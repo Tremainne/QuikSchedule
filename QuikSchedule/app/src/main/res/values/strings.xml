@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">QuikSchedule</string>
+    <string name="enterEmail">Email Address</string>
+    <string name="enterPass">Password</string>
 </resources>
