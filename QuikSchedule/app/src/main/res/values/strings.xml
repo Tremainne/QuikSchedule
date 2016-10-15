@@ -1,5 +1,19 @@
 <resources>
     <string name="app_name">QuikSchedule</string>
+
+    <!-- Text Field Strings -->
     <string name="enterEmail">Email Address</string>
     <string name="enterPass">Password</string>
+    <string name="enterPID">PID</string>
+    <string name="confirmEmail">Confirm Email Address</string>
+    <string name="confirmPass">Confirm Password</string>
+
+    <!-- Button Strings -->
+    <string name="submit">Submit</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+
+    <!-- HTML Strings -->
+    <string name="webregLogin">https://a4.ucsd.edu/tritON/Authn/UserPassword</string>
+    <string name="webregSchedule">https://act.ucsd.edu/myTritonlink20/display.htm</string>
 </resources>
