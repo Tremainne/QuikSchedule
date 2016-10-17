@@ -1,5 +1,6 @@
 package group22.quikschedule;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.MapFragment;
@@ -36,9 +37,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap map) {
+        LatLng centerHall = new LatLng(32.8772572,-117.2365204);
         map.addMarker(new MarkerOptions()
-                .position(new LatLng(32.8772572,-117.2365204))
+                .position(centerHall)
                 .title("Center"));
+        map.animateCamera(CameraUpdateFactory.newLatLng(centerHall));
+
     }
 
 }
