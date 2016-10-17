@@ -19,7 +19,6 @@ public class WebregActivity extends AppCompatActivity{
     private String[] page;
     private String[] lines;
     private boolean capNext = false;
-    private boolean completeParse = false;
 
     private static Pattern classPattern = Pattern.compile("\\s+(\\w.* \\- \\w+)");
     private static Pattern dayPattern = Pattern.compile(">(.*)<");
@@ -99,8 +98,6 @@ public class WebregActivity extends AppCompatActivity{
 
         webview.loadUrl("https://students.ucsd.edu/");
         CookieManager.getInstance().setAcceptCookie(true);
-
-
     }
 
 }
