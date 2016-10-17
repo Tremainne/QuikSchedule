@@ -12,7 +12,7 @@ import android.app.FragmentTransaction;
 
 
 /**
- * This shows how to create a simple activity with a map and a marker on the map.
+ * Very basic activity that should set the map up.
  */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -35,7 +35,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-
+    public void onMapReady(GoogleMap map) {
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(32.8772572,-117.2365204))
+                .title("Center"));
     }
+
 }
