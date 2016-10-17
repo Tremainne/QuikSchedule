@@ -8,44 +8,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="group22.quikschedule.WebregScraping">
+    tools:context="group22.quikschedule.WebregActivity">
 
-
-
-    <EditText
-        android:id="@+id/enterPID"
-        style="@style/EditTextStyle"
+    <WebView
+        android:id="@+id/activity_webreg_main"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/pid_background"
-        android:hint="@string/enterPID"
-        android:inputType="textPassword" />
-
-    <EditText
-        android:id="@+id/enterPassword"
-        style="@style/EditTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="-1dp"
-        android:layout_below="@+id/enterPID"
-        android:background="@drawable/password_background"
-        android:hint="@string/enterPass"
-        android:inputType="textPassword" />
-
-    <Button
-        android:layout_alignEnd="@+id/enterPassword"
-        android:layout_alignRight="@+id/enterPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/enterPassword"
-        android:id="@+id/submitWebreg"
-        android:text="@string/submit"
-        android:onClick="WebregScraping/retrieve"/>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

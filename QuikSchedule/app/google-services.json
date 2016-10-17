@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "398551720736",
-    "firebase_url": "https://quikschedule.firebaseio.com",
-    "project_id": "quikschedule",
-    "storage_bucket": "quikschedule.appspot.com"
+    "project_number": "264432439512",
+    "firebase_url": "https://quikschedule-ce480.firebaseio.com",
+    "project_id": "quikschedule-ce480",
+    "storage_bucket": "quikschedule-ce480.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398551720736:android:33c0ff96bf8fb051",
+        "mobilesdk_app_id": "1:264432439512:android:c62d1838df14523b",
         "android_client_info": {
           "package_name": "group22.quikschedule"
         }
       },
       "oauth_client": [
         {
-          "client_id": "398551720736-b45febv50q6asvmgr11kgmupocfa76lb.apps.googleusercontent.com",
+          "client_id": "264432439512-2g2jhfei5p4pmem4qpp721ghher0ar43.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDMWRKaRqBAMq30DNkhLwLciN0B8rS72AE"
+          "current_key": "AIzaSyCM5k2KMnQLKlSU101BKEhoJtZInXYovI4"
         }
       ],
       "services": {
