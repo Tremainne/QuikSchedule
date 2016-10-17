@@ -16,4 +16,8 @@ public class MainActivity extends AppCompatActivity {
     public void toWebreg(View view){
         startActivity(new Intent(MainActivity.this, WebregActivity.class));
     }
+
+    public void toMap(View view) {
+        startActivity(new Intent(MainActivity.this, MapsActivity.class));
+    }
 }
