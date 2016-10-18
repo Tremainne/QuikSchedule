@@ -13,6 +13,10 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
 
+    <!-- Facebook Strings -->
+    <string name="facebook_app_id">596070933908862</string>
+    <string name="fb_login_protocol_scheme">fb596070933908862</string>
+
     <!-- HTML Strings -->
     <string name="webregLogin">https://m.ucsd.edu/</string>
     <string name="webregSchedule">https://act.ucsd.edu/myTritonlink20/mobile.htm</string>
