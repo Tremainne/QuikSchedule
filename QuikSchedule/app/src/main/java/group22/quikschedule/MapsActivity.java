@@ -9,7 +9,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.app.FragmentTransaction;
-
+import android.Manifest;
+import android.support.v4.content.ContextCompat;
 
 
 /**
@@ -41,7 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map.addMarker(new MarkerOptions()
                 .position(centerHall)
                 .title("Center"));
-        map.animateCamera(CameraUpdateFactory.newLatLng(centerHall));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(centerHall, 16.5f));
 
     }
 
