@@ -8,7 +8,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -16,16 +17,43 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WebregActivity"></activity>
+        <activity android:name=".WebregActivity"
+            android:exported="true" />
+
         <activity android:name=".MapsActivity">
             <uses-sdk
                 android:minSdkVersion="14"
                 android:targetSdkVersion="18" />
-
         </activity>
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDAIwSaanY0mi_8zpn3VNyro-X1NR-86yo" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ApplicationName"
+            android:value="@string/app_name" />
+        <provider android:authorities="com.facebook.app.FacebookContentProvider355198514515820"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 
