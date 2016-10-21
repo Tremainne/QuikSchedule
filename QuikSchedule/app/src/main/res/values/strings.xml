@@ -22,4 +22,11 @@
     <string name="webregSchedule">https://act.ucsd.edu/myTritonlink20/mobile.htm</string>
     <string name="ua">Mozilla/5.0 (Linux; Android 6.0.1; SM-G900H Build/MMB29K) AppleWebKit/
     537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36</string>
+
+    <!--Directions Strings -->
+    <string name="DirectionsAPIKey">AIzaSyBeOVqVlXu6i4N0v-RiWGBsZeZCKJZrLks</string>
+    <string name="DirectionsOptions">traffic_model=best_guess</string>
+    <string name="TransitMode">mode=transit</string>
+    <string name="BikingMode">mode=bicycling</string>
+    <string name="WalkingMode">mode=walking</string>
 </resources>
