@@ -1,4 +1,4 @@
-package group22.quikschedule;
+package group22.quikschedule.Settings;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import group22.quikschedule.R;
 
 public class WebregActivity extends AppCompatActivity{
 

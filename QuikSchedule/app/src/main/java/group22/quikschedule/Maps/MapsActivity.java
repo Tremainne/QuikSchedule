@@ -1,4 +1,4 @@
-package group22.quikschedule;
+package group22.quikschedule.Maps;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.app.FragmentTransaction;
 
+import group22.quikschedule.R;
 
 
 /**

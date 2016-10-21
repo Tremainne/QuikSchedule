@@ -1,11 +1,12 @@
-package group22.quikschedule;
+package group22.quikschedule.Friends;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -24,21 +25,28 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import group22.quikschedule.Settings.WebregActivity;
+import group22.quikschedule.MainActivity;
+import group22.quikschedule.R;
 
-public class MainActivity extends AppCompatActivity {
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+
+public class FriendsFragment extends Fragment {
 
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG = MainActivity.class.getSimpleName();
 
+    public FriendsFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext()); //Allows for Facebook SDK access
-        setContentView(R.layout.activity_main);
-        AppEventsLogger.activateApp(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_friends, container, false);
+        AppEventsLogger.activateApp(getActivity());
 
         //Initialize Facebook Login Button + Firebase Connection
         mCallbackManager = CallbackManager.Factory.create();
@@ -58,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        LoginButton loginButton = (LoginButton) findViewById(R.id.fb_login2);
+        LoginButton loginButton = (LoginButton) v.findViewById(R.id.fb_login);
         loginButton.setReadPermissions("email", "public_profile", "user_friends");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -80,40 +88,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //End Facebook Login Button + Firebase Connection
+        return v;
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-    public void toWebreg(View view){
-        startActivity(new Intent(MainActivity.this, WebregActivity.class));
-    }
-
-
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
@@ -123,8 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

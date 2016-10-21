@@ -10,8 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="group22.quikschedule.MainActivity">
-
+    tools:context="group22.quikschedule.Settings">
 
     <Button
         android:layout_width="wrap_content"
@@ -20,21 +19,4 @@
         android:text="Go to Webreg Activity"
         android:onClick="toWebreg"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toMap"
-        android:text="Go to Map Activity"
-        android:onClick="toMap"/>
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/fb_login2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
-
 </LinearLayout>
-
-
