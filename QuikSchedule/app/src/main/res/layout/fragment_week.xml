@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/main_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NavigationDrawerActivity"
+    android:background="@color/md_blue_100">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="?attr/colorPrimary"
+        android:layout_marginTop="60dp"
+        android:elevation="6dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tab_layout"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/month"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:text="S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sundayTextView"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/abc_input_method_navigation_guard" />
+
+        <TextView
+            android:text="M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mondayTextView"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/abc_input_method_navigation_guard" />
+
+        <TextView
+            android:text="T"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuesdayTextView"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/abc_input_method_navigation_guard" />
+
+        <TextView
+            android:text="W"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wednesdayTextView"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/abc_input_method_navigation_guard" />
+
+        <TextView
+            android:text="T"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/thursdayTextView"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/abc_input_method_navigation_guard" />
+
+        <TextView
+            android:text="F"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fridayTextView"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/abc_input_method_navigation_guard" />
+
+        <TextView
+            android:text="S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/saturdayTextView"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/abc_input_method_navigation_guard" />
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/imageButton"
+        android:background="@null" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:text="  Select Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/month"
+        android:background="@android:color/transparent"
+        android:textCursorDrawable="@null"
+        style="@android:style/Theme.Translucent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/imageButton" />
+
+</RelativeLayout>

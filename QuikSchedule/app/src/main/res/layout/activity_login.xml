@@ -1,43 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_login"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="group22.quikschedule.LoginActivity">
+    android:paddingTop="56dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:weightSum="1"
+    android:background="@color/md_blue_200"
+    android:fitsSystemWindows="true" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ImageView android:src="@mipmap/ic_launcher"
+        android:layout_width="412dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="24dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:layout_weight="0.14" />
+
+    <!-- Email Label -->
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TODO: Login Activity"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp">
 
-    <EditText
-        android:layout_width="wrap_content"
+        <EditText android:id="@+id/input_email"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:inputType="textEmailAddress"
+            android:hint="MyTritonLink Username"
+            android:textColorHighlight="@color/md_yellow_200"
+            android:textColorHint="?android:attr/textColorHint"
+            android:textColorLink="?attr/colorPrimaryDark" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/email_address"
-        android:inputType="textEmailAddress"
-        android:imeActionLabel="@string/enterEmail"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="8dp">
 
-    <EditText
-        android:layout_width="wrap_content"
+        <EditText android:id="@+id/input_password"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:inputType="textPassword"
+            android:hint="Password"
+            android:textColorHighlight="@color/md_yellow_200"
+            android:textColorLink="@color/md_yellow_200"
+            android:textColorHint="?android:attr/textColorHint" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_signin"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/password"
-        android:inputType="textPassword"
-        android:imeActionLabel="@string/enterPass"
-        android:layout_below="@+id/email_address"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        android:text="Sign In"
+        android:background="@color/md_blue_900"
+        android:textColor="@color/md_blue_100"
+        android:textSize="18sp" />
 
-</RelativeLayout>
+</LinearLayout>

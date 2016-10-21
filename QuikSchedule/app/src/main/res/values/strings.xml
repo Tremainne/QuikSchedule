@@ -23,10 +23,48 @@
     <string name="ua">Mozilla/5.0 (Linux; Android 6.0.1; SM-G900H Build/MMB29K) AppleWebKit/
     537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36</string>
 
+
     <!--Directions Strings -->
     <string name="DirectionsAPIKey">AIzaSyBeOVqVlXu6i4N0v-RiWGBsZeZCKJZrLks</string>
     <string name="DirectionsOptions">traffic_model=best_guess</string>
     <string name="TransitMode">mode=transit</string>
     <string name="BikingMode">mode=bicycling</string>
     <string name="WalkingMode">mode=walking</string>
+
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="time12am">12 AM</string>
+    <string name="time1am">1 AM</string>
+    <string name="time2am">2 AM</string>
+    <string name="time3am">3 AM</string>
+    <string name="time4am">4 AM</string>
+    <string name="time5am">5 AM</string>
+    <string name="time6am">6 AM</string>
+    <string name="time7am">7 AM</string>
+    <string name="time8am">8 AM</string>
+    <string name="time9am">9 AM</string>
+    <string name="time10am">10 AM</string>
+    <string name="time11am">11 AM</string>
+    <string name="time12pm">12 PM</string>
+    <string name="time1pm">1 PM</string>
+    <string name="time2pm">2 PM</string>
+    <string name="time3pm">3 PM</string>
+    <string name="time4pm">4 PM</string>
+    <string name="time5pm">5 PM</string>
+    <string name="time6pm">6 PM</string>
+    <string name="time7pm">7 PM</string>
+    <string name="time8pm">8 PM</string>
+    <string name="time9pm">9 PM</string>
+    <string name="time10pm">10 PM</string>
+    <string name="time11pm">11 PM</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
+
 </resources>
