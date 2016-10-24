@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.TreeMap;
+import org.json.*;
 
 import group22.quikschedule.R;
 
@@ -78,14 +78,18 @@ public class Directions {
 
     private List getJson(HttpsURLConnection con) {
         List directions = new ArrayList();
+        JSONObject dirJSON;
         try {
             BufferedReader br =
                     new BufferedReader(
                             new InputStreamReader(con.getInputStream()));
-
+            dirJSON = new JSONObject(br.toString());
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
         return directions;
     }
 

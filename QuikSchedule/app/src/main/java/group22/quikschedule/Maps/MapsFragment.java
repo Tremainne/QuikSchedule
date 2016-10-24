@@ -12,6 +12,7 @@ import group22.quikschedule.R;
 
 public class MapsFragment extends Fragment {
 
+
     public MapsFragment() {
         // Required empty public constructor
     }
@@ -24,4 +25,5 @@ public class MapsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_maps, container, false);
     }
+
 }

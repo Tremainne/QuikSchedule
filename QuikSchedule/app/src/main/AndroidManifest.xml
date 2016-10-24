@@ -40,8 +40,8 @@
             android:exported="true" />
         <activity android:name=".Maps.MapsActivity">
             <uses-sdk
-                android:minSdkVersion="14"
-                android:targetSdkVersion="18" />
+                android:minSdkVersion="15"
+                android:targetSdkVersion="23" />
         </activity>
         <activity
             android:name=".Calendar.CalendarActivity"
