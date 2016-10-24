@@ -17,8 +17,11 @@ import android.webkit.WebViewClient;
 import com.facebook.CallbackManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -30,6 +33,7 @@ import group22.quikschedule.R;
 public class WebregActivity extends AppCompatActivity{
 
     private int count = 0;
+    private int textbookCount = 0;
     private boolean capNext = false;
     private String android_id;
     private String[] page;
@@ -135,22 +139,48 @@ public class WebregActivity extends AppCompatActivity{
                 lines = html.split("\n");
 
                 String currAuthor = "Not null";
+                String currClassName = "Not null";
+                String currSection = "Not null";
                 boolean getBook = false;
 
                 for (String line : lines) {
                     if( line.contains( "Section" ) ) {
-                        Matcher matcher = sectionPattern.matcher( line );
+                        Matcher matcher = sectionPattern.matcher(line);
                         matcher.find();
-                        String className = matcher.group(1) + " " + matcher.group(2);
-                        System.err.println( className );
-                        System.err.println( matcher.group(3) );
+                        currClassName = matcher.group(1) + " " + matcher.group(2);
+                        currSection = matcher.group(3);
                     }
                     else if( getBook ) {
                         Matcher matcher = bookPattern.matcher( line );
                         matcher.find();
 
-                        System.err.println( currAuthor );
-                        System.err.println( matcher.group(1) );
+                        final String className = currClassName;
+                        final String section = currSection;
+                        final String author = currAuthor;
+                        final String textbook = matcher.group(1);
+                        final int textCount = textbookCount;
+                        db.addValueEventListener( new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String currClassName;
+                                for( int i = 0; i < count; ++i ) {
+                                    currClassName = (String) dataSnapshot.child(android_id).child("class_" + i)
+                                            .child("class").getValue();
+                                    if( className.equals( currClassName ) ) {
+                                        db.child(android_id).child("class_" + i).child("section")
+                                                .setValue(section);
+                                        db.child(android_id).child("class_" + i).child("author_" + textCount)
+                                                .setValue(author);
+                                        db.child(android_id).child("class_" + i).child("textbook_" + textCount)
+                                                .setValue(textbook);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) { }
+                        });
+                        ++textbookCount;
                         getBook = false;
                     }
                     else if( line.contains( "<td><font face=\"tahoma\"" ) && line.contains( "</td>" ) ) {
@@ -218,11 +248,25 @@ public class WebregActivity extends AppCompatActivity{
                 }
                 else if( webUrl.equals( getString(R.string.webregLogin) ) ) {
                     AlertDialog alertDialog = new AlertDialog.Builder(WebregActivity.this).create();
-                    alertDialog.setTitle("Please log into myTritonlink");
+                    alertDialog.setTitle("Log into myTritonlink");
+                    alertDialog.setMessage("Please log into myTrtionlink to sync classes. No "
+                        + "personal information will be collected besides your class schedule.");
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+                else if( webUrl.contains( "https://ucsdbkst.ucsd.edu/wrtx/FullBookList?term=FA16" ) ) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(WebregActivity.this).create();
+                    alertDialog.setTitle("Books added successfully!");
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    setContentView(R.layout.activity_login);
                                 }
                             });
                     alertDialog.show();
