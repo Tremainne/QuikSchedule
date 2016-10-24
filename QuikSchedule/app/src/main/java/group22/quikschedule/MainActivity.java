@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        /*super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext()); //Allows for Facebook SDK access
         FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_main);
@@ -223,6 +223,6 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+                });*/
     }
 }
