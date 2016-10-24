@@ -1,6 +1,7 @@
 package group22.quikschedule.Settings;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.annotation.NonNull;
@@ -27,7 +28,9 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import group22.quikschedule.LoginActivity;
 import group22.quikschedule.MainActivity;
+import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
 
 public class WebregActivity extends AppCompatActivity{
@@ -50,7 +53,7 @@ public class WebregActivity extends AppCompatActivity{
     private static Pattern locPattern = Pattern.compile(">(.*)<");
     private static Pattern splitPattern = Pattern.compile("(.*) \\- (.*)");
     private static Pattern timePattern = Pattern.compile("\\s+(\\w.*)<");
-    private static Pattern sectionPattern = Pattern.compile("\\((\\w+)\\) (\\d+), Section: (\\d+)");
+    private static Pattern sectionPattern = Pattern.compile("\\((\\w+)\\) (\\w+), Section: (\\d+)");
     private static Pattern authorPattern = Pattern.compile(">(\\w+)</font>");
     private static Pattern bookPattern = Pattern.compile("-1\">(.*),");
 
@@ -76,6 +79,7 @@ public class WebregActivity extends AppCompatActivity{
             }
 
             db = FirebaseDatabase.getInstance().getReference();
+
             /*
             String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //Unique User ID
 
@@ -242,6 +246,7 @@ public class WebregActivity extends AppCompatActivity{
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
+                                    startActivity(new Intent(WebregActivity.this, NavigationDrawerActivity.class));
                                 }
                             });
                     alertDialog.show();
@@ -262,11 +267,12 @@ public class WebregActivity extends AppCompatActivity{
                 else if( webUrl.contains( "https://ucsdbkst.ucsd.edu/wrtx/FullBookList?term=FA16" ) ) {
                     AlertDialog alertDialog = new AlertDialog.Builder(WebregActivity.this).create();
                     alertDialog.setTitle("Books added successfully!");
+                    alertDialog.setMessage("Please hit the back button to return to the settings page.");
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    setContentView(R.layout.activity_login);
+                                    startActivity(new Intent(WebregActivity.this, NavigationDrawerActivity.class));
                                 }
                             });
                     alertDialog.show();
