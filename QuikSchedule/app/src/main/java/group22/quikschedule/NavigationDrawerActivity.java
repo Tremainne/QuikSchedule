@@ -20,6 +20,7 @@ import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsActivity;
@@ -127,6 +128,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void toWebreg(View view){
         startActivity(new Intent(this, WebregActivity.class));
     }
+
+    public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
 
 
     public void toMap(View view) {
