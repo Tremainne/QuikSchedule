@@ -30,6 +30,7 @@
     <string name="TransitMode">mode=transit</string>
     <string name="BikingMode">mode=bicycling</string>
     <string name="WalkingMode">mode=walking</string>
+    <string name="GeocodeAPIKey">AIzaSyBlxFh4rYsK8JmkxXAcAJvncXevR0W_O3c</string>
 
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
 

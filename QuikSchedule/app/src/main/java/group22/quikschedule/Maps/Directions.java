@@ -57,11 +57,50 @@ public class Directions {
         return request;
     }
 
-    public void setHome(LatLng home) {
+    /**
+     * Wrapper around LatLng version, uses geocoding API to convert string to LatLng then runs
+     * request
+     * @param start The starting address
+     * @param end The ending address
+     * @param arrivalTime desired arrvial time for transit
+     * @return the URL request to use.
+     */
+    public String buildURLRequest(String start, String end, int arrivalTime){
+        return buildURLRequest(Geocode.nameToLatLng(start), Geocode.nameToLatLng(end), arrivalTime);
+    }
+
+    /**
+     * Sets the home location that is used as the default starting location.
+     * @param home The home location to set in LatLng form.
+     */
+    private void setHome(LatLng home) {
         this.home = home;
     }
 
-    public void makeRequest(LatLng dest, int arrivalTime) {
+    /**
+     * Sets the home location that is used as the default starting location.
+     * @param home The home location to set in string form
+     */
+    public void setHome(String home) {
+        setHome(Geocode.nameToLatLng(home));
+    }
+
+    /**
+     * Makes a directions request based on a string destination address and current home location.
+     * @param dest The destination to route to.
+     * @param arrivalTime Desired arrival time for transit.
+     */
+    public void makeRequest(String dest, int arrivalTime) {
+        makeRequest(Geocode.nameToLatLng(dest), arrivalTime);
+    }
+
+
+    /**
+     * Makes a directions request based on a LatLng destination and current home location.
+     * @param dest  Destination to route to.
+     * @param arrivalTime Desired arrival time for transit.
+     */
+    private void makeRequest(LatLng dest, int arrivalTime) {
         String request = buildURLRequest(this.home, dest, arrivalTime);
         try {
             URL url = new URL(request);
