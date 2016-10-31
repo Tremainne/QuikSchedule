@@ -11,10 +11,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import group22.quikschedule.R;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import android.support.v4.content.ContextCompat;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -23,6 +26,9 @@ import android.support.v4.app.ActivityCompat;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -61,7 +67,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+        LatLng start = new LatLng( 32.8497754,-117.1876147 );
+        LatLng end = new LatLng( 32.8800649,-117.2362022 );
+        Directions direction = new Directions();
+        direction.makeRequest( start, end );
 
+        /*
+        ArrayList<LatLng> points;
+        PolylineOptions lineOptions = null;
+
+        // Traversing through all the routes
+        for( int i = 0; i < directions.size(); i++ ) {
+            points = new ArrayList<>();
+            lineOptions = new PolylineOptions();
+
+            // Fetching i-th route
+            List<HashMap<String, String>> path = directions.get( i );
+
+            // Fetching all the points in i-th route
+            for( int j = 0; j < path.size(); j++ ) {
+                HashMap<String, String> point = path.get( j );
+
+                double lat = Double.parseDouble( point.get( "lat" ) );
+                double lng = Double.parseDouble( point.get( "lng" ) );
+                LatLng position = new LatLng( lat, lng );
+
+                points.add( position );
+            }
+
+            // Adding all the points in the route to LineOptions
+            lineOptions.addAll( points );
+            lineOptions.width( 10 );
+            lineOptions.color( Color.RED );
+        }
+
+        myMap.addPolyline( lineOptions );
+        */
     }
 
     /** Zooms map to center hall on creation, and enables the myLocation button.
