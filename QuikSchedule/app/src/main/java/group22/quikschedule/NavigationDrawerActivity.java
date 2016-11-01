@@ -17,10 +17,16 @@ import android.view.View;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.calendar.CalendarScopes;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Arrays;
+
 import group22.quikschedule.Calendar.CalendarSyncActivity;
+import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsActivity;
@@ -130,6 +136,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
+
+    public void syncFirebaseToCalendar (View view) {
+        final String[] SCOPES = {CalendarScopes.CALENDAR_READONLY};
+        GoogleAccountCredential mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
+
+        new SyncFirebaseToCalendar(mCredential, this).execute();
+    }
 
 
     public void toMap(View view) {

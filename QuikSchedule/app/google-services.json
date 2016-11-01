@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "264432439512-5dort87r1mcgncnt32dempa313joq18n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "group22.quikschedule",
+            "certificate_hash": "61649C4675AC05DAA9FD8AAD86723D390C53490D"
+          }
+        },
+        {
           "client_id": "264432439512-2g2jhfei5p4pmem4qpp721ghher0ar43.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264432439512-2g2jhfei5p4pmem4qpp721ghher0ar43.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
