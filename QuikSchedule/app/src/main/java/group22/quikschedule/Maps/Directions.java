@@ -23,8 +23,9 @@ public class Directions {
     private static final HashMap<String, String> converter = new HashMap<String, String>();
     static {
         converter.put("TM", "Marshall College");
-        converter.put("APM","Applied Physics and Mathematics");
-        converter.put("CENTR","Center Hall");
+        converter.put("APM","Applied Physics and Mathematics " +
+                "San Diego, CA 92161");
+        converter.put("CENTR","Center Hall Library Walk, San Diego, CA 92161");
         converter.put("CSB","Cognitive Science Building");
         converter.put("CICC", "Copley International Conference Center");
         converter.put("GH", "Galbraith Hall");

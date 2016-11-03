@@ -25,12 +25,12 @@
 
 
     <!--Directions Strings -->
-    <string name="DirectionsAPIKey">AIzaSyBeOVqVlXu6i4N0v-RiWGBsZeZCKJZrLks</string>
+    <string name="DirectionsAPIKey">AIzaSyBmLBTq2_NcacunMNnPlEPL5fIQj38bIRs</string>
     <string name="DirectionsOptions">traffic_model=best_guess</string>
     <string name="TransitMode">mode=transit</string>
     <string name="BikingMode">mode=bicycling</string>
     <string name="WalkingMode">mode=walking</string>
-    <string name="GeocodeAPIKey">AIzaSyBlxFh4rYsK8JmkxXAcAJvncXevR0W_O3c</string>
+    <string name="GeocodeAPIKey">AIzaSyBFaJcedR1gHACBsISOnAajioMQqyVKVyg</string>
 
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
 

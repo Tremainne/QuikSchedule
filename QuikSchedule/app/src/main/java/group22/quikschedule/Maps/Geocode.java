@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -22,15 +23,19 @@ public class Geocode {
     public static LatLng nameToLatLng(String address) {
         String request = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
                 address + "&key=" + R.string.GeocodeAPIKey;
-        HttpsURLConnection con;
         JSONObject geoJSON;
         try {
             URL url = new URL(request);
-            con = (HttpsURLConnection)url.openConnection();
-            BufferedReader br =
-                    new BufferedReader(
-                            new InputStreamReader(con.getInputStream()));
-            geoJSON = new JSONObject(br.toString());
+
+            Scanner scan = new Scanner(url.openStream());
+            String str = "";
+            while (scan.hasNext()) {
+                str += scan.nextLine();
+            }
+            scan.close();
+            System.err.println(str);
+            geoJSON = new JSONObject(str);
+            System.err.println(geoJSON);
             JSONObject result = geoJSON.getJSONArray("result").getJSONObject(0);
             JSONObject loc = result.getJSONObject("geometry").getJSONObject("location");
             return new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));

@@ -31,6 +31,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -41,6 +44,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     // https://mvnrepository.com/artifact/org.json/json
     compile group: 'org.json', name: 'json', version: '20160810'
+
     compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.firebase:firebase-database:9.6.1'
@@ -49,8 +53,9 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.google.android.gms:play-services-auth:9.6.1'
-    androidTestCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
     apply plugin: 'com.google.gms.google-services'
+
 }
 
 
