@@ -70,9 +70,11 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
     }
 
     private void run() throws IOException {
-        String calendarId = getCalendarIdFromSummary("Classes");
+        String calendarId = getCalendarIdFromSummary("QuickSchedule");
         if (calendarId.equals("")) {
-            calendarId = "primary";
+            CalendarListEntry calendarListEntry = new CalendarListEntry();
+            calendarListEntry.setSummary("QuickSchedule");
+            mService.calendarList().insert(calendarListEntry).execute();
         }
         Calendar.Events.List request = mService.events().list(calendarId);
 
