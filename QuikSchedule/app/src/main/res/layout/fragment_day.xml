@@ -17,7 +17,7 @@
         android:textSize="20dp"
         android:textColor="@color/abc_input_method_navigation_guard" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/calendarScrollView"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
@@ -41,12 +41,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
-                android:padding="0dp" >
+                android:padding="0dp"
+                android:weightSum="1">
 
                 <RelativeLayout
                     android:id="@+id/hoursRelativeLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="1455dp"
+                    android:layout_width="33dp"
+                    android:layout_height="1458dp"
                     android:gravity="left">
 
                     <TextView
@@ -324,8 +325,16 @@
                         android:text="@string/time12am"
                         android:textSize="9dp" />
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/schedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="1454dp">
+                </RelativeLayout>
+
+
             </LinearLayout>
         </RelativeLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>
