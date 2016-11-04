@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,8 +22,6 @@ import group22.quikschedule.R;
 
 public class WeekFragment extends Fragment implements View.OnClickListener{
 
-    AppCompatButton button;
-
     public WeekFragment() {
         // Required empty public constructor
     }
@@ -33,8 +32,11 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
 
         View v = inflater.inflate(R.layout.fragment_week, container, false);
 
-        button = (AppCompatButton) v.findViewById(R.id.month);
+        AppCompatButton button = (AppCompatButton) v.findViewById(R.id.month);
         button.setOnClickListener(this);
+
+        ImageButton addButton = (ImageButton) v.findViewById(R.id.addButton);
+        addButton.setOnClickListener(this);
 
         Calendar cal = Calendar.getInstance();
 
@@ -81,7 +83,10 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
                 Intent i = new Intent(getActivity(), CalendarActivity.class);
                 startActivity(i);
                 break;
-
+            case R.id.addButton:
+                Intent i2 = new Intent(getActivity(), ExpandedEventActivity.class);
+                startActivity(i2);
+                break;
         }
     }
 

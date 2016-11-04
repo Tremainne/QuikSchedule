@@ -46,7 +46,7 @@ public class CalendarSyncActivity extends Activity
 
     private static final String BUTTON_TEXT = "Call Google Calendar API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = {CalendarScopes.CALENDAR_READONLY};
+    private static final String[] SCOPES = {CalendarScopes.CALENDAR};
 
     /**
      * Create the main activity.
@@ -79,6 +79,20 @@ public class CalendarSyncActivity extends Activity
             }
         });
         activityLayout.addView(mCallApiButton);
+
+        final Context context = this;
+
+        final Button firebaseButton = new Button(this);
+        firebaseButton.setText("Sync Firebase To Calendar");
+        firebaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseButton.setEnabled(false);
+                new SyncFirebaseToCalendar(mCredential, context).execute();
+                firebaseButton.setEnabled(true);
+            }
+        });
+        activityLayout.addView(firebaseButton);
 
         setContentView(activityLayout);
 

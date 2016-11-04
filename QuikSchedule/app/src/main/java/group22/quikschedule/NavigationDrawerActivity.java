@@ -137,16 +137,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
 
-    public void syncFirebaseToCalendar (View view) {
-        final String[] SCOPES = {CalendarScopes.CALENDAR_READONLY};
-        GoogleAccountCredential mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
-
-        new SyncFirebaseToCalendar(mCredential, this).execute();
-    }
-
-
     public void toMap(View view) {
 
         startActivity(new Intent(this, MapsActivity.class));
