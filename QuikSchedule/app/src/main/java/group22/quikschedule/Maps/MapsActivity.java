@@ -69,8 +69,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         LatLng start = new LatLng( 32.8497754,-117.1876147 );
         LatLng end = new LatLng( 32.8800649,-117.2362022 );
-        Directions direction = new Directions();
-        direction.makeRequest( start, end );
+        Directions.makeRequest(start,end);
+
 
         /*
         ArrayList<LatLng> points;
@@ -114,7 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             while (map == null)
             {
-                wait(10);
+                Thread.sleep(10);
             }
         }
         catch (InterruptedException e) {
@@ -131,6 +131,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         myMap = map;
         map.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
+        System.err.println(Directions.getStaticDirections());
     }
 
     /** Method to handle myLocation button presses, doesn't really do anything.

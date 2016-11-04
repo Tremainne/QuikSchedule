@@ -1,6 +1,7 @@
 package group22.quikschedule.Maps;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import javax.net.ssl.HttpsURLConnection;
@@ -26,7 +27,12 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class Directions {
 
-    private LatLng home;
+    private static LatLng home;
+
+    public static List<List<HashMap<String, String>>> getStaticDirections() {
+        return staticDirections;
+    }
+
     public static List<List<HashMap<String, String>>> staticDirections;
 
     private static final HashMap<String, String> converter = new HashMap<String, String>();
@@ -58,7 +64,7 @@ public class Directions {
      * @param end ending point of the trip to get directions for
      * @return  The URL request string
      */
-    private String buildURLRequest(LatLng start, LatLng end) {
+    private static String buildURLRequest(LatLng start, LatLng end) {
         String startStr = parseLatLong( start );
         String endStr = parseLatLong( end );
         String request = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
@@ -74,7 +80,7 @@ public class Directions {
      * @param end The ending address
      * @return the URL request to use.
      */
-    public String buildURLRequest(String start, String end){
+    public static String buildURLRequest(String start, String end){
         return buildURLRequest(Geocode.nameToLatLng(start), Geocode.nameToLatLng(end));
     }
 
@@ -82,15 +88,15 @@ public class Directions {
      * Sets the home location that is used as the default starting location.
      * @param home The home location to set in LatLng form.
      */
-    private void setHome(LatLng home) {
-        this.home = home;
+    private static void setHome(LatLng home) {
+        Directions.home = home;
     }
 
     /**
      * Sets the home location that is used as the default starting location.
      * @param home The home location to set in string form
      */
-    public void setHome(String home) {
+    public static void setHome(String home) {
         setHome(Geocode.nameToLatLng(home));
     }
 
@@ -101,44 +107,38 @@ public class Directions {
         return split[0];
     }
 
-    public List<List<HashMap<String, String>>> makeRequest(LatLng start, LatLng dest) {
+    public static List<List<HashMap<String, String>>> makeRequest(LatLng start, LatLng dest) {
         String request = buildURLRequest(start, dest);
-        System.err.println(request);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
-                result = "{ " + result + " }";
+                Log.d("directions", "callback completed");
+                //result = "{" + result + "}";
                 Directions.staticDirections = getJson( result );
             }
         });
 
         asyncTask.execute(request);
-        try {
-            while (asyncTask.getStatus() != AsyncTask.Status.FINISHED){
-                System.err.println(asyncTask.getStatus());
-                Thread.sleep(10);
-            }
-        } catch (InterruptedException e) {
-            return null;
-        }
         return staticDirections;
     }
 
-    private List<List<HashMap<String, String>>> getJson( String jsonStr ) {
-        System.err.println( "I'm here at least" );
+    private static List<List<HashMap<String, String>>> getJson( String jsonStr ) {
 
-        List directions = new ArrayList();
+
+
         JSONObject dirJSON = null;
         try {
             dirJSON = new JSONObject( jsonStr );
+            Log.d("Directions", jsonStr);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         JSONArray routesArr, legsArr;
-        JSONObject routes, legs, duration;
+        JSONObject routes, legs = null, duration;
         int time = 0;
         try {
+            Log.d("Directions", dirJSON.toString());
             routesArr = dirJSON.getJSONArray( "routes" );
             routes = routesArr.getJSONObject( 0 );
             legsArr = routes.getJSONArray( "legs" );
@@ -149,20 +149,20 @@ public class Directions {
             e.printStackTrace();
         }
 
-        System.err.println( "Time: " + time );
+        Log.d("Directions", "Time: " + time );
 
         List<List<HashMap<String, String>>> routesList = new ArrayList<>() ;
         JSONArray jRoutes;
         JSONArray jLegs;
         JSONArray jSteps;
 
-        /*
+        Log.d("Directions", legs.toString());
         try {
             jRoutes = dirJSON.getJSONArray( "routes" );
-            System.err.println( "I'm here at least" );
+            Log.d("Directions", "I'm here at least" );
             // Traversing all routes
             for( int i = 0; i < jRoutes.length() ; i++ ) {
-                System.err.println( "Made it here" );
+                Log.d("Directions", "Made it here" );
                 jLegs = ( (JSONObject) jRoutes.get(i) ).getJSONArray( "legs" );
                 List path = new ArrayList<>();
 
@@ -191,7 +191,7 @@ public class Directions {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        */
+
 
         return routesList;
     }
@@ -204,7 +204,7 @@ public class Directions {
      * Method to decode polyline points
      * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
      * */
-    private List<LatLng> decodePoly(String encoded) {
+    private static List<LatLng> decodePoly(String encoded) {
 
         List<LatLng> poly = new ArrayList<>();
         int index = 0, len = encoded.length();
@@ -237,4 +237,6 @@ public class Directions {
 
         return poly;
     }
+
+
 }

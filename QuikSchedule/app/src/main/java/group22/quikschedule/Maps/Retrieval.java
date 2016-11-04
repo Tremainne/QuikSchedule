@@ -1,6 +1,7 @@
 package group22.quikschedule.Maps;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 
 import java.io.BufferedReader;
@@ -24,7 +25,8 @@ class Retrieval extends AsyncTask<String, Void, String> {
     public String doInBackground(String... urls) {
         String request = urls[0];
         HttpsURLConnection con = null;
-        System.err.println( request );
+        Log.d("Retrieval", request );
+
         try {
             URL url = new URL(request);
             con = (HttpsURLConnection) url.openConnection();
@@ -49,6 +51,7 @@ class Retrieval extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        result.append(line);
         while( line != null ) {
             try {
                 line = rd.readLine();
@@ -62,6 +65,7 @@ class Retrieval extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.d("Request", result.toString());
         return result.toString();
     }
 

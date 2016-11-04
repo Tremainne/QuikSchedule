@@ -1,16 +1,11 @@
 package group22.quikschedule.Maps;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import org.json.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Scanner;
 
-import javax.net.ssl.HttpsURLConnection;
 
 import group22.quikschedule.R;
 
@@ -20,35 +15,37 @@ import group22.quikschedule.R;
 
 public class Geocode {
 
+    public static LatLng getStaticLatLng() {
+        return staticLatLng;
+    }
+
+    private static LatLng staticLatLng;
+
     public static LatLng nameToLatLng(String address) {
         String request = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
                 address + "&key=" + R.string.GeocodeAPIKey;
-        JSONObject geoJSON;
-        try {
-            URL url = new URL(request);
+        Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
+                @Override
+                public void processFinish(String result) {
+                    Log.d("geocode", "request completed");
+                    //result = "{ " + result + " }";
+                    Geocode.staticLatLng = getJson( result );
+                }
+            });
+        asyncTask.execute(request);
+        return staticLatLng;
+    }
 
-            Scanner scan = new Scanner(url.openStream());
-            String str = "";
-            while (scan.hasNext()) {
-                str += scan.nextLine();
-            }
-            scan.close();
-            System.err.println(str);
-            geoJSON = new JSONObject(str);
-            System.err.println(geoJSON);
+    public static LatLng getJson(String json) {
+        try {
+            JSONObject geoJSON = new JSONObject(json);
             JSONObject result = geoJSON.getJSONArray("result").getJSONObject(0);
             JSONObject loc = result.getJSONObject("geometry").getJSONObject("location");
             return new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        }
+        catch (JSONException e) {
             e.printStackTrace();
         }
-
         return null;
     }
-
 }
