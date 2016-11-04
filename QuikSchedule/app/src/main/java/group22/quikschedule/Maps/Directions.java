@@ -1,5 +1,7 @@
 package group22.quikschedule.Maps;
 
+import android.os.AsyncTask;
+
 import com.google.android.gms.maps.model.LatLng;
 import javax.net.ssl.HttpsURLConnection;
 
@@ -10,6 +12,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
 import org.json.*;
 
 import group22.quikschedule.R;
@@ -52,16 +56,14 @@ public class Directions {
      * Builds a URL request for use with the DirectionsAPI, using transit for now.
      * @param start Strarting point of the trip to get directions for
      * @param end ending point of the trip to get directions for
-     * @param arrivalTime The desired arrival time (should be 5 minutes before class probs)
      * @return  The URL request string
      */
     private String buildURLRequest(LatLng start, LatLng end) {
         String startStr = parseLatLong( start );
         String endStr = parseLatLong( end );
         String request = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
-                startStr + "&destination=" + endStr + "&key=" +
-                getApplicationContext().getResources().getString( R.string.DirectionsAPIKey ) +
-                "&" + getApplicationContext().getResources().getString( R.string.TransitMode );
+                startStr + "&destination=" + endStr +
+                "&key=AIzaSyBFaJcedR1gHACBsISOnAajioMQqyVKVyg&mode=transit" ;
         return request;
     }
 
@@ -70,11 +72,10 @@ public class Directions {
      * request
      * @param start The starting address
      * @param end The ending address
-     * @param arrivalTime desired arrvial time for transit
      * @return the URL request to use.
      */
-    public String buildURLRequest(String start, String end, int arrivalTime){
-        return buildURLRequest(Geocode.nameToLatLng(start), Geocode.nameToLatLng(end), arrivalTime);
+    public String buildURLRequest(String start, String end){
+        return buildURLRequest(Geocode.nameToLatLng(start), Geocode.nameToLatLng(end));
     }
 
     /**
@@ -100,23 +101,32 @@ public class Directions {
         return split[0];
     }
 
-    public void setHome(LatLng home) {
-        this.home = home;
-    }
-
     public List<List<HashMap<String, String>>> makeRequest(LatLng start, LatLng dest) {
         String request = buildURLRequest(start, dest);
-        Retrieval asyncTask = (Retrieval) new Retrieval(new Retrieval.AsyncResponse() {
+        System.err.println(request);
+        Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
                 result = "{ " + result + " }";
-                staticDirections = getJson( result );
+                Directions.staticDirections = getJson( result );
             }
-        }).execute( request );
+        });
+
+        asyncTask.execute(request);
+        try {
+            while (asyncTask.getStatus() != AsyncTask.Status.FINISHED){
+                System.err.println(asyncTask.getStatus());
+                Thread.sleep(10);
+            }
+        } catch (InterruptedException e) {
+            return null;
+        }
         return staticDirections;
     }
 
     private List<List<HashMap<String, String>>> getJson( String jsonStr ) {
+        System.err.println( "I'm here at least" );
+
         List directions = new ArrayList();
         JSONObject dirJSON = null;
         try {
