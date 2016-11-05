@@ -95,10 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         mapFragment.getMapAsync(this);
-        ArrayList<LatLng> startHolder = new ArrayList<>();
-        ArrayList<LatLng> endHolder = new ArrayList<>();
-        Geocode.nameToLatLng("5030%20Via%20Papel,%20San%20Diego%2092122", this, true);
-        Geocode.nameToLatLng("Geisel%20Library,%20La%20Jolla", this, false);
+        showDirections(Directions.codeToName("CENTR"));
         Log.d("Maps", "Made geocode request");
 
     }
@@ -120,6 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             double latDbl = Double.parseDouble(lat);
             double lngDbl = Double.parseDouble(lng);
             start = new LatLng(latDbl, lngDbl);
+            onLatLngComplete();
         }
     }
 
@@ -296,10 +294,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d("plotLine", "Should finish line.");
     }
 
-    public void onGeocodeComplete() {
+    public void onLatLngComplete() {
         if (start != null && end != null) {
             Directions.makeRequest(start, end, this);
         }
     }
 
+    public void showDirections(String start, String end) {
+        Geocode.nameToLatLng(start, this, true);
+        Geocode.nameToLatLng(end, this, false);
+    }
+    public void showDirections(String end) {
+        Geocode.nameToLatLng(end, this, false);
+    }
 }

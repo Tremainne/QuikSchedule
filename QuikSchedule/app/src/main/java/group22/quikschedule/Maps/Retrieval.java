@@ -5,6 +5,7 @@ import android.util.Log;
 
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,12 +43,13 @@ class Retrieval extends AsyncTask<String, Void, String> {
         BufferedReader rd = null;
         try {
             int code = con.getResponseCode();
-            if (code != 200){
+            if (code != 200) {
                 throw new IOException("Response code was: " + code);
             }
             rd = new BufferedReader(new InputStreamReader(con.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
         String line = null;
         try {
