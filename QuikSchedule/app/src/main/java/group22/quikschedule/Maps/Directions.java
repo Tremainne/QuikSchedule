@@ -86,10 +86,11 @@ public class Directions {
         return buildURLRequest(Geocode.nameToLatLng(start), Geocode.nameToLatLng(end));
     }*/
 
+    /*
     /**
      * Sets the home location that is used as the default starting location.
      * @param home The home location to set in LatLng form.
-     */
+
     private static void setHome(LatLng home) {
         Directions.home = home;
     }
@@ -97,10 +98,10 @@ public class Directions {
     /**
      * Sets the home location that is used as the default starting location.
      * @param home The home location to set in string form
-     */
+
     public static void setHome(String home) {
         //setHome(Geocode.nameToLatLng(home));
-    }
+    }*/
 
     private static String parseLatLong( LatLng parse ) {
         String latLng = parse.toString();

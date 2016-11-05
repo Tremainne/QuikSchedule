@@ -80,13 +80,11 @@ public class WebregActivity extends AppCompatActivity{
 
             db = FirebaseDatabase.getInstance().getReference();
 
-            /*
             String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //Unique User ID
 
             if (!uuid.isEmpty()) {
                 db.child(android_id).child("uuid").setValue(uuid);
             }
-            */
 
             if( parseWebreg ) {
                 html = page[1];

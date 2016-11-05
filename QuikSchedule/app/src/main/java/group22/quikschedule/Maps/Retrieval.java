@@ -41,6 +41,10 @@ class Retrieval extends AsyncTask<String, Void, String> {
         StringBuilder result = new StringBuilder();
         BufferedReader rd = null;
         try {
+            int code = con.getResponseCode();
+            if (code != 200){
+                throw new IOException("Response code was: " + code);
+            }
             rd = new BufferedReader(new InputStreamReader(con.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();

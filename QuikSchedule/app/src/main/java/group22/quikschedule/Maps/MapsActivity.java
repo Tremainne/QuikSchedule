@@ -1,6 +1,9 @@
 package group22.quikschedule.Maps;
 
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -12,6 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.annotation.TargetApi;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import group22.quikschedule.R;
@@ -35,7 +39,8 @@ import java.util.List;
  * Very basic activity that should set the map up.
  */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
-        OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback
+        OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 {
 
 
@@ -48,6 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap myMap;
     private boolean permissionDenied = false;
+    private GoogleApiClient client;
 
     public void setStart(LatLng start) {
         this.start = start;
@@ -61,7 +67,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LatLng end;
 
+    public void setHome(LatLng home) {
+        this.home = home;
+    }
 
+    private LatLng home;
 
 
     /**
@@ -77,18 +87,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
+
+        client = new GoogleApiClient.Builder( this )
+                .addApi( LocationServices.API )
+                .addConnectionCallbacks( this )
+                .addOnConnectionFailedListener( this )
+                .build();
+
         mapFragment.getMapAsync(this);
         ArrayList<LatLng> startHolder = new ArrayList<>();
         ArrayList<LatLng> endHolder = new ArrayList<>();
-        Geocode.nameToLatLng("5030 Via Papel, San Diego 92122", this, true);
-        Geocode.nameToLatLng("Geisel Library, La Jolla", this, false);
+        Geocode.nameToLatLng("5030%20Via%20Papel,%20San%20Diego%2092122", this, true);
+        Geocode.nameToLatLng("Geisel%20Library,%20La%20Jolla", this, false);
         Log.d("Maps", "Made geocode request");
 
+    }
 
+    @Override
+    protected void onStart() {
+        client.connect();
+        super.onStart();
+    }
 
+    @Override
+    public void onConnected( Bundle connectionHint ) {
+        Location myLoc = LocationServices.FusedLocationApi.getLastLocation( client );
+        String lat = null;
+        String lng = null;
+        if( myLoc != null ) {
+            lat = String.valueOf( myLoc.getLatitude() );
+            lng = String.valueOf( myLoc.getLongitude() );
+            double latDbl = Double.parseDouble(lat);
+            double lngDbl = Double.parseDouble(lng);
+            start = new LatLng(latDbl, lngDbl);
+        }
+    }
 
+    @Override
+    public void onConnectionSuspended (int cause) {
+        Log.d( "Maps", "Connection suspended"  );
+    }
 
-
+    @Override
+    public void onConnectionFailed ( ConnectionResult result ) {
+        Log.d( "Maps", "Connection failed"  );
     }
 
     /** Zooms map to center hall on creation, and enables the myLocation button.
