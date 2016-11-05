@@ -1,9 +1,11 @@
 package group22.quikschedule.Maps;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,7 +26,8 @@ class Retrieval extends AsyncTask<String, Void, String> {
     public String doInBackground(String... urls) {
         String request = urls[0];
         HttpsURLConnection con = null;
-        System.err.println( request );
+        Log.d("Retrieval", request );
+
         try {
             URL url = new URL(request);
             con = (HttpsURLConnection) url.openConnection();
@@ -39,9 +42,14 @@ class Retrieval extends AsyncTask<String, Void, String> {
         StringBuilder result = new StringBuilder();
         BufferedReader rd = null;
         try {
+            int code = con.getResponseCode();
+            if (code != 200) {
+                throw new IOException("Response code was: " + code);
+            }
             rd = new BufferedReader(new InputStreamReader(con.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
         String line = null;
         try {
@@ -49,6 +57,7 @@ class Retrieval extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        result.append(line);
         while( line != null ) {
             try {
                 line = rd.readLine();
@@ -62,11 +71,12 @@ class Retrieval extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.d("Request", result.toString());
         return result.toString();
     }
 
     public interface AsyncResponse {
-        void processFinish( String result );
+        void processFinish( String result);
     }
 
     public AsyncResponse delegate = null;

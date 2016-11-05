@@ -24,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -35,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import group22.quikschedule.Maps.Directions;
 import group22.quikschedule.Settings.WebregActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         /*super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext()); //Allows for Facebook SDK access
         FirebaseApp.initializeApp(this);

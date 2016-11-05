@@ -14,7 +14,6 @@ repositories {
 }
 apply plugin: 'com.android.application'
 
-
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
@@ -32,13 +31,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+<<<<<<< HEAD
     testOptions {
         unitTests.returnDefaultValues = true
-    }
-
+=======
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+>>>>>>> 7b8b4ceffef47a6038a5c40423bc223d1fd824c3
     }
 }
 
@@ -54,15 +53,16 @@ dependencies {
     compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.firebase:firebase-database:9.6.1'
-    compile 'com.google.firebase:firebase-auth:9.6.1'
+    compile 'com.google.firebase:firebase-auth:9.4.0'
     compile 'com.google.android.gms:play-services:9.6.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.google.android.gms:play-services-auth:9.6.1'
     testCompile 'junit:junit:4.12'
     apply plugin: 'com.google.gms.google-services'
+<<<<<<< HEAD
 
-
+=======
     compile 'pub.devrel:easypermissions:0.2.1'
     compile('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
@@ -70,8 +70,8 @@ dependencies {
     compile('com.google.apis:google-api-services-calendar:v3-rev218-1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-
+>>>>>>> 7b8b4ceffef47a6038a5c40423bc223d1fd824c3
 }
 
-apply plugin: 'com.google.gms.google-services'
 
+apply plugin: 'com.google.gms.google-services'
