@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.api.client.util.Maps;
+
 import javax.net.ssl.HttpsURLConnection;
 
 import java.net.HttpURLConnection;
@@ -80,9 +82,9 @@ public class Directions {
      * @param end The ending address
      * @return the URL request to use.
      */
-    public static String buildURLRequest(String start, String end){
+    /*public static String buildURLRequest(String start, String end){
         return buildURLRequest(Geocode.nameToLatLng(start), Geocode.nameToLatLng(end));
-    }
+    }*/
 
     /**
      * Sets the home location that is used as the default starting location.
@@ -97,7 +99,7 @@ public class Directions {
      * @param home The home location to set in string form
      */
     public static void setHome(String home) {
-        setHome(Geocode.nameToLatLng(home));
+        //setHome(Geocode.nameToLatLng(home));
     }
 
     private static String parseLatLong( LatLng parse ) {
@@ -107,19 +109,20 @@ public class Directions {
         return split[0];
     }
 
-    public static List<List<HashMap<String, String>>> makeRequest(LatLng start, LatLng dest) {
+    public static void makeRequest(final LatLng start, LatLng dest,
+                                                                  final MapsActivity maps) {
         String request = buildURLRequest(start, dest);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
                 Log.d("directions", "callback completed");
-                //result = "{" + result + "}";
                 Directions.staticDirections = getJson( result );
+                maps.plotLine(staticDirections);
+
             }
         });
 
         asyncTask.execute(request);
-        return staticDirections;
     }
 
     private static List<List<HashMap<String, String>>> getJson( String jsonStr ) {

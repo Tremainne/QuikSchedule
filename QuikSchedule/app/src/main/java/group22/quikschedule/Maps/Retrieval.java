@@ -70,7 +70,7 @@ class Retrieval extends AsyncTask<String, Void, String> {
     }
 
     public interface AsyncResponse {
-        void processFinish( String result );
+        void processFinish( String result);
     }
 
     public AsyncResponse delegate = null;

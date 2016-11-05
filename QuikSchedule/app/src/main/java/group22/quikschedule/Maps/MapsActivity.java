@@ -49,6 +49,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap myMap;
     private boolean permissionDenied = false;
 
+    public void setStart(LatLng start) {
+        this.start = start;
+    }
+
+    private LatLng start;
+
+    public void setEnd(LatLng end) {
+        this.end = end;
+    }
+
+    private LatLng end;
 
 
 
@@ -67,42 +78,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-        LatLng start = new LatLng( 32.8497754,-117.1876147 );
-        LatLng end = new LatLng( 32.8800649,-117.2362022 );
-        Directions.makeRequest(start,end);
+        ArrayList<LatLng> startHolder = new ArrayList<>();
+        ArrayList<LatLng> endHolder = new ArrayList<>();
+        Geocode.nameToLatLng("5030 Via Papel, San Diego 92122", this, true);
+        Geocode.nameToLatLng("Geisel Library, La Jolla", this, false);
+        Log.d("Maps", "Made geocode request");
 
 
-        /*
-        ArrayList<LatLng> points;
-        PolylineOptions lineOptions = null;
 
-        // Traversing through all the routes
-        for( int i = 0; i < directions.size(); i++ ) {
-            points = new ArrayList<>();
-            lineOptions = new PolylineOptions();
 
-            // Fetching i-th route
-            List<HashMap<String, String>> path = directions.get( i );
 
-            // Fetching all the points in i-th route
-            for( int j = 0; j < path.size(); j++ ) {
-                HashMap<String, String> point = path.get( j );
 
-                double lat = Double.parseDouble( point.get( "lat" ) );
-                double lng = Double.parseDouble( point.get( "lng" ) );
-                LatLng position = new LatLng( lat, lng );
-
-                points.add( position );
-            }
-
-            // Adding all the points in the route to LineOptions
-            lineOptions.addAll( points );
-            lineOptions.width( 10 );
-            lineOptions.color( Color.RED );
-        }
-
-        myMap.addPolyline( lineOptions );
-        */
     }
 
     /** Zooms map to center hall on creation, and enables the myLocation button.
@@ -131,7 +117,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         myMap = map;
         map.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
-        System.err.println(Directions.getStaticDirections());
+
+
     }
 
     /** Method to handle myLocation button presses, doesn't really do anything.
@@ -153,10 +140,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
-            Log.d("maps", "permission needs request.");
+            Log.d("maps", "fine permission needs request.");
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                     LOCATION_PERMISSION_REQUEST_CODE);
-            Log.d("maps", "permission requested.");
+            Log.d("maps", "fine permission requested.");
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                // Permission to access the location is missing.
+                Log.d("maps", "coarse permission needs request.");
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        LOCATION_PERMISSION_REQUEST_CODE);
+                Log.d("maps", "coarse permission requested.");
+            }
         } else if (myMap != null) {
             // Access to the location has been granted to the app.
             Log.d("maps", "permission given");
@@ -217,5 +212,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
+    public void plotLine(List<List<HashMap<String, String>>> result) {
+        ArrayList<LatLng> points;
+        PolylineOptions lineOptions = null;
+
+        // Traversing through all the routes
+        for (int i = 0; i < result.size(); i++) {
+            points = new ArrayList<>();
+            lineOptions = new PolylineOptions();
+
+            // Fetching i-th route
+            List<HashMap<String, String>> path = result.get(i);
+
+            // Fetching all the points in i-th route
+            for (int j = 0; j < path.size(); j++) {
+                HashMap<String, String> point = path.get(j);
+
+                double lat = Double.parseDouble(point.get("lat"));
+                double lng = Double.parseDouble(point.get("lng"));
+                LatLng position = new LatLng(lat, lng);
+
+                points.add(position);
+            }
+
+            // Adding all the points in the route to LineOptions
+            lineOptions.addAll(points);
+            lineOptions.width(10);
+            lineOptions.color(Color.RED);
+            Log.d("MapsActivity","onPostExecute lineoptions decoded");
+
+        }
+
+        // Drawing polyline in the Google Map for the i-th route
+        if(lineOptions != null) {
+            myMap.addPolyline(lineOptions);
+        }
+        else {
+            Log.d("MapsActivity","without Polylines drawn");
+        }
+
+        Log.d("plotLine", "Should finish line.");
+    }
+
+    public void onGeocodeComplete() {
+        if (start != null && end != null) {
+            Directions.makeRequest(start, end, this);
+        }
+    }
 
 }
