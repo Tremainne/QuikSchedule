@@ -78,10 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-        ArrayList<LatLng> startHolder = new ArrayList<>();
-        ArrayList<LatLng> endHolder = new ArrayList<>();
-        Geocode.nameToLatLng("5030 Via Papel, San Diego 92122", this, true);
-        Geocode.nameToLatLng("Geisel Library, La Jolla", this, false);
+        showDirections("5030 Via Papel, San Diego 92122", Directions.codeToName("CENTR"));
         Log.d("Maps", "Made geocode request");
 
 
@@ -260,4 +257,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    public void showDirections(String start, String end) {
+        Geocode.nameToLatLng(start, this, true);
+        Geocode.nameToLatLng(end, this, false);
+    }
 }

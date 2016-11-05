@@ -6,9 +6,8 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.*;
 
 
-import java.util.List;
 
-import group22.quikschedule.R;
+
 
 /**
  * Created by christoph on 10/31/16.
@@ -16,13 +15,8 @@ import group22.quikschedule.R;
 
 public class Geocode {
 
-    public static LatLng getStaticLatLng() {
-        return staticLatLng;
-    }
-
-    private static LatLng staticLatLng;
-
     public static void nameToLatLng(String address, final MapsActivity map, final boolean isStart) {
+        address = address.replaceAll("\\s", "%20");
         String request = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
                 address + "&key=AIzaSyBmLBTq2_NcacunMNnPlEPL5fIQj38bIRs";
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
