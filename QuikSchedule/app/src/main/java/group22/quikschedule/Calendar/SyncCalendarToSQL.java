@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.text.format.DateFormat;
+import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -50,6 +51,8 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
                 transport, jsonFactory, credential)
                 .setApplicationName("Quick Calendar")
                 .build();
+
+        Toast.makeText(mContext, "Syncing Calendar", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -72,9 +75,11 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
     private void run() throws IOException {
         String calendarId = getCalendarIdFromSummary("QuickSchedule");
         if (calendarId.equals("")) {
-            CalendarListEntry calendarListEntry = new CalendarListEntry();
-            calendarListEntry.setSummary("QuickSchedule");
-            mService.calendarList().insert(calendarListEntry).execute();
+            com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
+            calendar.setSummary("QuickSchedule");
+            calendar.setTimeZone(java.util.Calendar.getInstance().getTimeZone().getID());
+            com.google.api.services.calendar.model.Calendar execute = mService.calendars().insert(calendar).execute();
+            calendarId = execute.getId();
         }
         Calendar.Events.List request = mService.events().list(calendarId);
 

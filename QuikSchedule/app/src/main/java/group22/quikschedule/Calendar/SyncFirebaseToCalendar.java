@@ -140,10 +140,11 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
                             .setLocation(location)
                             .setDescription("Section: " + section);
 
-                    String[] recurrence = new String[]{"RRULE:FREQ=WEEKLY;COUNT=10"};
+                    String[] recurrence = new String[]{"RRULE:FREQ=WEEKLY;COUNT=11"};
                     event.setRecurrence(Arrays.asList(recurrence));
 
                     java.util.Calendar cal = java.util.Calendar.getInstance();
+                    cal.set(java.util.Calendar.WEEK_OF_YEAR, 39);
 
                     cal.set(java.util.Calendar.MINUTE, Integer.parseInt(startTime.substring(3,5)));
                     cal.set(java.util.Calendar.DAY_OF_WEEK, dayOfWeek(day));
