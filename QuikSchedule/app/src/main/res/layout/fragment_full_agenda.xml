@@ -327,12 +327,10 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/schedule"
+                    android:id="@+id/fullAgendaSchedule"
                     android:layout_width="match_parent"
                     android:layout_height="1454dp">
                 </RelativeLayout>
-
-
             </LinearLayout>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

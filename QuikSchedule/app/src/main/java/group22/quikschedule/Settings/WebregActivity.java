@@ -15,7 +15,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.facebook.CallbackManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +27,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import group22.quikschedule.LoginActivity;
 import group22.quikschedule.MainActivity;
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
