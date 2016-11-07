@@ -41,7 +41,7 @@
         <activity
             android:name=".Settings.WebregActivity"
             android:exported="true" />
-        <activity android:name=".Maps.MapsActivity">
+        <activity android:name=".Maps.MapsFragment">
             <uses-sdk
                 android:minSdkVersion="15"
                 android:targetSdkVersion="23" />

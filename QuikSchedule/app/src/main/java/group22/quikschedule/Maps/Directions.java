@@ -1,27 +1,14 @@
 package group22.quikschedule.Maps;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.api.client.util.Maps;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import org.json.*;
-
-import group22.quikschedule.R;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by christoph on 10/20/16.
@@ -111,7 +98,7 @@ public class Directions {
     }
 
     public static void makeRequest(final LatLng start, LatLng dest,
-                                                                  final MapsActivity maps) {
+                                                                  final MapsFragment maps) {
         String request = buildURLRequest(start, dest);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override

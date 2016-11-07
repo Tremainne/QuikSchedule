@@ -2,7 +2,6 @@ package group22.quikschedule;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
@@ -15,26 +14,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Arrays;
 
 import group22.quikschedule.Calendar.CalendarSyncActivity;
-import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
-import group22.quikschedule.Maps.MapsActivity;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Settings.SettingsFragment;
 import group22.quikschedule.Settings.WebregActivity;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -139,6 +126,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public void toMap(View view) {
 
-        startActivity(new Intent(this, MapsActivity.class));
+        startActivity(new Intent(this, MapsFragment.class));
     }
 }
