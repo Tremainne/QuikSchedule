@@ -28,8 +28,6 @@ public class CalendarActivity extends AppCompatActivity {
                 i.putExtra("Year", year);
                 i.putExtra("Month", month);
                 startActivity(i);
-
-
             }
         });
 

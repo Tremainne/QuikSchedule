@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ToggleButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,10 @@ import group22.quikschedule.R;
 
 public class WeekFragment extends Fragment implements View.OnClickListener{
 
+    private boolean fullAgenda = true;
+    private View weekView;
+    private String[] dates;
+
     public WeekFragment() {
         // Required empty public constructor
     }
@@ -30,13 +35,37 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_week, container, false);
+        weekView = inflater.inflate(R.layout.fragment_week, container, false);
 
-        AppCompatButton button = (AppCompatButton) v.findViewById(R.id.month);
+        AppCompatButton button = (AppCompatButton) weekView.findViewById(R.id.month);
         button.setOnClickListener(this);
 
-        ImageButton addButton = (ImageButton) v.findViewById(R.id.addButton);
+        ImageButton addButton = (ImageButton) weekView.findViewById(R.id.addButton);
         addButton.setOnClickListener(this);
+
+        createTabs();
+
+        // Inflate the layout for this fragment
+        return weekView;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch(v.getId()) {
+            case R.id.month:
+                Intent i = new Intent(getActivity(), CalendarActivity.class);
+                startActivity(i);
+                break;
+            case R.id.addButton:
+                Intent i2 = new Intent(getActivity(), ExpandedEventActivity.class);
+                i2.putExtra("Dates", dates);
+                startActivity(i2);
+                break;
+        }
+    }
+
+    public void createTabs() {
 
         Calendar cal = Calendar.getInstance();
 
@@ -50,43 +79,27 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
 
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         DateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
-        String[] dates = new String[7];
+        dates = new String[7];
         for(int i = 0; i < 7; i++) {
             dates[i] = formatter.format(cal.getTime());
             cal.roll(Calendar.DAY_OF_WEEK, 1);
         }
+
         Bundle bundle = new Bundle();
         bundle.putStringArray("Dates", dates);
+        bundle.putBoolean("Agenda", fullAgenda);
 
-        ViewPager viewPager = (ViewPager) v.findViewById(R.id.pager);
+        ViewPager viewPager = (ViewPager) weekView.findViewById(R.id.pager);
         FragmentPageAdapter f = new FragmentPageAdapter(getChildFragmentManager(), bundle);
         viewPager.setAdapter(f);
         viewPager.setCurrentItem(dayOfWeek-1);
 
-        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
+        TabLayout tabLayout = (TabLayout) weekView.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
         for(int i = 0; i < 7; i++) {
             TabLayout.Tab t = tabLayout.getTabAt(i);
             t.setText(dates[i].substring(dates[i].length()-8, dates[i].length()-6));
-        }
-
-        // Inflate the layout for this fragment
-        return v;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        switch(v.getId()) {
-            case R.id.month:
-                Intent i = new Intent(getActivity(), CalendarActivity.class);
-                startActivity(i);
-                break;
-            case R.id.addButton:
-                Intent i2 = new Intent(getActivity(), ExpandedEventActivity.class);
-                startActivity(i2);
-                break;
         }
     }
 
