@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import group22.quikschedule.Calendar.DayFragment;
-
 public class FragmentPageAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 7;
     private String tabTitles[] = new String[7];

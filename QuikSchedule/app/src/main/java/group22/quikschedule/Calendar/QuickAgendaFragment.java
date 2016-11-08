@@ -28,7 +28,7 @@ import java.util.PriorityQueue;
 
 import group22.quikschedule.R;
 
-public class DayFragment extends Fragment {
+public class QuickAgendaFragment extends Fragment {
 
     private String[] dates;
     private int mPage;
@@ -40,12 +40,12 @@ public class DayFragment extends Fragment {
         }
     });
 
-    public static DayFragment newInstance(int page, String[] tabTitles) {
+    public static QuickAgendaFragment newInstance(int page, String[] tabTitles) {
         Bundle args = new Bundle();
         args.putInt("Page", page);
         args.putStringArray("Dates", tabTitles);
 
-        DayFragment fragment = new DayFragment();
+        QuickAgendaFragment fragment = new QuickAgendaFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -62,7 +62,7 @@ public class DayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_full_agenda, container, false);
+        View view = inflater.inflate(R.layout.fragment_quick_agenda, container, false);
 
         TextView date = (TextView) view.findViewById(R.id.date);
         date.setText(dates[mPage-1]);
@@ -82,9 +82,7 @@ public class DayFragment extends Fragment {
     public void addEvents(View view) {
 
         pullEventsFromDatabase();
-
-        RelativeLayout schedule = (RelativeLayout) view.findViewById(R.id.fullAgendaSchedule);
-
+        LinearLayout schedule = (LinearLayout) view.findViewById(R.id.quickAgendaSchedule);
 
         while(!events.isEmpty()) {
 
@@ -97,16 +95,7 @@ public class DayFragment extends Fragment {
                 newEvent.setText(event.name);
                 newEvent.setBackgroundResource(R.drawable.border);
 
-                int eventSize = (event.endTime - event.startTime) * 3;
-                int eventPosition = event.startTime * 3; //Considering startTime is in terms of minutes
-
-                RelativeLayout.LayoutParams params =
-                        new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, eventSize);
-                params.leftMargin = 10;
-                params.rightMargin = 10;
-                params.topMargin = eventPosition;
-
-                schedule.addView(newEvent, params);
+                schedule.addView(newEvent);
 
                 newEvent.setOnClickListener(new View.OnClickListener() {
 
@@ -117,9 +106,6 @@ public class DayFragment extends Fragment {
                         i.putExtra("Date", dates[mPage - 1]);
                         i.putExtra("Name", event.name);
                         i.putExtra("Location", event.location);
-                        i.putExtra("Start Time", event.startTime);
-                        i.putExtra("End Time", event.endTime);
-
                         startActivity(i);
                     }
                 });

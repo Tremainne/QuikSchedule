@@ -1,12 +1,15 @@
 package group22.quikschedule.Calendar;
 
+import android.os.Parcelable;
+
+import java.util.Comparator;
 import java.util.Date;
 
 /**
  * Created by RohanChhabra on 10/30/16.
  */
 
-public class Event {
+public class Event{
 
     String name;
     int startTime;//in minutes
@@ -23,4 +26,5 @@ public class Event {
         startTime = s;
         endTime = e;
     }
+
 }
