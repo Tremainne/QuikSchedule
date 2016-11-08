@@ -33,6 +33,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation_drawer);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("QuikSchedule");
         setSupportActionBar(toolbar);
 
         Intent i = getIntent();
@@ -46,7 +47,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        Log.i("Fragment Selected", "Opened Navigation Drawer");
         if (i.hasExtra("Day")) {
             Bundle weekBundle = new Bundle();
             weekBundle.putInt("Day", i.getIntExtra("Day", 0));
@@ -58,16 +58,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
-        Log.i("Fragment Selected", "After FragmentManager");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
 
-        Log.i("Fragment Selected", "After DrawerLayout");
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Log.i("Fragment Selected", "After NavigationView");
     }
 
     @Override
