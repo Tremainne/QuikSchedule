@@ -135,22 +135,18 @@ public class ExpandedEventActivity extends AppCompatActivity
     private boolean addToCalendar () {
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
-            addToCalendar();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
             addToCalendar();
         } else if (!isDeviceOnline()) {
             Toast.makeText(getApplicationContext(), "No network available", Toast.LENGTH_LONG).show();
         } else {
-
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
                     transport, jsonFactory, mCredential)
                     .setApplicationName("Quick Calendar")
                     .build();
-
-            Intent i = getIntent();
 
             event = new Event()
                     .setSummary(((EditText) findViewById(R.id.eventName)).getText().toString())
@@ -271,8 +267,6 @@ public class ExpandedEventActivity extends AppCompatActivity
 
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
-
-
         if (EasyPermissions.hasPermissions(
                 this, Manifest.permission.GET_ACCOUNTS)) {
             String accountName = getPreferences(Context.MODE_PRIVATE)
@@ -302,9 +296,6 @@ public class ExpandedEventActivity extends AppCompatActivity
         switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    //mOutputText.setText(
-                    //        "This app requires Google Play Services. Please install " +
-                    //                "Google Play Services on your device and relaunch this app.");
                 } else {
                     addToCalendar();
                 }
