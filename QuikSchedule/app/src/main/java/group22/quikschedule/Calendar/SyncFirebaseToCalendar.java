@@ -120,6 +120,18 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
                     String day = (String) snapshot.child("day").getValue();
                     String location = (String) snapshot.child("location").getValue();
                     String section = (String) snapshot.child("section").getValue();
+                    String textBooks = "";
+
+                    int textBookNum = 0;
+                    String currTextBook = (String) snapshot.child("textbook_" + textBookNum).getValue();
+                    String currAuthor = (String) snapshot.child("author_" + textBookNum).getValue();
+                    while (currTextBook != null) {
+                        textBooks += " : " + currTextBook + " by " + currAuthor;
+
+                        textBookNum++;
+                        currTextBook = (String) snapshot.child("textbook_" + textBookNum).getValue();
+                        currAuthor = (String) snapshot.child("author_" + textBookNum).getValue();
+                    }
 
 
                     if (startTime.substring(1,2).equals(":")) {
@@ -138,7 +150,8 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
                     Event event = new Event()
                             .setSummary(className + " - " + classType)
                             .setLocation(location)
-                            .setDescription("Section: " + section);
+                            .setDescription("Section: " + section + "\n"
+                                            + "Textbooks" + textBooks);
 
                     String[] recurrence = new String[]{"RRULE:FREQ=WEEKLY;COUNT=11"};
                     event.setRecurrence(Arrays.asList(recurrence));

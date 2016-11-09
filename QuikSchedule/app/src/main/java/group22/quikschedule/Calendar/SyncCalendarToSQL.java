@@ -163,7 +163,7 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
             CharSequence cs = DateFormat.format("EEEE", dt.getValue());
             final StringBuilder sb = new StringBuilder(cs.length());
             sb.append(cs);
-            String day = sb.toString();
+            String day = sb.toString().toUpperCase();
             System.out.println(day);
 
             java.util.Calendar cal = java.util.Calendar.getInstance();
