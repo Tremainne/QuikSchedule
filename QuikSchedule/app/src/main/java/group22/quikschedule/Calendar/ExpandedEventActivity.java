@@ -256,9 +256,10 @@ public class ExpandedEventActivity extends AppCompatActivity
                     Toast.LENGTH_LONG).show();
         }
         else {
-            //Intent i  = new Intent(this, MapsActivity.class);
-            //i.putExtra("Location", location.getText());
-            //startActivity(i);
+            Intent i  = new Intent(this, NavigationDrawerActivity.class);
+            i.putExtra("Location", location.getText());
+            i.putExtra("Fragment", 1);
+            startActivity(i);
         }
     }
 
