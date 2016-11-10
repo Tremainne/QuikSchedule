@@ -1,29 +1,29 @@
 package group22.quikschedule.Calendar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.util.PriorityQueue;
 
 import group22.quikschedule.R;
@@ -31,14 +31,17 @@ import group22.quikschedule.R;
 public class DayFragment extends Fragment {
 
     private String[] dates;
+    private String[] daysOfWeek =
+            {" = 'Sunday'", " = 'Monday'", " = 'Tuesday'", " = 'Wednesday'", " = 'Thursday'",
+                    " = 'Friday'", " = 'Saturday'"};
     private int mPage;
-    private PriorityQueue<Event> events = new PriorityQueue<>(15, new Comparator<Event>() {
+   /* private PriorityQueue<Event> events = new PriorityQueue<>(15, new Comparator<Event>() {
         @Override
         public int compare(Event a, Event b) {
 
             return a.startTime-b.startTime;
         }
-    });
+    });*/
 
     public static DayFragment newInstance(int page, String[] tabTitles) {
         Bundle args = new Bundle();
@@ -81,64 +84,116 @@ public class DayFragment extends Fragment {
 
     public void addEvents(View view) {
 
-        pullEventsFromDatabase();
+        ArrayList<JSONObject> j = getData(getContext());
 
         RelativeLayout schedule = (RelativeLayout) view.findViewById(R.id.fullAgendaSchedule);
 
+        for (JSONObject i : j) {
 
-        while(!events.isEmpty()) {
+            final Event event = convertJSONToEvent(i);
 
-            final Event event = events.poll();
+            TextView newEvent = new TextView(getActivity());
+            newEvent.setGravity(Gravity.NO_GRAVITY);
+            newEvent.setText(" "+event.name+"\n"+
+                            " " +event.startTime+"-"+event.endTime+"\n"+
+                            " " +event.location);
+            newEvent.setBackgroundResource(R.drawable.border);
 
-            if ((event.repeating && event.days[mPage - 1]) || !event.repeating) {
+            int eventSize = (event.endTime - event.startTime) * 3;
+            int eventPosition = event.startTime * 3; //Considering startTime is in terms of minutes
 
-                TextView newEvent = new TextView(getActivity());
-                newEvent.setGravity(Gravity.NO_GRAVITY);
-                newEvent.setText(event.name);
-                newEvent.setBackgroundResource(R.drawable.border);
+            RelativeLayout.LayoutParams params =
+                    new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, eventSize);
+            params.leftMargin = 10;
+            params.rightMargin = 10;
+            params.topMargin = eventPosition;
 
-                int eventSize = (event.endTime - event.startTime) * 3;
-                int eventPosition = event.startTime * 3; //Considering startTime is in terms of minutes
+            schedule.addView(newEvent, params);
 
-                RelativeLayout.LayoutParams params =
-                        new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, eventSize);
-                params.leftMargin = 10;
-                params.rightMargin = 10;
-                params.topMargin = eventPosition;
+            newEvent.setOnClickListener(new View.OnClickListener() {
 
-                schedule.addView(newEvent, params);
+                @Override
+                public void onClick(View v) {
 
-                newEvent.setOnClickListener(new View.OnClickListener() {
+                    Intent i = new Intent(getActivity(), ExpandedEventActivity.class);
+                    i.putExtra("Date", dates[mPage - 1]);
+                    i.putExtra("Name", event.name);
+                    i.putExtra("Location", event.location);
+                    i.putExtra("Start Time", event.startTime);
+                    i.putExtra("End Time", event.endTime);
 
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent i = new Intent(getActivity(), ExpandedEventActivity.class);
-                        i.putExtra("Date", dates[mPage - 1]);
-                        i.putExtra("Name", event.name);
-                        i.putExtra("Location", event.location);
-                        i.putExtra("Start Time", event.startTime);
-                        i.putExtra("End Time", event.endTime);
-
-                        startActivity(i);
-                    }
-                });
-            }
+                    startActivity(i);
+                }
+            });
         }
     }
 
+    public ArrayList<JSONObject> getData(Context mContext)
+    {
 
-    public void pullEventsFromDatabase() {
+        DateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
 
-        DateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
-        Date inputDate = null;
+        Calendar c = Calendar.getInstance();
+
         try {
-            inputDate = (Date) format.parse(dates[mPage-1]);
+            Date inputDate = formatter.parse(dates[mPage - 1]);
+            c.setTime(inputDate);
         }
         catch(ParseException e) {
             e.printStackTrace();
         }
-        format = new SimpleDateFormat("yyyy-MM-DD");
+
+        int week = c.get(Calendar.WEEK_OF_YEAR);
+        int day = c.get(Calendar.DAY_OF_WEEK);
+
+
+        Log.d("Entered", "JSON getData");
+        DatabaseHelper mDbHelper = new DatabaseHelper(mContext);
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
+                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_WEEK + " = '"+week+"'" + " AND " +
+                DatabaseContract.DatabaseEntry.COLUMN_DAY + daysOfWeek[day-1];
+
+        Cursor cursor = db.rawQuery(sql, null);
+        ArrayList<JSONObject> events = new ArrayList<>();
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    String json = cursor.getString(
+                            cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_DATA));
+                    System.err.println(json);
+                    JSONObject j;
+                    try {
+                        j = new JSONObject(json);
+                        events.add(j);
+                    } catch (JSONException e) {
+                    }
+                } while (cursor.moveToNext());
+            }
+        }
+
+        cursor.close();
+
+        return events;
+    }
+
+    public Event convertJSONToEvent(JSONObject jsonObject) {
+
+        String id;
+        try {
+            id = jsonObject.getString("id");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Event e = new Event("Tester", 1200, 1250, "random_id");
+        return e;
+    }
+
+    /*
+    public void pullEventsFromDatabase() {
 
         //pull and parse the events by the input day into stack
         Event test = new Event("ETHN1 Lecture", 780, 830);
@@ -186,5 +241,6 @@ public class DayFragment extends Fragment {
         test.repeating = true;
         events.add(test);
     }
+    */
 
 }

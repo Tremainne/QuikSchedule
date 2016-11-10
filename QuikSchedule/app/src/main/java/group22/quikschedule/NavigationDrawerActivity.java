@@ -38,9 +38,27 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         Intent i = getIntent();
 
+        int selectFrag = i.getIntExtra("Fragment", 0);
+
         Fragment fragment = null;
         Class fragmentClass = null;
         fragmentClass = WeekFragment.class;
+
+        switch(selectFrag) {
+            case 0:
+                fragmentClass = WeekFragment.class;
+                break;
+            case 1:
+                fragmentClass = WeekFragment.class;
+                break;
+            case 2:
+                fragmentClass = WeekFragment.class;
+                break;
+            case 3:
+                fragmentClass = WeekFragment.class;
+                break;
+        }
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -53,6 +71,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
             weekBundle.putInt("Month", i.getIntExtra("Month", 0));
             weekBundle.putInt("Year", i.getIntExtra("Year", 0));
             fragment.setArguments(weekBundle);
+        }
+
+        if(i.hasExtra("Location")) {
+            Bundle mapsBundle = new Bundle();
+            mapsBundle.putString("Location", i.getStringExtra("Location"));
+            fragment.setArguments(mapsBundle);
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
