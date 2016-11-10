@@ -49,13 +49,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 fragmentClass = WeekFragment.class;
                 break;
             case 1:
-                fragmentClass = WeekFragment.class;
+                fragmentClass = MapsFragment.class;
                 break;
             case 2:
-                fragmentClass = WeekFragment.class;
+                fragmentClass = FriendsFragment.class;
                 break;
             case 3:
-                fragmentClass = WeekFragment.class;
+                fragmentClass = SettingsFragment.class;
                 break;
         }
 
