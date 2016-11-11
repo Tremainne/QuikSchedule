@@ -129,7 +129,6 @@ public class ExpandedEventActivity extends AppCompatActivity
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
-            addToCalendar();
         } else if (!isDeviceOnline()) {
             Toast.makeText(getApplicationContext(), "No network available", Toast.LENGTH_LONG).show();
         } else {
