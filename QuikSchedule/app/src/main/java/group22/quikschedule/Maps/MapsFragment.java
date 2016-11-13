@@ -4,14 +4,17 @@ package group22.quikschedule.Maps;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -25,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.Manifest;
 import android.support.v4.app.ActivityCompat;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -35,24 +39,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import static android.content.Intent.getIntent;
+
 
 /**
- * Very basic activity that should set the map up.
+ * Very basic fragment that should set the map up.
  */
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_maps, container, false);
+        Bundle extras = getActivity().getIntent().getExtras();
+        if( extras != null ) {
+            destination = extras.getString("Location");
+        }
         create(savedInstanceState);
         return view;
-
     }
-
 
     /**
      * Request code for location permission request.
@@ -83,19 +92,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     private LatLng home;
 
+    private String destination = "CENTR";
+
+    private int time;
 
     /**
      * sets up the map when the activity is created.
      * @param savedInstanceState - passed to super's onCreate.
     */
-
     private void create(Bundle savedInstanceState) {
         //super.onCreate(savedInstanceState);
         Log.d("Maps", "activity began");
         getActivity().setContentView(R.layout.fragment_maps);
         SupportMapFragment mapFragment = (SupportMapFragment)
                 (getActivity().getSupportFragmentManager().findFragmentById(R.id.map));
-
 
         client = new GoogleApiClient.Builder( getActivity() )
                 .addApi( LocationServices.API )
@@ -104,9 +114,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 .build();
 
         mapFragment.getMapAsync(this);
-        showDirections(Directions.codeToName("CENTR"));
+        showDirections(Directions.codeToName(destination));
         Log.d("Maps", "Made geocode request");
-
     }
 
     @Override
@@ -157,17 +166,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
         map.clear();
         Log.d("Maps", "callback occurred.");
-        LatLng centerHall = new LatLng(32.8772572,-117.2365204);
-        map.addMarker(new MarkerOptions()
-                .position(centerHall)
-                .title("Center"));
-        Log.d("Maps", "marker added.");
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(centerHall, 16.5f));
         myMap = map;
         map.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
-
-
     }
 
     /** Method to handle myLocation button presses, doesn't really do anything.
@@ -236,8 +237,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-
-
     /**
      * Checks if the permission has been granted.
      * @param grantPermissions  permissions
@@ -255,9 +254,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         return false;
     }
 
-    public void plotLine(List<List<HashMap<String, String>>> result) {
+    public void plotLine(int time, List<List<HashMap<String, String>>> result) {
+        this.time = time;
         ArrayList<LatLng> points;
         PolylineOptions lineOptions = null;
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         // Traversing through all the routes
         for (int i = 0; i < result.size(); i++) {
@@ -276,6 +277,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 LatLng position = new LatLng(lat, lng);
 
                 points.add(position);
+                builder.include( position );
             }
 
             // Adding all the points in the route to LineOptions
@@ -286,9 +288,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
         }
 
+        LatLngBounds bounds = builder.build();
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int padding = (int) (0.15 * dpWidth); // offset from edges of map in pixels
+                                              // based on width of screen
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+
         // Drawing polyline in the Google Map for the i-th route
         if(lineOptions != null) {
+            myMap.clear();
             myMap.addPolyline(lineOptions);
+            myMap.addMarker(new MarkerOptions()
+                    .position(end)
+                    .title("Destination"));
+            myMap.moveCamera( cu );
         }
         else {
             Log.d("MapsFragment","without Polylines drawn");
@@ -307,6 +321,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         Geocode.nameToLatLng(start, this, true);
         Geocode.nameToLatLng(end, this, false);
     }
+
     public void showDirections(String end) {
         Geocode.nameToLatLng(end, this, false);
     }

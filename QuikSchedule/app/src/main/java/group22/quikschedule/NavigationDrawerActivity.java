@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -94,9 +95,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else if (fragmentManager.getBackStackEntryCount() != 0) {
+            fragmentManager.popBackStack();
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -131,8 +137,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -146,7 +151,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
 
     public void toMap(View view) {
-
         startActivity(new Intent(this, MapsFragment.class));
     }
 }
