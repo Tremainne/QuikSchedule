@@ -5,15 +5,13 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import org.json.*;
 
-
-
-
-
 /**
  * Created by christoph on 10/31/16.
  */
 
 public class Geocode {
+
+    static LatLng ret;
 
     public static void nameToLatLng(String address, final MapsFragment map, final boolean isStart) {
         address = address.replaceAll("\\s", "%20");
@@ -32,7 +30,6 @@ public class Geocode {
                 }
             });
         asyncTask.execute(request);
-
     }
 
     public static LatLng getJson(String json) {

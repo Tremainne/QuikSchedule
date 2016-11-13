@@ -256,7 +256,7 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
         else {
             Intent i  = new Intent(this, NavigationDrawerActivity.class);
-            i.putExtra("Location", location.getText());
+            i.putExtra("Location", location.getText().toString());
             i.putExtra("Fragment", 1);
             startActivity(i);
         }
