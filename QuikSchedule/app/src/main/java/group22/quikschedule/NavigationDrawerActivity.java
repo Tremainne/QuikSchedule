@@ -27,6 +27,8 @@ import group22.quikschedule.Settings.WebregActivity;
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static boolean inMaps = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext()); //Allows for Facebook SDK access
@@ -99,8 +101,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        else {
+        else if( inMaps == true ) {
             startActivity(new Intent(NavigationDrawerActivity.this, NavigationDrawerActivity.class));
+            inMaps = false;
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -121,6 +126,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_maps) {
             fragmentClass = MapsFragment.class;
             Log.i("Fragment Selected", "Maps");
+            inMaps = true;
         } else if (id == R.id.nav_friends) {
             fragmentClass = FriendsFragment.class;
             Log.i("Fragment Selected", "Friends");
