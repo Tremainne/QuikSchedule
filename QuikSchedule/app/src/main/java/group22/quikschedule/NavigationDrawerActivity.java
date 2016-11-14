@@ -99,10 +99,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        else if (fragmentManager.getBackStackEntryCount() != 0) {
-            fragmentManager.popBackStack();
-        }
         else {
+            startActivity(new Intent(NavigationDrawerActivity.this, NavigationDrawerActivity.class));
             super.onBackPressed();
         }
     }
