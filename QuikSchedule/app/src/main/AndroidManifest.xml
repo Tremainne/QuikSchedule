@@ -25,9 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
-            android:excludeFromRecents="true"
-            android:noHistory="true">
+            android:name=".NavigationDrawerActivity"
+            android:label="@string/title_activity_navigation_drawer"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,13 +35,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NavigationDrawerActivity"
-            android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Settings.WebregActivity"
             android:exported="true" />
-        <activity android:name=".Maps.MapsActivity">
+        <activity android:name=".Maps.MapsFragment">
             <uses-sdk
                 android:minSdkVersion="15"
                 android:targetSdkVersion="23" />

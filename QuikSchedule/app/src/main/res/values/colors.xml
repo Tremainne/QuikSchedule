@@ -3,7 +3,7 @@
 
     <color name="colorPrimary">@color/md_indigo_400</color>
     <color name="colorPrimaryDark">@color/md_indigo_900</color>
-    <color name="colorAccent">@color/md_yellow_200</color>
+    <color name="colorAccent">@color/md_pink_A700</color>
 
     <!--reds-->
     <color name="md_red_50">#FFEBEE</color>

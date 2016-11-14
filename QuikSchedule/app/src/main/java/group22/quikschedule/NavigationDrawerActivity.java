@@ -2,10 +2,10 @@ package group22.quikschedule;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,26 +15,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Arrays;
 
 import group22.quikschedule.Calendar.CalendarSyncActivity;
-import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
-import group22.quikschedule.Maps.MapsActivity;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Settings.SettingsFragment;
 import group22.quikschedule.Settings.WebregActivity;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,20 +34,38 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation_drawer);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("QuikSchedule");
         setSupportActionBar(toolbar);
 
         Intent i = getIntent();
 
+        int selectFrag = i.getIntExtra("Fragment", 0);
+
         Fragment fragment = null;
         Class fragmentClass = null;
         fragmentClass = WeekFragment.class;
+
+        switch(selectFrag) {
+            case 0:
+                fragmentClass = WeekFragment.class;
+                break;
+            case 1:
+                fragmentClass = MapsFragment.class;
+                break;
+            case 2:
+                fragmentClass = FriendsFragment.class;
+                break;
+            case 3:
+                fragmentClass = SettingsFragment.class;
+                break;
+        }
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Log.i("Fragment Selected", "Opened Navigation Drawer");
         if (i.hasExtra("Day")) {
             Bundle weekBundle = new Bundle();
             weekBundle.putInt("Day", i.getIntExtra("Day", 0));
@@ -68,27 +74,33 @@ public class NavigationDrawerActivity extends AppCompatActivity
             fragment.setArguments(weekBundle);
         }
 
+        if(i.hasExtra("Location")) {
+            Bundle mapsBundle = new Bundle();
+            mapsBundle.putString("Location", i.getStringExtra("Location"));
+            fragment.setArguments(mapsBundle);
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
-        Log.i("Fragment Selected", "After FragmentManager");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
 
-        Log.i("Fragment Selected", "After DrawerLayout");
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Log.i("Fragment Selected", "After NavigationView");
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
+            startActivity(new Intent(NavigationDrawerActivity.this, NavigationDrawerActivity.class));
             super.onBackPressed();
         }
     }
@@ -123,8 +135,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -138,7 +149,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
 
     public void toMap(View view) {
-
-        startActivity(new Intent(this, MapsActivity.class));
+        startActivity(new Intent(this, MapsFragment.class));
     }
 }

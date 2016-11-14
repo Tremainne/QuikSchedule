@@ -5,17 +5,15 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import org.json.*;
 
-
-
-
-
 /**
  * Created by christoph on 10/31/16.
  */
 
 public class Geocode {
 
-    public static void nameToLatLng(String address, final MapsActivity map, final boolean isStart) {
+    static LatLng ret;
+
+    public static void nameToLatLng(String address, final MapsFragment map, final boolean isStart) {
         address = address.replaceAll("\\s", "%20");
         String request = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
                 address + "&key=AIzaSyBmLBTq2_NcacunMNnPlEPL5fIQj38bIRs";
@@ -32,7 +30,6 @@ public class Geocode {
                 }
             });
         asyncTask.execute(request);
-
     }
 
     public static LatLng getJson(String json) {

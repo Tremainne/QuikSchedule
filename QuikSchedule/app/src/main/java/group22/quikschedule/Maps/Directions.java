@@ -1,27 +1,15 @@
 package group22.quikschedule.Maps;
 
-import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.api.client.util.Maps;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import org.json.*;
-
-import group22.quikschedule.R;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by christoph on 10/20/16.
@@ -36,6 +24,7 @@ public class Directions {
     }
 
     public static List<List<HashMap<String, String>>> staticDirections;
+    public static Integer staticTime;
 
     private static final HashMap<String, String> converter = new HashMap<String, String>();
     static {
@@ -111,24 +100,23 @@ public class Directions {
     }
 
     public static void makeRequest(final LatLng start, LatLng dest,
-                                                                  final MapsActivity maps) {
+                                                                  final MapsFragment maps) {
         String request = buildURLRequest(start, dest);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
                 Log.d("directions", "callback completed");
-                Directions.staticDirections = getJson( result );
-                maps.plotLine(staticDirections);
-
+                Pair<Integer, List<List<HashMap<String, String>>>> ret = getJson( result );
+                Directions.staticTime = ret.first;
+                Directions.staticDirections = ret.second;
+                maps.plotLine(staticTime, staticDirections);
             }
         });
 
         asyncTask.execute(request);
     }
 
-    private static List<List<HashMap<String, String>>> getJson( String jsonStr ) {
-
-
+    private static Pair<Integer, List<List<HashMap<String, String>>>> getJson(String jsonStr ) {
 
         JSONObject dirJSON = null;
         try {
@@ -163,10 +151,8 @@ public class Directions {
         Log.d("Directions", legs.toString());
         try {
             jRoutes = dirJSON.getJSONArray( "routes" );
-            Log.d("Directions", "I'm here at least" );
             // Traversing all routes
             for( int i = 0; i < jRoutes.length() ; i++ ) {
-                Log.d("Directions", "Made it here" );
                 jLegs = ( (JSONObject) jRoutes.get(i) ).getJSONArray( "legs" );
                 List path = new ArrayList<>();
 
@@ -197,7 +183,7 @@ public class Directions {
         }
 
 
-        return routesList;
+        return new Pair<>( time, routesList );
     }
 
     public static final String codeToName(String code) {

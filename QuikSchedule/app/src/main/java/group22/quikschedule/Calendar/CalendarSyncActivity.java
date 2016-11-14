@@ -44,7 +44,7 @@ public class CalendarSyncActivity extends Activity
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String BUTTON_TEXT = "Call Google Calendar API";
+    private static final String BUTTON_TEXT = "Sync Calendar to Phone";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
 
@@ -83,10 +83,13 @@ public class CalendarSyncActivity extends Activity
         final Context context = this;
 
         final Button firebaseButton = new Button(this);
-        firebaseButton.setText("Sync Firebase To Calendar");
+        firebaseButton.setText("Add Classes to Calendar");
         firebaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCallApiButton.setEnabled(false);
+                getResultsFromApi();
+                mCallApiButton.setEnabled(true);
                 firebaseButton.setEnabled(false);
                 new SyncFirebaseToCalendar(mCredential, context).execute();
                 firebaseButton.setEnabled(true);
