@@ -121,16 +121,25 @@ public class ExpandedEventActivity extends AppCompatActivity
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
 
-        addToCalendar();
+        if (addToCalendar()) {
+            Intent i = new Intent(this, NavigationDrawerActivity.class);
+            i.putExtra("Day", c.get(Calendar.DAY_OF_MONTH));
+            i.putExtra("Year", c.get(Calendar.YEAR));
+            i.putExtra("Month", c.get(Calendar.MONTH));
+            startActivity(i);
+        }
     }
 
     private boolean addToCalendar () {
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
+            return false;
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
+            return false;
         } else if (!isDeviceOnline()) {
             Toast.makeText(getApplicationContext(), "No network available", Toast.LENGTH_LONG).show();
+            return false;
         } else {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -188,16 +197,8 @@ public class ExpandedEventActivity extends AppCompatActivity
 
             new addToCalendarInBackground().execute();
 
-            Intent i = new Intent(this, NavigationDrawerActivity.class);
-            i.putExtra("Day", c.get(Calendar.DAY_OF_MONTH));
-            i.putExtra("Year", c.get(Calendar.YEAR));
-            i.putExtra("Month", c.get(Calendar.MONTH));
-            startActivity(i);
-
             return true;
         }
-
-        return false;
     }
 
     public void pickDate(View v) {
