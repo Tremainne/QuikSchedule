@@ -47,7 +47,8 @@ import static android.content.Intent.getIntent;
  */
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        GeoCodeListener
 {
 
     @Override
@@ -59,7 +60,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         if( extras != null ) {
             destination = extras.getString("Location");
         }
-        create(savedInstanceState);
+        create();
         return view;
     }
 
@@ -98,11 +99,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * sets up the map when the activity is created.
-     * @param savedInstanceState - passed to super's onCreate.
     */
-    private void create(Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
+    private void create() {
         Log.d("Maps", "activity began");
+        start = null;
+        end = null;
         getActivity().setContentView(R.layout.fragment_maps);
         SupportMapFragment mapFragment = (SupportMapFragment)
                 (getActivity().getSupportFragmentManager().findFragmentById(R.id.map));
@@ -114,7 +115,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 .build();
 
         mapFragment.getMapAsync(this);
-        showDirections(Directions.codeToName(destination));
+        if (Directions.converter.containsKey(destination)) {
+            showDirections(Directions.codeToName(destination));
+        }
+        else {
+            showDirections(destination);
+        }
         Log.d("Maps", "Made geocode request");
     }
 
@@ -254,8 +260,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         return false;
     }
 
-    public void plotLine(int time, List<List<HashMap<String, String>>> result) {
-        this.time = time;
+    public void plotLine(List<List<HashMap<String, String>>> result) {
         ArrayList<LatLng> points;
         PolylineOptions lineOptions = null;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -297,6 +302,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
         // Drawing polyline in the Google Map for the i-th route
         if(lineOptions != null) {
+            Log.d("MapsFragment", "drawing Polyline");
             myMap.clear();
             myMap.addPolyline(lineOptions);
             myMap.addMarker(new MarkerOptions()
@@ -313,7 +319,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     public void onLatLngComplete() {
         if (start != null && end != null) {
-            Directions.makeRequest(start, end, this);
+            Directions.makeDirectionsRequest(start, end, this);
+            Log.d("MapsFragment", "making routing request");
         }
     }
 
@@ -323,6 +330,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public void showDirections(String end) {
+        Log.d("MapsFragment", "showing directions");
         Geocode.nameToLatLng(end, this, false);
+    }
+
+    public void onComplete() {
+        plotLine(Directions.staticDirections);
     }
 }

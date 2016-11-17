@@ -1,7 +1,6 @@
 package group22.quikschedule.Maps;
 
 import android.util.Log;
-import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -26,28 +25,28 @@ public class Directions {
     public static List<List<HashMap<String, String>>> staticDirections;
     public static Integer staticTime;
 
-    private static final HashMap<String, String> converter = new HashMap<String, String>();
+    public static final HashMap<String, String> converter = new HashMap<String, String>();
     static {
-        converter.put("TM", "Marshall College");
+        converter.put("TM", "Marshall College, La Jolla");
         converter.put("APM","Applied Physics and Mathematics " +
-                "San Diego, CA 92161");
-        converter.put("CENTR","Center Hall Library Walk, San Diego, CA 92161");
-        converter.put("CSB","Cognitive Science Building");
-        converter.put("CICC", "Copley International Conference Center");
-        converter.put("GH", "Galbraith Hall");
-        converter.put("HSS", "Humanities and Social Sciences");
-        converter.put("LEDDN", "Humanities and Social Sciences");
-        converter.put("MANDE", "Mandeville Center");
-        converter.put("MCGIL", "McGill Hall");
-        converter.put("PCYNH", "Pepper Canyon Hall");
-        converter.put("PETER", "Peterson Hall");
-        converter.put("PRICE", "Price Center");
-        converter.put("RBC", "Robinson Building");
-        converter.put("SEQUO", "Sequoyah Hall");
-        converter.put("SSB", "Social Sciences Building");
-        converter.put("SOLIS", "Solis Hall");
-        converter.put("WLH", "Warren Lecture Hall");
-        converter.put("YORK", "York Hall");
+                "La Jolla, CA 92161");
+        converter.put("CENTR","Center Hall Library Walk, La Jolla, CA 92161");
+        converter.put("CSB","Cognitive Science Building, La Jolla");
+        converter.put("CICC", "Copley International Conference Center, La Jolla");
+        converter.put("GH", "Galbraith Hall, La Jolla");
+        converter.put("HSS", "Humanities and Social Sciences, La Jolla");
+        converter.put("LEDDN", "Humanities and Social Sciences, La Jolla");
+        converter.put("MANDE", "Mandeville Center, La Jolla");
+        converter.put("MCGIL", "McGill Hall, La Jolla");
+        converter.put("PCYNH", "Pepper Canyon Hall, La Jolla");
+        converter.put("PETER", "Peterson Hall, La Jolla");
+        converter.put("PRICE", "Price Center, La Jolla");
+        converter.put("RBC", "Robinson Building, La Jolla");
+        converter.put("SEQUO", "Sequoyah Hall, La Jolla");
+        converter.put("SSB", "Social Sciences Building, La Jolla");
+        converter.put("SOLIS", "Solis Hall, La Jolla");
+        converter.put("WLH", "Warren Lecture Hall, La Jolla");
+        converter.put("YORK", "York Hall, La Jolla");
     }
     /**
      * Builds a URL request for use with the DirectionsAPI, using transit for now.
@@ -63,17 +62,6 @@ public class Directions {
                 "&key=AIzaSyBFaJcedR1gHACBsISOnAajioMQqyVKVyg&mode=transit" ;
         return request;
     }
-
-    /**
-     * Wrapper around LatLng version, uses geocoding API to convert string to LatLng then runs
-     * request
-     * @param start The starting address
-     * @param end The ending address
-     * @return the URL request to use.
-     */
-    /*public static String buildURLRequest(String start, String end){
-        return buildURLRequest(Geocode.nameToLatLng(start), Geocode.nameToLatLng(end));
-    }*/
 
     /*
     /**
@@ -99,28 +87,40 @@ public class Directions {
         return split[0];
     }
 
-    public static void makeRequest(final LatLng start, LatLng dest,
-                                                                  final MapsFragment maps) {
+    public static void makeTimeRequest(final LatLng start, LatLng dest,
+                                       final GeoCodeListener maps) {
         String request = buildURLRequest(start, dest);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
                 Log.d("directions", "callback completed");
-                Pair<Integer, List<List<HashMap<String, String>>>> ret = getJson( result );
-                Directions.staticTime = ret.first;
-                Directions.staticDirections = ret.second;
-                maps.plotLine(staticTime, staticDirections);
+                Directions.staticTime = getTimeJson( result );
             }
         });
 
         asyncTask.execute(request);
     }
 
-    private static Pair<Integer, List<List<HashMap<String, String>>>> getJson(String jsonStr ) {
+    public static void makeDirectionsRequest(final LatLng start, LatLng dest,
+                                                                  final GeoCodeListener maps) {
+        String request = buildURLRequest(start, dest);
+        Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
+            @Override
+            public void processFinish(String result) {
+                Log.d("directions", "callback completed");
+                Directions.staticDirections = getDirectionsJson( result );
+                maps.onComplete();
+            }
+        });
+
+        asyncTask.execute(request);
+    }
+
+    private static int getTimeJson(String jsonStr ) {
 
         JSONObject dirJSON = null;
         try {
-            dirJSON = new JSONObject( jsonStr );
+            dirJSON = new JSONObject(jsonStr);
             Log.d("Directions", jsonStr);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -131,24 +131,34 @@ public class Directions {
         int time = 0;
         try {
             Log.d("Directions", dirJSON.toString());
-            routesArr = dirJSON.getJSONArray( "routes" );
-            routes = routesArr.getJSONObject( 0 );
-            legsArr = routes.getJSONArray( "legs" );
-            legs = legsArr.getJSONObject( 0 );
-            duration = legs.getJSONObject( "duration" );
-            time = duration.getInt( "value" );
+            routesArr = dirJSON.getJSONArray("routes");
+            routes = routesArr.getJSONObject(0);
+            legsArr = routes.getJSONArray("legs");
+            legs = legsArr.getJSONObject(0);
+            duration = legs.getJSONObject("duration");
+            time = duration.getInt("value");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.d("Directions", "Time: " + time );
+        return time;
+    }
+
+    private static List<List<HashMap<String, String>>> getDirectionsJson(String jsonStr ) {
+
+        JSONObject dirJSON = null;
+        try {
+            dirJSON = new JSONObject( jsonStr );
+            Log.d("Directions", jsonStr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         List<List<HashMap<String, String>>> routesList = new ArrayList<>() ;
         JSONArray jRoutes;
         JSONArray jLegs;
         JSONArray jSteps;
 
-        Log.d("Directions", legs.toString());
         try {
             jRoutes = dirJSON.getJSONArray( "routes" );
             // Traversing all routes
@@ -182,8 +192,7 @@ public class Directions {
             e.printStackTrace();
         }
 
-
-        return new Pair<>( time, routesList );
+        return routesList;
     }
 
     public static final String codeToName(String code) {

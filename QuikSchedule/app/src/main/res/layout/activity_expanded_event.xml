@@ -36,6 +36,23 @@
                 android:layout_marginEnd="13dp"
                 android:onClick="toCalendar"/>
 
+            <android.support.v7.widget.AppCompatButton
+                android:text="Cancel"
+                android:textSize="20dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/cancel"
+                android:layout_alignTop="@+id/edit"
+                android:background="@color/md_black_1000"
+                android:textCursorDrawable="@null"
+                style="@android:style/Theme.Translucent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/colorAccent"
+                android:layout_width="65dp"
+                android:layout_marginLeft="13dp"
+                android:layout_alignBottom="@+id/edit"
+                android:onClick="cancel"/>
+
         </RelativeLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -95,8 +112,8 @@
                 android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="42dp"
+                        android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/imageButton2" />
 
@@ -126,8 +143,8 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="42dp"
+                        android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/TimeImage" />
 
@@ -156,9 +173,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageButton
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <ImageView
+                        android:layout_width="43dp"
+                        android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/TimeImage2" />
 

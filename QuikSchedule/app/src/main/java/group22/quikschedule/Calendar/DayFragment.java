@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import com.google.api.client.util.DateTime;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,6 +40,13 @@ public class DayFragment extends Fragment {
             {" = 'SUNDAY'", " = 'MONDAY'", " = 'TUESDAY'", " = 'WEDNESDAY'", " = 'THURSDAY'",
                     " = 'FRIDAY'", " = 'SATURDAY'"};
     private int mPage;
+   /* private PriorityQueue<Event> events = new PriorityQueue<>(15, new Comparator<Event>() {
+        @Override
+        public int compare(Event a, Event b) {
+
+            return a.startTime-b.startTime;
+        }
+    });*/
 
     public static DayFragment newInstance(int page, String[] tabTitles) {
         Bundle args = new Bundle();
@@ -74,8 +83,6 @@ public class DayFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //pullEventsFromDatabase
-        //addEventsToDay();
     }
 
     public void populateAgenda(Context mContext, View view)

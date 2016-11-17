@@ -27,7 +27,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + DatabaseContract.DatabaseEntry.TABLE_NAME +
-                " (" + DatabaseContract.DatabaseEntry.COLUMN_ID + " TEXT PRIMARY KEY, " +
+                " (" + DatabaseContract.DatabaseEntry.COLUMN_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                DatabaseContract.DatabaseEntry.COLUMN_ID + " TEXT NOT NULL, " +
                 DatabaseContract.DatabaseEntry.COLUMN_WEEK + " TEXT NOT NULL, " +
                 DatabaseContract.DatabaseEntry.COLUMN_DAY + " TEXT NOT NULL, " +
                 DatabaseContract.DatabaseEntry.COLUMN_DATA + " TEXT NOT NULL);"

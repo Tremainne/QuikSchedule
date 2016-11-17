@@ -21,17 +21,22 @@ import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsFragment;
+import group22.quikschedule.Maps.PollingService;
 import group22.quikschedule.Settings.SettingsFragment;
 import group22.quikschedule.Settings.WebregActivity;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static boolean inMaps = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext()); //Allows for Facebook SDK access
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
+
+        startService( new Intent(this, PollingService.class) );
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("QuikSchedule");
@@ -99,8 +104,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        else if (fragmentManager.getBackStackEntryCount() != 0) {
-            fragmentManager.popBackStack();
+        else if( inMaps == true ) {
+            startActivity(new Intent(NavigationDrawerActivity.this, NavigationDrawerActivity.class));
+            inMaps = false;
         }
         else {
             super.onBackPressed();
@@ -122,7 +128,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_maps) {
             fragmentClass = MapsFragment.class;
+
             Log.i("Fragment Selected", "Maps");
+            inMaps = true;
         } else if (id == R.id.nav_friends) {
             fragmentClass = FriendsFragment.class;
             Log.i("Fragment Selected", "Friends");
@@ -133,6 +141,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+            if (id == R.id.nav_maps) {
+                Bundle mapsBundle = new Bundle();
+                mapsBundle.putString("Location", "CENTR");
+                fragment.setArguments(mapsBundle);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
