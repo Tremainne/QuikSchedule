@@ -128,13 +128,8 @@ public class ExpandedEventActivity extends AppCompatActivity
                     getApplicationContext(), Arrays.asList(SCOPES))
                     .setBackOff(new ExponentialBackOff());
 
-            if (addToCalendar()) {
-                Intent i = new Intent(this, NavigationDrawerActivity.class);
-                i.putExtra("Day", c.get(Calendar.DAY_OF_MONTH));
-                i.putExtra("Year", c.get(Calendar.YEAR));
-                i.putExtra("Month", c.get(Calendar.MONTH));
-                startActivity(i);
-            }
+            addToCalendar();
+
         }
     }
 
@@ -146,7 +141,7 @@ public class ExpandedEventActivity extends AppCompatActivity
         String endTime = ((TextView) findViewById(R.id.endTimePicker)).getText().toString();
         String locationName = ((EditText) findViewById(R.id.location)).getText().toString();
 
-        if (eventName.matches(".*[a-z].*") == false) {
+        if (eventName.matches(".*[a-zA-Z].*") == false) {
             Toast.makeText(this, "Enter an event name", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -162,7 +157,7 @@ public class ExpandedEventActivity extends AppCompatActivity
             Toast.makeText(this, "Enter an end time", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (locationName.matches(".*[a-z].*") == false) {
+        if (locationName.matches(".*[a-zA-Z].*") == false) {
             Toast.makeText(this, "Enter a location", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -253,6 +248,12 @@ public class ExpandedEventActivity extends AppCompatActivity
             event.setEnd(eventEnd);
 
             new addToCalendarInBackground().execute();
+
+            Intent i = new Intent(this, NavigationDrawerActivity.class);
+            i.putExtra("Day", c.get(Calendar.DAY_OF_MONTH));
+            i.putExtra("Year", c.get(Calendar.YEAR));
+            i.putExtra("Month", c.get(Calendar.MONTH));
+            startActivity(i);
 
             return true;
         }
