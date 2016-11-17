@@ -19,6 +19,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:dateTextAppearance="@style/AppTheme"
         android:background="@color/background_material_light" />
 
 </RelativeLayout>
