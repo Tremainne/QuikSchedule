@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.api.client.util.DateTime;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,8 +34,8 @@ public class DayFragment extends Fragment {
 
     private String[] dates;
     private String[] daysOfWeek =
-            {" = 'Sunday'", " = 'Monday'", " = 'Tuesday'", " = 'Wednesday'", " = 'Thursday'",
-                    " = 'Friday'", " = 'Saturday'"};
+            {" = 'SUNDAY'", " = 'MONDAY'", " = 'TUESDAY'", " = 'WEDNESDAY'", " = 'THURSDAY'",
+                    " = 'FRIDAY'", " = 'SATURDAY'"};
     private int mPage;
    /* private PriorityQueue<Event> events = new PriorityQueue<>(15, new Comparator<Event>() {
         @Override
@@ -92,6 +94,8 @@ public class DayFragment extends Fragment {
 
             final Event event = convertJSONToEvent(i);
 
+            if (event == null) continue;
+
             TextView newEvent = new TextView(getActivity());
             newEvent.setGravity(Gravity.NO_GRAVITY);
             newEvent.setText(" "+event.name+"\n"+
@@ -139,7 +143,7 @@ public class DayFragment extends Fragment {
             Date inputDate = formatter.parse(dates[mPage - 1]);
             c.setTime(inputDate);
         }
-        catch(ParseException e) {
+        catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -181,14 +185,35 @@ public class DayFragment extends Fragment {
 
     public Event convertJSONToEvent(JSONObject jsonObject) {
 
+        Event e;
+
+        String summary;
         String id;
         try {
+            summary = jsonObject.getString("summary");
             id = jsonObject.getString("id");
+
+            DateTime startTime = new DateTime(jsonObject.getJSONObject("start").getString("dateTime"));
+            DateTime endTime = new DateTime(jsonObject.getJSONObject("end").getString("dateTime"));
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(startTime.getValue());
+
+            int eventStartTime = cal.get(Calendar.HOUR_OF_DAY) * 100;
+            eventStartTime += cal.get(Calendar.MINUTE);
+
+            cal.setTimeInMillis(endTime.getValue());
+
+            int eventEndTime = cal.get(Calendar.HOUR_OF_DAY) * 100;
+            eventEndTime += cal.get(Calendar.MINUTE);
+
+            e = new Event(summary, eventStartTime, eventEndTime, id);
         }
-        catch (JSONException e) {
-            e.printStackTrace();
+        catch (JSONException ex) {
+            ex.printStackTrace();
+            return null;
         }
-        Event e = new Event("Tester", 1200, 1250, "random_id");
+        //Event e = new Event("Tester", 1200, 1250, "random_id");
         return e;
     }
 

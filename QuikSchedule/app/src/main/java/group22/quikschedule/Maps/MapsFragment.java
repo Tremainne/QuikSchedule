@@ -47,7 +47,8 @@ import static android.content.Intent.getIntent;
  */
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        GeoCodeListener
 {
 
     @Override
@@ -259,8 +260,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         return false;
     }
 
-    public void plotLine(int time, List<List<HashMap<String, String>>> result) {
-        this.time = time;
+    public void plotLine(List<List<HashMap<String, String>>> result) {
         ArrayList<LatLng> points;
         PolylineOptions lineOptions = null;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -319,7 +319,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     public void onLatLngComplete() {
         if (start != null && end != null) {
-            Directions.makeRequest(start, end, this);
+            Directions.makeDirectionsRequest(start, end, this);
             Log.d("MapsFragment", "making routing request");
         }
     }
@@ -332,5 +332,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public void showDirections(String end) {
         Log.d("MapsFragment", "showing directions");
         Geocode.nameToLatLng(end, this, false);
+    }
+
+    public void onComplete() {
+        plotLine(Directions.staticDirections);
     }
 }

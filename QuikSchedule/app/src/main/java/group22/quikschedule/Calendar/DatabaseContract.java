@@ -17,6 +17,7 @@ public final class DatabaseContract {
 
     public static class DatabaseEntry implements BaseColumns {
         public static final String TABLE_NAME = "Events";
+        public static final String COLUMN_KEY = "Key";
         public static final String COLUMN_ID = "ID";
         public static final String COLUMN_WEEK = "Week";
         public static final String COLUMN_DAY = "Day";
