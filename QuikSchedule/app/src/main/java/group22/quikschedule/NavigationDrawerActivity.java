@@ -21,6 +21,7 @@ import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsFragment;
+import group22.quikschedule.Maps.PollingService;
 import group22.quikschedule.Settings.SettingsFragment;
 import group22.quikschedule.Settings.WebregActivity;
 
@@ -34,6 +35,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         FacebookSdk.sdkInitialize(getApplicationContext()); //Allows for Facebook SDK access
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
+
+        startService( new Intent(this, PollingService.class) );
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("QuikSchedule");
