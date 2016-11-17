@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.util.EventLog;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -40,13 +42,6 @@ public class DayFragment extends Fragment {
             {" = 'SUNDAY'", " = 'MONDAY'", " = 'TUESDAY'", " = 'WEDNESDAY'", " = 'THURSDAY'",
                     " = 'FRIDAY'", " = 'SATURDAY'"};
     private int mPage;
-   /* private PriorityQueue<Event> events = new PriorityQueue<>(15, new Comparator<Event>() {
-        @Override
-        public int compare(Event a, Event b) {
-
-            return a.startTime-b.startTime;
-        }
-    });*/
 
     public static DayFragment newInstance(int page, String[] tabTitles) {
         Bundle args = new Bundle();
@@ -77,6 +72,9 @@ public class DayFragment extends Fragment {
 
         populateAgenda(getContext(), view);
 
+        Calendar currentTime = Calendar.getInstance();
+        NestedScrollView sv = (NestedScrollView) view.findViewById(R.id.calendarScrollView);
+        sv.scrollTo(0, currentTime.get(Calendar.HOUR_OF_DAY)*60+currentTime.get(Calendar.MINUTE));
         return view;
     }
 
