@@ -18,20 +18,36 @@ public class Directions {
 
     private static LatLng home;
 
+    /**
+     * Getter for the staticDirections
+     * @return the directions information for display
+     */
     public static List<List<HashMap<String, String>>> getStaticDirections() {
         return staticDirections;
     }
 
-    public static List<List<HashMap<String, String>>> staticDirections;
-    public static Integer staticTime;
+    /**
+     * Getter for travel time
+     *
+     * @return time of travel for a route.
+     */
+    public static Integer getStaticTime() {
+        return staticTime;
+    }
 
+    private static List<List<HashMap<String, String>>> staticDirections;
+    private static Integer staticTime;
+
+    //converter from classrom code to Location name
     public static final HashMap<String, String> converter = new HashMap<String, String>();
+
+    // Place locations into converter
     static {
         converter.put("TM", "Marshall College, La Jolla");
-        converter.put("APM","Applied Physics and Mathematics " +
+        converter.put("APM", "Applied Physics and Mathematics " +
                 "La Jolla, CA 92161");
-        converter.put("CENTR","Center Hall Library Walk, La Jolla, CA 92161");
-        converter.put("CSB","Cognitive Science Building, La Jolla");
+        converter.put("CENTR", "Center Hall Library Walk, La Jolla, CA 92161");
+        converter.put("CSB", "Cognitive Science Building, La Jolla");
         converter.put("CICC", "Copley International Conference Center, La Jolla");
         converter.put("GH", "Galbraith Hall, La Jolla");
         converter.put("HSS", "Humanities and Social Sciences, La Jolla");
@@ -48,45 +64,42 @@ public class Directions {
         converter.put("WLH", "Warren Lecture Hall, La Jolla");
         converter.put("YORK", "York Hall, La Jolla");
     }
+
     /**
      * Builds a URL request for use with the DirectionsAPI, using transit for now.
+     *
      * @param start Strarting point of the trip to get directions for
-     * @param end ending point of the trip to get directions for
-     * @return  The URL request string
+     * @param end   ending point of the trip to get directions for
+     * @return The URL request string
      */
     private static String buildURLRequest(LatLng start, LatLng end) {
-        String startStr = parseLatLong( start );
-        String endStr = parseLatLong( end );
+        String startStr = parseLatLong(start);
+        String endStr = parseLatLong(end);
         String request = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
                 startStr + "&destination=" + endStr +
-                "&key=AIzaSyBFaJcedR1gHACBsISOnAajioMQqyVKVyg&mode=transit" ;
+                "&key=AIzaSyBFaJcedR1gHACBsISOnAajioMQqyVKVyg&mode=transit";
         return request;
     }
 
-    /*
-    /**
-     * Sets the home location that is used as the default starting location.
-     * @param home The home location to set in LatLng form.
-
-    private static void setHome(LatLng home) {
-        Directions.home = home;
-    }
 
     /**
-     * Sets the home location that is used as the default starting location.
-     * @param home The home location to set in string form
-
-    public static void setHome(String home) {
-        //setHome(Geocode.nameToLatLng(home));
-    }*/
-
-    private static String parseLatLong( LatLng parse ) {
+     * Parses a LatLng value into a string that can be used with Directions
+     * @param parse The LatLng value to parse into a string
+     * @return The resulting string
+     */
+    private static String parseLatLong(LatLng parse) {
         String latLng = parse.toString();
-        String[] split = latLng.split( "\\(" );
-        split = split[1].split( "\\)" );
+        String[] split = latLng.split("\\(");
+        split = split[1].split("\\)");
         return split[0];
     }
 
+    /**
+     * Makes a request to the directions API to find the amount of travel time for a specific route
+     * @param start The starting location of the route
+     * @param dest The ending location of the route
+     * @param maps The listener to the result, handles using the time value.
+     */
     public static void makeTimeRequest(final LatLng start, LatLng dest,
                                        final GeoCodeListener maps) {
         String request = buildURLRequest(start, dest);
@@ -94,115 +107,134 @@ public class Directions {
             @Override
             public void processFinish(String result) {
                 Log.d("directions", "callback completed");
-                Directions.staticTime = getTimeJson( result );
+                try {
+                    Directions.staticTime = getTimeJson(result);
+                    maps.onComplete();
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                    maps.onFail();
+                }
             }
         });
 
         asyncTask.execute(request);
     }
 
+    /**
+     * Makes a directions API request to find out the actual routing directions, used to draw the
+     * polyline
+     * @param start The starting location for the route
+     * @param dest The ending location for the route
+     * @param maps The listener that will use the route info.
+     */
     public static void makeDirectionsRequest(final LatLng start, LatLng dest,
-                                                                  final GeoCodeListener maps) {
+                                             final GeoCodeListener maps) {
         String request = buildURLRequest(start, dest);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
                 Log.d("directions", "callback completed");
-                Directions.staticDirections = getDirectionsJson( result );
-                maps.onComplete();
+                try {
+                    Directions.staticDirections = getDirectionsJson(result);
+                    maps.onComplete();
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                    maps.onFail();
+                }
             }
         });
 
         asyncTask.execute(request);
     }
 
-    private static int getTimeJson(String jsonStr ) {
+    /**
+     * Parses the JSON to get the time amount
+     * @param jsonStr The string to parse
+     * @return The time value that was parsed out
+     * @throws JSONException If there was an issue with the JSON
+     */
+    private static int getTimeJson(String jsonStr) throws JSONException {
 
-        JSONObject dirJSON = null;
-        try {
-            dirJSON = new JSONObject(jsonStr);
-            Log.d("Directions", jsonStr);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject dirJSON = new JSONObject(jsonStr);
+        Log.d("Directions", jsonStr);
+
 
         JSONArray routesArr, legsArr;
-        JSONObject routes, legs = null, duration;
-        int time = 0;
-        try {
-            Log.d("Directions", dirJSON.toString());
-            routesArr = dirJSON.getJSONArray("routes");
-            routes = routesArr.getJSONObject(0);
-            legsArr = routes.getJSONArray("legs");
-            legs = legsArr.getJSONObject(0);
-            duration = legs.getJSONObject("duration");
-            time = duration.getInt("value");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject routes, legs, duration;
+        int time;
+
+        Log.d("Directions", dirJSON.toString());
+        routesArr = dirJSON.getJSONArray("routes");
+        routes = routesArr.getJSONObject(0);
+        legsArr = routes.getJSONArray("legs");
+        legs = legsArr.getJSONObject(0);
+        duration = legs.getJSONObject("duration");
+        time = duration.getInt("value");
+
 
         return time;
     }
 
-    private static List<List<HashMap<String, String>>> getDirectionsJson(String jsonStr ) {
+    /**
+     * Parses the JSON to get the directions to the destination
+     * @param jsonStr The string to parse
+     * @return The directions that were parsed out
+     * @throws JSONException If there was an issue with the JSON
+     */
+    private static List<List<HashMap<String, String>>> getDirectionsJson(String jsonStr)
+            throws JSONException {
 
-        JSONObject dirJSON = null;
-        try {
-            dirJSON = new JSONObject( jsonStr );
-            Log.d("Directions", jsonStr);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject dirJSON = new JSONObject(jsonStr);
+        Log.d("Directions", jsonStr);
 
-        List<List<HashMap<String, String>>> routesList = new ArrayList<>() ;
+
+        List<List<HashMap<String, String>>> routesList = new ArrayList<>();
         JSONArray jRoutes;
         JSONArray jLegs;
         JSONArray jSteps;
 
-        try {
-            jRoutes = dirJSON.getJSONArray( "routes" );
-            // Traversing all routes
-            for( int i = 0; i < jRoutes.length() ; i++ ) {
-                jLegs = ( (JSONObject) jRoutes.get(i) ).getJSONArray( "legs" );
-                List path = new ArrayList<>();
 
-                // Traversing all legs
-                for( int j = 0; j < jLegs.length(); j++ ) {
-                    jSteps = ( (JSONObject) jLegs.get(j) ).getJSONArray( "steps" );
+        jRoutes = dirJSON.getJSONArray("routes");
+        // Traversing all routes
+        for (int i = 0; i < jRoutes.length(); i++) {
+            jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+            List path = new ArrayList<>();
 
-                    // Traversing all steps
-                    for( int k = 0; k < jSteps.length(); k++){
-                        String polyline = "";
-                        polyline = (String) ( (JSONObject) ( (JSONObject) jSteps.get(k) )
-                                .get( "polyline" ) ).get( "points" );
-                        List<LatLng> list = decodePoly(polyline);
+            // Traversing all legs
+            for (int j = 0; j < jLegs.length(); j++) {
+                jSteps = ((JSONObject) jLegs.get(j)).getJSONArray("steps");
 
-                        // Traversing all points
-                        for( int l = 0; l < list.size(); l++ ) {
-                            HashMap<String, String> hm = new HashMap<>();
-                            hm.put( "lat", Double.toString( (list.get(l)).latitude ) );
-                            hm.put( "lng", Double.toString( (list.get(l)).longitude ) );
-                            path.add( hm );
-                        }
+                // Traversing all steps
+                for (int k = 0; k < jSteps.length(); k++) {
+                    String polyline = "";
+                    polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k))
+                            .get("polyline")).get("points");
+                    List<LatLng> list = decodePoly(polyline);
+
+                    // Traversing all points
+                    for (int l = 0; l < list.size(); l++) {
+                        HashMap<String, String> hm = new HashMap<>();
+                        hm.put("lat", Double.toString((list.get(l)).latitude));
+                        hm.put("lng", Double.toString((list.get(l)).longitude));
+                        path.add(hm);
                     }
-                    routesList.add( path );
                 }
+                routesList.add(path);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
+
 
         return routesList;
     }
 
-    public static final String codeToName(String code) {
-        return converter.get(code);
-    }
+
 
     /**
      * Method to decode polyline points
      * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
-     * */
+     */
     private static List<LatLng> decodePoly(String encoded) {
 
         List<LatLng> poly = new ArrayList<>();
@@ -236,8 +268,6 @@ public class Directions {
 
         return poly;
     }
-
-
 
 
 }

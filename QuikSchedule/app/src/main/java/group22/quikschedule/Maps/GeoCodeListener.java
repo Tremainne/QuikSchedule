@@ -7,8 +7,9 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public interface GeoCodeListener {
-    public void setStart(LatLng start);
-    public void setEnd(LatLng end);
-    public void onLatLngComplete();
-    public void onComplete();
+    void setStart(LatLng start);
+    void setEnd(LatLng end);
+    void onLatLngComplete();
+    void onComplete();
+    void onFail();
 }

@@ -119,7 +119,12 @@ public class Polling extends BroadcastReceiver {
         }
 
         public void onComplete() {
-            time = Directions.staticTime;
+            time = Directions.getStaticTime();
+        }
+
+        public void onFail() {
+            // Set time to be two hours if there was an error.
+            time = 60*60*2*100;
         }
     }
 }

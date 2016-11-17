@@ -38,6 +38,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import static android.content.Intent.getIntent;
 
@@ -116,7 +117,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
         mapFragment.getMapAsync(this);
         if (Directions.converter.containsKey(destination)) {
-            showDirections(Directions.codeToName(destination));
+            showDirections(Directions.converter.get(destination));
         }
         else {
             showDirections(destination);
@@ -335,6 +336,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public void onComplete() {
-        plotLine(Directions.staticDirections);
+        plotLine(Directions.getStaticDirections());
+    }
+
+    public void onFail() {
+        Toast.makeText(getContext(), "Location could not be found", Toast.LENGTH_LONG).show();
     }
 }
