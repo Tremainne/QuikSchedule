@@ -1,7 +1,6 @@
 package group22.quikschedule.Maps;
 
 import android.util.Log;
-import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -64,8 +63,6 @@ public class Directions {
         return request;
     }
 
-
-
     /*
     /**
      * Sets the home location that is used as the default starting location.
@@ -90,28 +87,40 @@ public class Directions {
         return split[0];
     }
 
-    public static void makeRequest(final LatLng start, LatLng dest,
-                                                                  final MapsFragment maps) {
+    public static void makeTimeRequest(final LatLng start, LatLng dest,
+                                       final GeoCodeListener maps) {
         String request = buildURLRequest(start, dest);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
                 Log.d("directions", "callback completed");
-                Pair<Integer, List<List<HashMap<String, String>>>> ret = getJson( result );
-                Directions.staticTime = ret.first;
-                Directions.staticDirections = ret.second;
-                maps.plotLine(staticTime, staticDirections);
+                Directions.staticTime = getTimeJson( result );
             }
         });
 
         asyncTask.execute(request);
     }
 
-    private static Pair<Integer, List<List<HashMap<String, String>>>> getJson(String jsonStr ) {
+    public static void makeDirectionsRequest(final LatLng start, LatLng dest,
+                                                                  final GeoCodeListener maps) {
+        String request = buildURLRequest(start, dest);
+        Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
+            @Override
+            public void processFinish(String result) {
+                Log.d("directions", "callback completed");
+                Directions.staticDirections = getDirectionsJson( result );
+                maps.onComplete();
+            }
+        });
+
+        asyncTask.execute(request);
+    }
+
+    private static int getTimeJson(String jsonStr ) {
 
         JSONObject dirJSON = null;
         try {
-            dirJSON = new JSONObject( jsonStr );
+            dirJSON = new JSONObject(jsonStr);
             Log.d("Directions", jsonStr);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -122,24 +131,34 @@ public class Directions {
         int time = 0;
         try {
             Log.d("Directions", dirJSON.toString());
-            routesArr = dirJSON.getJSONArray( "routes" );
-            routes = routesArr.getJSONObject( 0 );
-            legsArr = routes.getJSONArray( "legs" );
-            legs = legsArr.getJSONObject( 0 );
-            duration = legs.getJSONObject( "duration" );
-            time = duration.getInt( "value" );
+            routesArr = dirJSON.getJSONArray("routes");
+            routes = routesArr.getJSONObject(0);
+            legsArr = routes.getJSONArray("legs");
+            legs = legsArr.getJSONObject(0);
+            duration = legs.getJSONObject("duration");
+            time = duration.getInt("value");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.d("Directions", "Time: " + time );
+        return time;
+    }
+
+    private static List<List<HashMap<String, String>>> getDirectionsJson(String jsonStr ) {
+
+        JSONObject dirJSON = null;
+        try {
+            dirJSON = new JSONObject( jsonStr );
+            Log.d("Directions", jsonStr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         List<List<HashMap<String, String>>> routesList = new ArrayList<>() ;
         JSONArray jRoutes;
         JSONArray jLegs;
         JSONArray jSteps;
 
-        Log.d("Directions", legs.toString());
         try {
             jRoutes = dirJSON.getJSONArray( "routes" );
             // Traversing all routes
@@ -173,8 +192,7 @@ public class Directions {
             e.printStackTrace();
         }
 
-
-        return new Pair<>( time, routesList );
+        return routesList;
     }
 
     public static final String codeToName(String code) {

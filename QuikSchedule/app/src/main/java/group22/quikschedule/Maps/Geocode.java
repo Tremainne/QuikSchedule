@@ -13,7 +13,7 @@ public class Geocode {
 
     static LatLng ret;
 
-    public static void nameToLatLng(String address, final MapsFragment map, final boolean isStart) {
+    public static void nameToLatLng(String address, final GeoCodeListener map, final boolean isStart) {
         address = address.replaceAll("\\s", "%20");
         String request = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
                 address + "&key=AIzaSyBmLBTq2_NcacunMNnPlEPL5fIQj38bIRs";
