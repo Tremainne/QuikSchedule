@@ -128,6 +128,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_maps) {
             fragmentClass = MapsFragment.class;
+
             Log.i("Fragment Selected", "Maps");
             inMaps = true;
         } else if (id == R.id.nav_friends) {
@@ -140,6 +141,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+            if (id == R.id.nav_maps) {
+                Bundle mapsBundle = new Bundle();
+                mapsBundle.putString("Location", "CENTR");
+                fragment.setArguments(mapsBundle);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -26,28 +26,28 @@ public class Directions {
     public static List<List<HashMap<String, String>>> staticDirections;
     public static Integer staticTime;
 
-    private static final HashMap<String, String> converter = new HashMap<String, String>();
+    public static final HashMap<String, String> converter = new HashMap<String, String>();
     static {
-        converter.put("TM", "Marshall College");
+        converter.put("TM", "Marshall College, La Jolla");
         converter.put("APM","Applied Physics and Mathematics " +
-                "San Diego, CA 92161");
-        converter.put("CENTR","Center Hall Library Walk, San Diego, CA 92161");
-        converter.put("CSB","Cognitive Science Building");
-        converter.put("CICC", "Copley International Conference Center");
-        converter.put("GH", "Galbraith Hall");
-        converter.put("HSS", "Humanities and Social Sciences");
-        converter.put("LEDDN", "Humanities and Social Sciences");
-        converter.put("MANDE", "Mandeville Center");
-        converter.put("MCGIL", "McGill Hall");
-        converter.put("PCYNH", "Pepper Canyon Hall");
-        converter.put("PETER", "Peterson Hall");
-        converter.put("PRICE", "Price Center");
-        converter.put("RBC", "Robinson Building");
-        converter.put("SEQUO", "Sequoyah Hall");
-        converter.put("SSB", "Social Sciences Building");
-        converter.put("SOLIS", "Solis Hall");
-        converter.put("WLH", "Warren Lecture Hall");
-        converter.put("YORK", "York Hall");
+                "La Jolla, CA 92161");
+        converter.put("CENTR","Center Hall Library Walk, La Jolla, CA 92161");
+        converter.put("CSB","Cognitive Science Building, La Jolla");
+        converter.put("CICC", "Copley International Conference Center, La Jolla");
+        converter.put("GH", "Galbraith Hall, La Jolla");
+        converter.put("HSS", "Humanities and Social Sciences, La Jolla");
+        converter.put("LEDDN", "Humanities and Social Sciences, La Jolla");
+        converter.put("MANDE", "Mandeville Center, La Jolla");
+        converter.put("MCGIL", "McGill Hall, La Jolla");
+        converter.put("PCYNH", "Pepper Canyon Hall, La Jolla");
+        converter.put("PETER", "Peterson Hall, La Jolla");
+        converter.put("PRICE", "Price Center, La Jolla");
+        converter.put("RBC", "Robinson Building, La Jolla");
+        converter.put("SEQUO", "Sequoyah Hall, La Jolla");
+        converter.put("SSB", "Social Sciences Building, La Jolla");
+        converter.put("SOLIS", "Solis Hall, La Jolla");
+        converter.put("WLH", "Warren Lecture Hall, La Jolla");
+        converter.put("YORK", "York Hall, La Jolla");
     }
     /**
      * Builds a URL request for use with the DirectionsAPI, using transit for now.
@@ -64,16 +64,7 @@ public class Directions {
         return request;
     }
 
-    /**
-     * Wrapper around LatLng version, uses geocoding API to convert string to LatLng then runs
-     * request
-     * @param start The starting address
-     * @param end The ending address
-     * @return the URL request to use.
-     */
-    /*public static String buildURLRequest(String start, String end){
-        return buildURLRequest(Geocode.nameToLatLng(start), Geocode.nameToLatLng(end));
-    }*/
+
 
     /*
     /**
