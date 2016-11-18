@@ -109,11 +109,11 @@ public class Directions {
                 Log.d("directions", "callback completed");
                 try {
                     Directions.staticTime = getTimeJson(result);
-                    maps.onComplete();
+                    maps.onGeocodeListenerComplete();
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
-                    maps.onFail();
+                    maps.onGeocodeListenerFail();
                 }
             }
         });
@@ -137,11 +137,11 @@ public class Directions {
                 Log.d("directions", "callback completed");
                 try {
                     Directions.staticDirections = getDirectionsJson(result);
-                    maps.onComplete();
+                    maps.onGeocodeListenerComplete();
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
-                    maps.onFail();
+                    maps.onGeocodeListenerFail();
                 }
             }
         });
@@ -200,7 +200,7 @@ public class Directions {
         // Traversing all routes
         for (int i = 0; i < jRoutes.length(); i++) {
             jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
-            List path = new ArrayList<>();
+            List<HashMap<String, String>> path = new ArrayList<>();
 
             // Traversing all legs
             for (int j = 0; j < jLegs.length(); j++) {
@@ -208,7 +208,7 @@ public class Directions {
 
                 // Traversing all steps
                 for (int k = 0; k < jSteps.length(); k++) {
-                    String polyline = "";
+                    String polyline;
                     polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k))
                             .get("polyline")).get("points");
                     List<LatLng> list = decodePoly(polyline);
@@ -234,6 +234,10 @@ public class Directions {
     /**
      * Method to decode polyline points
      * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
+     *
+     * @param encoded The encoding of the polyline that is then decoded and converted to
+     *                a list of LatLng values.
+     * @return the decoded list of LatLng values to plot.
      */
     private static List<LatLng> decodePoly(String encoded) {
 

@@ -12,9 +12,15 @@ import org.json.*;
 
 public class Geocode {
 
-    static LatLng ret;
 
-    public static void nameToLatLng(String address, final GeoCodeListener map, final boolean isStart) {
+    /**
+     * Perfroms a Google Geocode API request to find the latitude and longitude of the address
+     * @param address Address to look up
+     * @param map The listener to tell the result of the address lookup.
+     * @param isStart Which value to set in the listener
+     */
+    public static void nameToLatLng(String address, final GeoCodeListener map,
+                                    final boolean isStart) {
         address = address.replaceAll("\\s", "%20");
         String request = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
                 address + "&key=AIzaSyBmLBTq2_NcacunMNnPlEPL5fIQj38bIRs";
@@ -23,6 +29,7 @@ public class Geocode {
             public void processFinish(String result) {
                 Log.d("geocode", "request completed");
                 try {
+                    // Used to decide whether the start or end should get set in the map.
                     if (isStart) {
                         map.setStart(getJson(result));
 
@@ -30,7 +37,7 @@ public class Geocode {
                         map.setEnd(getJson(result));
                     }
                 } catch (JSONException e) {
-                    map.onFail();
+                    map.onGeocodeListenerFail();
                 }
                 map.onLatLngComplete();
             }
@@ -38,7 +45,13 @@ public class Geocode {
         asyncTask.execute(request);
     }
 
-    public static LatLng getJson(String json) throws JSONException {
+    /**
+     * Parses the JSON to ifnd the latitude and longitude.
+     * @param json The string to parse address info from
+     * @return The parsed latitude and longitude values.
+     * @throws JSONException if the address isn't found or something goes wrong with the request
+     */
+    private static LatLng getJson(String json) throws JSONException {
 
         JSONObject geoJSON = new JSONObject(json);
         JSONObject result = geoJSON.getJSONArray("results").getJSONObject(0);

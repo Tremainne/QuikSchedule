@@ -76,11 +76,17 @@ public class Polling extends BroadcastReceiver {
 
 
         private LatLng end;
+
+        /**
+         * When the Google API client connection succeeds, lookup our current location and parse it
+         * to set the start.
+         * @param connectionHint unused.
+         */
         @Override
         public void onConnected( Bundle connectionHint ) {
             Location myLoc = LocationServices.FusedLocationApi.getLastLocation( client );
-            String lat = null;
-            String lng = null;
+            String lat;
+            String lng;
             if( myLoc != null ) {
                 lat = String.valueOf( myLoc.getLatitude() );
                 lng = String.valueOf( myLoc.getLongitude() );
@@ -96,21 +102,36 @@ public class Polling extends BroadcastReceiver {
             Log.d( "Maps", "Connection suspended"  );
         }
 
+        /**
+         * If the Google API connection fails
+         * @param result The result of the connection.
+         */
         @Override
         public void onConnectionFailed ( ConnectionResult result ) {
             Log.d( "Maps", "Connection failed"  );
         }
 
+        /**
+         * Set the start value for the event being polled for.
+         * @param start The start value to set to.
+         */
         @Override
         public void setStart(LatLng start) {
             Polling.this.start = start;
         }
 
+        /**
+         * Set the destination for the even being polled for.
+         * @param end The destination to route to.
+         */
         @Override
         public void setEnd(LatLng end) {
             this.end = end;
         }
 
+        /**
+         * When the start and end are known, make the request for the timing values.
+         */
         @Override
         public void onLatLngComplete() {
             if (this.end != null && start != null) {
@@ -118,11 +139,20 @@ public class Polling extends BroadcastReceiver {
             }
         }
 
-        public void onComplete() {
+        /**
+         * Get the travel time for the first event from the directions lookup.
+         */
+        @Override
+        public void onGeocodeListenerComplete() {
             time = Directions.getStaticTime();
         }
 
-        public void onFail() {
+        /**
+         * If the address lookup or the directions lookup fails, set the time to two hours by
+         * default. May also want to indicate an error here, or verify location at event creation.
+         */
+        @Override
+        public void onGeocodeListenerFail() {
             // Set time to be two hours if there was an error.
             time = 60*60*2*100;
         }
