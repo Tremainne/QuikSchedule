@@ -26,8 +26,10 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -113,7 +115,7 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
             } catch (GoogleJsonResponseException e) {
                 if (e.getStatusCode() == 410) {
                     System.out.println("Invalid sync token, clearing event store and re-syncing.");
-                    sharedPreferences.edit().putString(SYNC_TOKEN_KEY, null);
+                    sharedPreferences.edit().putString(SYNC_TOKEN_KEY, null).apply();
 
                     db.execSQL("DROP DATABASE");
                     db.close();
@@ -138,7 +140,7 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
 
         db.close();
         String token = events.getNextSyncToken();
-        sharedPreferences.edit().putString(SYNC_TOKEN_KEY, token).commit();
+        sharedPreferences.edit().putString(SYNC_TOKEN_KEY, token).apply();
         System.err.println(token);
         System.out.println("Sync complete");
     }
@@ -164,22 +166,34 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
             final StringBuilder sb = new StringBuilder(cs.length());
             sb.append(cs);
             String day = sb.toString().toUpperCase();
-            System.out.println(day);
 
             java.util.Calendar cal = java.util.Calendar.getInstance();
             cal.setTimeInMillis(dt.getValue());
             int weekNum = cal.get(java.util.Calendar.WEEK_OF_YEAR);
 
-            System.out.println("WEEK NUMBER: " + weekNum);
+            int numOfWeeks = 0;
+            try {
+                JSONObject jsonObject = new JSONObject(event.toString());
+                JSONArray recurrenceArray = jsonObject.getJSONArray("recurrence");
+                String recurrenceString = recurrenceArray.get(0).toString();
+                numOfWeeks = 0;
+                if (recurrenceString.contains("WEEKLY") && recurrenceString.contains("COUNT")) {
+                    numOfWeeks = Integer.parseInt(recurrenceString.substring(recurrenceString.length() - 2, recurrenceString.length()));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+            do {
+                ContentValues values = new ContentValues();
+                values.put(DatabaseContract.DatabaseEntry.COLUMN_ID, event.getId());
+                values.put(DatabaseContract.DatabaseEntry.COLUMN_WEEK, weekNum + numOfWeeks);
+                values.put(DatabaseContract.DatabaseEntry.COLUMN_DAY, day);
+                values.put(DatabaseContract.DatabaseEntry.COLUMN_DATA, event.toPrettyString());
+                db.insert(DatabaseContract.DatabaseEntry.TABLE_NAME, null, values);
 
-
-            ContentValues values = new ContentValues();
-            values.put(DatabaseContract.DatabaseEntry.COLUMN_ID, event.getId());
-            values.put(DatabaseContract.DatabaseEntry.COLUMN_WEEK, weekNum);
-            values.put(DatabaseContract.DatabaseEntry.COLUMN_DAY, day);
-            values.put(DatabaseContract.DatabaseEntry.COLUMN_DATA, event.toPrettyString());
-            db.insert(DatabaseContract.DatabaseEntry.TABLE_NAME, null, values);
+                numOfWeeks--;
+            } while (numOfWeeks >= 0);
             db.close();
 
 

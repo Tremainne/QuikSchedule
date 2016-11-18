@@ -10,14 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ToggleButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import group22.quikschedule.Calendar.CalendarActivity;
-import group22.quikschedule.Calendar.FragmentPageAdapter;
 import group22.quikschedule.R;
 
 

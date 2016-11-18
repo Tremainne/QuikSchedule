@@ -15,7 +15,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textSize="20dp"
-        android:textColor="@color/abc_input_method_navigation_guard" />
+        android:textColor="@color/md_pink_A700" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/calendarScrollView"
@@ -59,6 +59,7 @@
                         android:layout_marginTop="0dp"
                         android:gravity="center"
                         android:text="@string/time12am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -70,6 +71,7 @@
                         android:layout_marginTop="60dp"
                         android:gravity="center"
                         android:text="@string/time1am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -81,6 +83,7 @@
                         android:layout_marginTop="120dp"
                         android:gravity="center"
                         android:text="@string/time2am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -92,6 +95,7 @@
                         android:layout_marginTop="180dp"
                         android:gravity="center"
                         android:text="@string/time3am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -103,6 +107,7 @@
                         android:layout_marginTop="240dp"
                         android:gravity="center"
                         android:text="@string/time4am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -114,6 +119,7 @@
                         android:layout_marginTop="300dp"
                         android:gravity="center"
                         android:text="@string/time5am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -125,6 +131,7 @@
                         android:layout_marginTop="360dp"
                         android:gravity="center"
                         android:text="@string/time6am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -136,6 +143,7 @@
                         android:layout_marginTop="420dp"
                         android:gravity="center"
                         android:text="@string/time7am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -147,6 +155,7 @@
                         android:layout_marginTop="480dp"
                         android:gravity="center"
                         android:text="@string/time8am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -158,6 +167,7 @@
                         android:layout_marginTop="540dp"
                         android:gravity="center"
                         android:text="@string/time9am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -169,6 +179,7 @@
                         android:layout_marginTop="600dp"
                         android:gravity="center"
                         android:text="@string/time10am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -180,6 +191,7 @@
                         android:layout_marginTop="660dp"
                         android:gravity="center"
                         android:text="@string/time11am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -191,6 +203,7 @@
                         android:layout_marginTop="720dp"
                         android:gravity="center"
                         android:text="@string/time12pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -202,6 +215,7 @@
                         android:layout_marginTop="780dp"
                         android:gravity="center"
                         android:text="@string/time1pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -213,6 +227,7 @@
                         android:layout_marginTop="840dp"
                         android:gravity="center"
                         android:text="@string/time2pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -224,6 +239,7 @@
                         android:layout_marginTop="900dp"
                         android:gravity="center"
                         android:text="@string/time3pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -235,6 +251,7 @@
                         android:layout_marginTop="960dp"
                         android:gravity="center"
                         android:text="@string/time4pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -246,6 +263,7 @@
                         android:layout_marginTop="1020dp"
                         android:gravity="center"
                         android:text="@string/time5pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -257,6 +275,7 @@
                         android:layout_marginTop="1080dp"
                         android:gravity="center"
                         android:text="@string/time6pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -268,6 +287,7 @@
                         android:layout_marginTop="1140dp"
                         android:gravity="center"
                         android:text="@string/time7pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -279,6 +299,7 @@
                         android:layout_marginTop="1200dp"
                         android:gravity="center"
                         android:text="@string/time8pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -290,6 +311,7 @@
                         android:layout_marginTop="1260dp"
                         android:gravity="center"
                         android:text="@string/time9pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -301,6 +323,7 @@
                         android:layout_marginTop="1320dp"
                         android:gravity="center"
                         android:text="@string/time10pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -312,6 +335,7 @@
                         android:layout_marginTop="1380dp"
                         android:gravity="center"
                         android:text="@string/time11pm"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
 
                     <TextView
@@ -323,6 +347,7 @@
                         android:layout_marginTop="1440dp"
                         android:gravity="center|top"
                         android:text="@string/time12am"
+                        android:textColor="@color/md_white_1000"
                         android:textSize="9dp" />
                 </RelativeLayout>
 

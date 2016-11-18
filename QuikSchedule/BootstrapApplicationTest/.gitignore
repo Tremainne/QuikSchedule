@@ -1,0 +1,6 @@
+/build
+/debug
+/gradle
+.*
+local.properties
+*.png

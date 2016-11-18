@@ -4,10 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,11 +30,14 @@ import group22.quikschedule.Calendar.ExpandedEventActivity;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsFragment;
+import group22.quikschedule.Maps.PollingService;
 import group22.quikschedule.Settings.SettingsFragment;
 import group22.quikschedule.Settings.WebregActivity;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static boolean inMaps = false;
 
 
     public static HashMap<Integer, PendingIntent> alarmIntentMap;
@@ -250,6 +252,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
 
+        startService( new Intent(this, PollingService.class) );
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("QuikSchedule");
         setSupportActionBar(toolbar);
@@ -316,8 +320,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        else {
+        else if( inMaps == true ) {
             startActivity(new Intent(NavigationDrawerActivity.this, NavigationDrawerActivity.class));
+            inMaps = false;
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -337,7 +344,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_maps) {
             fragmentClass = MapsFragment.class;
+
             Log.i("Fragment Selected", "Maps");
+            inMaps = true;
         } else if (id == R.id.nav_friends) {
             fragmentClass = FriendsFragment.class;
             Log.i("Fragment Selected", "Friends");
@@ -348,6 +357,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+            if (id == R.id.nav_maps) {
+                Bundle mapsBundle = new Bundle();
+                mapsBundle.putString("Location", "CENTR");
+                fragment.setArguments(mapsBundle);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

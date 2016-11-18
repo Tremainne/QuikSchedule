@@ -11,10 +11,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.annotation.IntegerRes;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -25,7 +23,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.fitness.data.Application;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -34,8 +31,10 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.*;
+import com.google.api.services.calendar.model.CalendarList;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -46,7 +45,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-//import group22.quikschedule.Maps.MapsActivity;
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -57,21 +55,22 @@ import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_AUTHORI
 import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_GOOGLE_PLAY_SERVICES;
 import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_PERMISSION_GET_ACCOUNTS;
 
+//import group22.quikschedule.Maps.MapsActivity;
+
 public class ExpandedEventActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks {
 
     private boolean editingEvent = false;
     private String date;
     private TextView dateContainer;
-    private int startTime;
     private TextView startTimeContainer;
-    private int endTime;
     private TextView endTimeContainer;
     private EditText location;
 
     GoogleAccountCredential mCredential;
     private final Calendar c = Calendar.getInstance();
-    private SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 
 
     private static final String PREF_ACCOUNT_NAME = "accountName";
@@ -85,6 +84,7 @@ public class ExpandedEventActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expanded_event);
 
+        EditText eventName = (EditText) findViewById(R.id.eventName);
         dateContainer = (TextView) findViewById(R.id.datePicker);
         startTimeContainer = (TextView) findViewById(R.id.startTimePicker);
         endTimeContainer = (TextView) findViewById(R.id.endTimePicker);
@@ -94,7 +94,6 @@ public class ExpandedEventActivity extends AppCompatActivity
 
         if(i.hasExtra("Name")) {
             editingEvent = true;
-            EditText eventName = (EditText) findViewById(R.id.eventName);
 
             eventName.setText(i.getStringExtra("Name"));
             location.setText(i.getStringExtra("Location"));
@@ -110,28 +109,99 @@ public class ExpandedEventActivity extends AppCompatActivity
             }
 
             c.setTime(inputDate);
-            dateContainer.setText(formatter.format(c.getTime()));
+            dateContainer.setText(dateFormat.format(c.getTime()));
+
+            startTimeContainer.setText(i.getStringExtra("Start Time"));
+            endTimeContainer.setText(i.getStringExtra("End Time"));
         }
     }
 
     public void toCalendar(View v) {
         //Send Data to Google Calendar
 
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
 
-        addToCalendar();
+        if(editingEvent) {
+            //edit event implementation
+            onBackPressed();
+        }
+        else {
+            mCredential = GoogleAccountCredential.usingOAuth2(
+                    getApplicationContext(), Arrays.asList(SCOPES))
+                    .setBackOff(new ExponentialBackOff());
+
+            addToCalendar();
+
+        }
     }
 
     private boolean addToCalendar () {
+
+        String eventName = ((EditText) findViewById(R.id.eventName)).getText().toString();
+        String date = ((TextView) findViewById(R.id.datePicker)).getText().toString();
+        String startTime = ((TextView) findViewById(R.id.startTimePicker)).getText().toString();
+        String endTime = ((TextView) findViewById(R.id.endTimePicker)).getText().toString();
+        String locationName = ((EditText) findViewById(R.id.location)).getText().toString();
+
+        if (eventName.matches(".*[a-zA-Z].*") == false) {
+            Toast.makeText(this, "Enter an event name", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (date == "" || date == null || date.length() < 10) {
+            Toast.makeText(this, "Enter a date", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (startTime == "" || startTime == null || startTime.length() < 5) {
+            Toast.makeText(this, "Enter a start time", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (endTime == "" || endTime == null || endTime.length() < 5) {
+            Toast.makeText(this, "Enter an end time", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (locationName.matches(".*[a-zA-Z].*") == false) {
+            Toast.makeText(this, "Enter a location", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        Date startDate = null;
+        try{
+            startDate = timeFormat.parse(startTimeContainer.getText().toString());
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date endDate = null;
+        try{
+            endDate = timeFormat.parse(endTimeContainer.getText().toString());
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(startDate.after(endDate)) {
+            Toast.makeText(this, "Start time should be before end time", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
+            Log.d("CAL", "1");
+            return false;
+
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
+            Log.d("CAL", "2");
+            return false;
+
         } else if (!isDeviceOnline()) {
             Toast.makeText(getApplicationContext(), "No network available", Toast.LENGTH_LONG).show();
+            Log.d("CAL", "3");
+            return false;
+
         } else {
+            Log.d("CAL", "4");
+
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
@@ -145,34 +215,26 @@ public class ExpandedEventActivity extends AppCompatActivity
                     .setDescription("Textbooks: " + ((EditText) findViewById(R.id.materials)).getText().toString() +
                     "\n" + "Comments: " + ((EditText) findViewById(R.id.comments)).getText().toString());
 
-            String date = ((TextView) findViewById(R.id.datePicker)).getText().toString();
-            String startTime = ((TextView) findViewById(R.id.startTimePicker)).getText().toString();
-            String endTime = ((TextView) findViewById(R.id.endTimePicker)).getText().toString();
-
-            if (date == "" || date == null || date.length() < 10) {
-                Toast.makeText(this, "Enter a date", Toast.LENGTH_LONG).show();
-                return false;
-            }
-            if (startTime == "" || startTime == null || startTime.length() < 5) {
-                Toast.makeText(this, "Enter a start time", Toast.LENGTH_LONG).show();
-                return false;
-            }
-            if (endTime == "" || endTime == null || endTime.length() < 5) {
-                Toast.makeText(this, "Enter an end time", Toast.LENGTH_LONG).show();
-                return false;
-            }
-
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.MONTH, Integer.parseInt(date.substring(0,2)) - 1);
-            cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date.substring(3,5)));
-            cal.set(Calendar.YEAR, Integer.parseInt(date.substring(6,10)));
 
-            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTime.substring(0,2)));
-            cal.set(Calendar.MINUTE, Integer.parseInt(startTime.substring(3,5)));
+            Calendar time = Calendar.getInstance();
+            Date inputDate = null;
+            try{
+                inputDate = dateFormat.parse(dateContainer.getText().toString());
+                cal.setTime(inputDate);
+            }
+            catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            time.setTime(startDate);
+            cal.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY));
+            cal.set(Calendar.MINUTE, time.get(Calendar.MINUTE));
             DateTime startDateTime = new DateTime(cal.getTimeInMillis());
 
-            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTime.substring(0,2)));
-            cal.set(Calendar.MINUTE, Integer.parseInt(endTime.substring(3,5)));
+            time.setTime(endDate);
+            cal.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY));
+            cal.set(Calendar.MINUTE, time.get(Calendar.MINUTE));
             DateTime endDateTime = new DateTime(cal.getTimeInMillis());
 
             EventDateTime eventStart = new EventDateTime()
@@ -196,8 +258,6 @@ public class ExpandedEventActivity extends AppCompatActivity
 
             return true;
         }
-
-        return false;
     }
 
     public void pickDate(View v) {
@@ -212,13 +272,13 @@ public class ExpandedEventActivity extends AppCompatActivity
                 c.set(Calendar.YEAR, year);
                 c.set(Calendar.MONTH, monthOfYear);
                 c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                dateContainer.setText(formatter.format(c.getTime()));
+                dateContainer.setText(dateFormat.format(c.getTime()));
             }
         }, year, month, day);
         datePicker.show();
     }
 
-    public void timePicker() {
+    public void pickTime(final View v) {
 
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
@@ -228,23 +288,16 @@ public class ExpandedEventActivity extends AppCompatActivity
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 c.set(Calendar.HOUR_OF_DAY, selectedHour);
                 c.set(Calendar.MINUTE, selectedMinute);
+                if(v.getId() == R.id.endTimePicker) {
+
+                    endTimeContainer.setText(timeFormat.format(c.getTime()));
+                } else {
+                        startTimeContainer.setText(timeFormat.format(c.getTime()));
+                }
+
             }
-        }, hour, minute, true);
+        }, hour, minute, false);
         mTimePicker.show();
-    }
-
-    public void pickStartTime(View v) {
-
-        timePicker();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        startTimeContainer.setText(timeFormat.format(c.getTime()));
-    }
-
-    public void pickEndTime(View v) {
-
-        timePicker();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        endTimeContainer.setText(timeFormat.format(c.getTime()));
     }
 
     public void routeToEvent(View v) {
@@ -262,7 +315,9 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
-
+    public void cancel(View v) {
+        onBackPressed();
+    }
 
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
@@ -270,14 +325,14 @@ public class ExpandedEventActivity extends AppCompatActivity
                 this, Manifest.permission.GET_ACCOUNTS)) {
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
-            if (accountName != null) {
+            //if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-            } else {
+            //} else {
                 // Start a dialog from which the user can choose an account
                 startActivityForResult(
                         mCredential.newChooseAccountIntent(),
                         REQUEST_ACCOUNT_PICKER);
-            }
+            //}
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(

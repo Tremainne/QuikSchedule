@@ -17,8 +17,12 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/qs_icon"
         android:label="@string/app_name"
@@ -79,6 +83,19 @@
             </intent-filter>
         </receiver>
 
+
+        <receiver android:process=":remote" android:name=".Maps.Polling" />
+
+        <receiver android:name=".Maps.AutoStart">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".Maps.PollingService"
+            android:enabled="true"
+            android:process=":your_service" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
