@@ -1,14 +1,13 @@
 package group22.quikschedule.Calendar;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import android.widget.TextView;
 
 /**
  * Created by RohanChhabra on 10/30/16.

@@ -4,7 +4,8 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.json.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by christoph on 10/31/16.

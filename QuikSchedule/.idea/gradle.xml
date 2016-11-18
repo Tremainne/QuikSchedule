@@ -8,6 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/BootstrapApplicationTest" />
+            <option value="$PROJECT_DIR$/MultiDexApplicationTest" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

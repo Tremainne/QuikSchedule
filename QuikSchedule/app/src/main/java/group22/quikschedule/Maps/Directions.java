@@ -4,11 +4,13 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
-
-import org.json.*;
 
 /**
  * Created by christoph on 10/20/16.

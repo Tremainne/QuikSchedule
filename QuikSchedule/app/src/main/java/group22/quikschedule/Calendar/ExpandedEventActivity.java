@@ -11,9 +11,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -32,11 +31,12 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.*;
+import com.google.api.services.calendar.model.CalendarList;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +45,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-//import group22.quikschedule.Maps.MapsActivity;
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -55,6 +54,8 @@ import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_ACCOUNT
 import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_AUTHORIZATION;
 import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_GOOGLE_PLAY_SERVICES;
 import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_PERMISSION_GET_ACCOUNTS;
+
+//import group22.quikschedule.Maps.MapsActivity;
 
 public class ExpandedEventActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks {

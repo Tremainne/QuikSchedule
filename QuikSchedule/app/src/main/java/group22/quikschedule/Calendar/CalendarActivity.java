@@ -1,19 +1,9 @@
 package group22.quikschedule.Calendar;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.CalendarView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
