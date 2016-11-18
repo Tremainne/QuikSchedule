@@ -70,6 +70,16 @@
             </intent-filter>
         </activity>
 
+        <receiver
+            android:name=".Settings.AlertActivity"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name=".BroadcastReceiver" />
+            </intent-filter>
+        </receiver>
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDAIwSaanY0mi_8zpn3VNyro-X1NR-86yo" />

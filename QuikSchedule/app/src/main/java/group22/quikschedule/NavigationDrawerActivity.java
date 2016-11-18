@@ -1,5 +1,7 @@
 package group22.quikschedule;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +19,15 @@ import android.view.View;
 
 import com.facebook.FacebookSdk;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+
 import group22.quikschedule.Calendar.CalendarSyncActivity;
+import group22.quikschedule.Calendar.ExpandedEventActivity;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsFragment;
@@ -26,6 +36,213 @@ import group22.quikschedule.Settings.WebregActivity;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    public static HashMap<Integer, PendingIntent> alarmIntentMap;
+    public static HashMap<Integer, AlarmManager> alarmManagerMap;
+
+
+    public void showNotification(View view)
+    {
+        System.err.println("OIJOIDASJOISAJDOIASJDOIJSA");
+        getData(this);
+
+        NotificationCompat.Builder notifBuilder = new
+                NotificationCompat.Builder(this)
+                .setContentTitle("CSE 110")
+                .setContentText("Centre Hall 119 at 630pm")
+                .setTicker("Ticker")
+                .setSmallIcon(R.drawable.qs_icon);
+
+        Intent moreInfoIntent =  new Intent(this, ExpandedEventActivity.class);
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+
+        taskStackBuilder.addParentStack(ExpandedEventActivity.class);
+        taskStackBuilder.addNextIntent(moreInfoIntent);
+
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notifBuilder.setContentIntent(pendingIntent);
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notifBuilder.setAutoCancel(true);
+        notificationManager.notify(notifID,notifBuilder.build());
+        //isNotificationActive = true;
+
+        getData(getApplicationContext());
+    }
+
+    public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
+        HashMap<String, String> map = AlertActivity.getDataFromEvent(jsonObj);
+
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(map.get("start").substring(0,2)));
+        cal.set(Calendar.MINUTE, Integer.parseInt(map.get("start").substring(3)));
+
+        return Integer.parseInt(map.get("start"));
+    }
+
+    public void setAlarm(View view) throws JSONException {
+        System.err.println("adsfasdf");
+
+        //Get the list of jsonObjects for the current day
+        ArrayList<JSONObject> list = getData(getApplicationContext());
+
+        //Initialise my maps that store the pendingIntent and alarmManager for each alarm
+        //with the id as the time that they were set so that they can be canceled later using
+        //alarmManagerMap.get(timeOfAlarmToCancel).cancel(alarmIntentMap.get(timeOfAlarmToCancel));
+        alarmIntentMap = new HashMap<Integer, PendingIntent>();
+        alarmManagerMap = new HashMap<Integer, AlarmManager>();
+
+        for(int i = 0; i < list.size(); i++)
+        {
+            Calendar c = Calendar.getInstance();
+            //Set the alarm time for event i based on the start time and get the time back
+            int id = setAlarmtime(list.get(i), c);
+
+            //Set a new alertIntent for the notification
+            Intent alertIntent = new Intent(this, AlertActivity.class);
+
+            //set a pending intent where the unique id is the time of the event
+            //If you have two events with the same time then it wont notify you for second
+            PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), id, alertIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            //Add this to my static map so it can be accessed later to cancel
+            alarmIntentMap.put(id, contentIntent);
+
+            //Create an AlarmManager for each event
+            AlarmManager alarmManager  = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            ////Add this to my static map so it can be accessed later to cancel the pendingIntent
+            alarmManagerMap.put(id, alarmManager);
+
+            //Set the alarm
+            alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);
+        }
+
+
+        /*Calendar c = Calendar.getInstance();
+
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
+        c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+        c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
+
+        //System.err.println("Current time: " + c.toString());
+
+        Intent alertIntent = new Intent(this, AlertActivity.class);
+         PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, alertIntent,
+                 PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager  = (AlarmManager)
+                getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY
+        , contentIntent);
+
+        //alarmMangager.set(AlarmManager.RTC_WAKEUP, alertTime,
+          //      PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+*/
+    }
+
+    public ArrayList<JSONObject> cursorToJson(Cursor cursor)
+    {
+
+        ArrayList<JSONObject> events = new ArrayList<>();
+        Log.d("FUCK", "ME");
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                System.err.println("AYYY2");
+                do {
+                    System.err.println("AYYY3");
+                    String json = cursor.getString(
+                            cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_DATA));
+                    Log.d("Pls", "help");
+                    System.err.println(json);
+                    JSONObject j;
+                    try {
+                        j = new JSONObject(json);
+                        Log.d("New JSON", json);
+                        events.add(j);
+                    } catch (JSONException e) {
+                        Log.i("FUCK", "OFF");
+                    }
+                } while (cursor.moveToNext());
+            }
+        }
+
+        return events;
+
+    }
+
+    public static String getDayString()
+    {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+        switch (day) {
+            case Calendar.SUNDAY:
+                return "Sunday";
+
+            case Calendar.MONDAY:
+                return "Monday";
+
+            case Calendar.TUESDAY:
+                return "Tuesday";
+
+            case Calendar.WEDNESDAY:
+                return "Wednesday";
+
+            case Calendar.THURSDAY:
+                return "Thursday";
+
+            case Calendar.FRIDAY:
+                return "Friday";
+
+            case Calendar.SATURDAY:
+                return "Saturday";
+        }
+        return "null";
+    }
+
+    public ArrayList<JSONObject> getData(Context mContext)
+    {
+
+        Log.d("Entered", "JSON getData");
+        DatabaseHelper mDbHelper = new DatabaseHelper(mContext);
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
+                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_DAY + " = '" +getDayString()+ "'";
+
+        // COLUMN_WEEK is number
+        //+ DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
+        //DatabaseContract.DatabaseEntry.TABLE_NAME + " WHERE "
+        //+ DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS 'MONDAY'"; // + " WHERE " +
+        //DatabaseContract.DatabaseEntry.COLUMN_DAY; // + " IS MONDAY";
+        Cursor cursor = db.rawQuery(sql, null); //+ "MONDAY", null);
+        ArrayList<JSONObject> events = cursorToJson(cursor);
+        Log.d("JSON Objects", events.toString());
+        Log.d("JSON Objects size", ""+events.size());
+        cursor.close();
+        return events;
+    }
+
+    /*public void setAlarm(View view)
+    {
+        Intent myIntent = new Intent(this , Alert.class);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 4);
+        calendar.set(Calendar.MINUTE, 19);
+        calendar.set(Calendar.SECOND, 00);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000 , pendingIntent);
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
