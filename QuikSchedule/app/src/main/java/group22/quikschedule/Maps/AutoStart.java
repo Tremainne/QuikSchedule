@@ -12,6 +12,11 @@ public class AutoStart extends BroadcastReceiver {
 
     Polling polling = new Polling();
 
+    /**
+     * starts the alarm to poll for the location of days first even on reboot.
+     * @param context current context
+     * @param intent the intent that was received, checked to see if it was a reboot.
+     */
     @Override
     public void onReceive( Context context, Intent intent )
     {

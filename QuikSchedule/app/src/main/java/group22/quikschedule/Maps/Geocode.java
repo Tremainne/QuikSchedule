@@ -46,18 +46,20 @@ public class Geocode {
     }
 
     /**
-     * Parses the JSON to ifnd the latitude and longitude.
+     * Parses the JSON to find the latitude and longitude.
      * @param json The string to parse address info from
      * @return The parsed latitude and longitude values.
      * @throws JSONException if the address isn't found or something goes wrong with the request
      */
     private static LatLng getJson(String json) throws JSONException {
 
-        JSONObject geoJSON = new JSONObject(json);
-        JSONObject result = geoJSON.getJSONArray("results").getJSONObject(0);
-        JSONObject loc = result.getJSONObject("geometry").getJSONObject("location");
-        return new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
-
+        if (json != null) {
+            JSONObject geoJSON = new JSONObject(json);
+            JSONObject result = geoJSON.getJSONArray("results").getJSONObject(0);
+            JSONObject loc = result.getJSONObject("geometry").getJSONObject("location");
+            return new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
+        }
+        return null;
 
     }
 }
