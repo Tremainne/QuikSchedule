@@ -1,7 +1,6 @@
 package group22.quikschedule;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +10,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,11 +31,11 @@ import java.util.HashMap;
 import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
-import group22.quikschedule.Calendar.ExpandedEventActivity;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Maps.PollingService;
+import group22.quikschedule.Settings.AlertActivity;
 import group22.quikschedule.Settings.SettingsFragment;
 import group22.quikschedule.Settings.WebregActivity;
 
@@ -52,37 +49,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public static HashMap<Integer, AlarmManager> alarmManagerMap;
 
 
-    public void showNotification(View view)
-    {
-        System.err.println("OIJOIDASJOISAJDOIASJDOIJSA");
-        getData(this);
 
-        NotificationCompat.Builder notifBuilder = new
-                NotificationCompat.Builder(this)
-                .setContentTitle("CSE 110")
-                .setContentText("Centre Hall 119 at 630pm")
-                .setTicker("Ticker")
-                .setSmallIcon(R.drawable.qs_icon);
-
-        Intent moreInfoIntent =  new Intent(this, ExpandedEventActivity.class);
-
-        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
-
-        taskStackBuilder.addParentStack(ExpandedEventActivity.class);
-        taskStackBuilder.addNextIntent(moreInfoIntent);
-
-        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        notifBuilder.setContentIntent(pendingIntent);
-
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notifBuilder.setAutoCancel(true);
-        notificationManager.notify(notifID,notifBuilder.build());
-        //isNotificationActive = true;
-
-        getData(getApplicationContext());
-    }
 
     public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
         HashMap<String, String> map = AlertActivity.getDataFromEvent(jsonObj);
