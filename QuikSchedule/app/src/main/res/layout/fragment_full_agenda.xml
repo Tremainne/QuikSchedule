@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center" >
 
+
+
     <TextView
         android:text="Today's Date"
         android:layout_width="wrap_content"
@@ -16,6 +18,11 @@
         android:layout_alignParentEnd="true"
         android:textSize="20dp"
         android:textColor="@color/md_pink_A700" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/calendarScrollView"
@@ -359,5 +366,6 @@
             </LinearLayout>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

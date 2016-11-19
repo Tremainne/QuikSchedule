@@ -54,7 +54,7 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
                 .setApplicationName("Quick Calendar")
                 .build();
 
-        Toast.makeText(mContext, "Syncing Calendar", Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, "Calendar Sync Complete", Toast.LENGTH_LONG).show();
     }
 
     @Override
