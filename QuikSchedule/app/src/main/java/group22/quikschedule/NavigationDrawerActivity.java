@@ -65,7 +65,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public static boolean inMaps = false;
 
-
     public static HashMap<Integer, PendingIntent> alarmIntentMap;
     public static HashMap<Integer, AlarmManager> alarmManagerMap;
 
@@ -80,40 +79,29 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private static final String BUTTON_TEXT = "Sync Calendar to Phone";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
-
+    public static int id;
 
 
 
     public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
-        HashMap<String, String> map = AlertActivity.getDataFromEvent(jsonObj);
 
-        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(map.get("start").substring(0,2)));
-        cal.set(Calendar.MINUTE, Integer.parseInt(map.get("start").substring(3)));
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt("")); //GET SHIT FROM TY
+        cal.set(Calendar.MINUTE, Integer.parseInt("")); //GET SHIT FROM TY
 
-        return Integer.parseInt(map.get("start"));
-    }
-
-    public void showNotification (View view) {
-
+        return Integer.parseInt(""); //GET SHIT FROM TY
     }
 
     public void setAlarm(View view) throws JSONException {
-        System.err.println("adsfasdf");
+        System.err.println("Setting Alarm");
 
-        //Get the list of jsonObjects for the current day
-        ArrayList<JSONObject> list = getData(getApplicationContext());
-
-        //Initialise my maps that store the pendingIntent and alarmManager for each alarm
-        //with the id as the time that they were set so that they can be canceled later using
-        //alarmManagerMap.get(timeOfAlarmToCancel).cancel(alarmIntentMap.get(timeOfAlarmToCancel));
-        alarmIntentMap = new HashMap<Integer, PendingIntent>();
-        alarmManagerMap = new HashMap<Integer, AlarmManager>();
-
-        for(int i = 0; i < list.size(); i++)
-        {
             Calendar c = Calendar.getInstance();
             //Set the alarm time for event i based on the start time and get the time back
-            int id = setAlarmtime(list.get(i), c);
+            //id = setAlarmtime(null, c); //GET SHIT FROM TY
+
+                id = 0;
+                c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
+                c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+                c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
 
             //Set a new alertIntent for the notification
             Intent alertIntent = new Intent(this, AlertActivity.class);
@@ -124,40 +112,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             //Add this to my static map so it can be accessed later to cancel
-            alarmIntentMap.put(id, contentIntent);
+            //alarmIntentMap.put(id, contentIntent);
 
             //Create an AlarmManager for each event
             AlarmManager alarmManager  = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
             ////Add this to my static map so it can be accessed later to cancel the pendingIntent
-            alarmManagerMap.put(id, alarmManager);
+            //alarmManagerMap.put(id, alarmManager);
 
             //Set the alarm
             alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);
-        }
 
-
-        /*Calendar c = Calendar.getInstance();
-
-        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
-        c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
-        c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
-
-        //System.err.println("Current time: " + c.toString());
-
-        Intent alertIntent = new Intent(this, AlertActivity.class);
-         PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, alertIntent,
-                 PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager  = (AlarmManager)
-                getSystemService(Context.ALARM_SERVICE);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY
-        , contentIntent);
-
-        //alarmMangager.set(AlarmManager.RTC_WAKEUP, alertTime,
-          //      PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-*/
     }
 
     public ArrayList<JSONObject> cursorToJson(Cursor cursor)
@@ -244,19 +209,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return events;
     }
 
-    /*public void setAlarm(View view)
-    {
-        Intent myIntent = new Intent(this , Alert.class);
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 4);
-        calendar.set(Calendar.MINUTE, 19);
-        calendar.set(Calendar.SECOND, 00);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000 , pendingIntent);
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

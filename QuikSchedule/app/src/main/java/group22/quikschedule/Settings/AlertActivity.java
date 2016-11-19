@@ -28,29 +28,14 @@ public class AlertActivity extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.err.println("WORK");
+        System.err.println("Received Broadcast");
 
-        createNotificationsForTheDay(context);
+        createNotification(context,"TEST1", "TEST2", "TEST3");
 
-    }
-
-    private void createNotificationsForTheDay(Context context) {
-        HashMap<String, String> stringMap = new HashMap<String, String>();
-
-        JSONObject jsonObj = null;// = ""; //GET THE STRING
-        try {
-            stringMap = getDataFromEvent(jsonObj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //createNotification(context, stringMap.get("title"), stringMap.get("location") +
-        //      "at" + stringMap.get("start"), stringMap.get("title"));
-        createNotification(context, "CSE 110", "Centre 119 at 6:30pm ", "CSE 110");
     }
 
     private void createNotification(Context context, String msg, String msgText, String msgAlert) {
-        System.err.println(" BEEITITITITTTTCHHH");
+        System.err.println("Creating Notification");
 
         Intent i = new Intent(context, ExpandedEventActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -72,40 +57,8 @@ public class AlertActivity extends BroadcastReceiver {
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mNotificationManager.notify(1, builder.build());
-        System.err.println("WORK BEEITITITITTTTCHHH");
-    }
-
-    public static HashMap<String, String> getDataFromEvent(JSONObject jsonObj) throws JSONException {
-
-        HashMap<String, String> strMap = new HashMap<String, String>();
-
-        //final JSONObject jsonObj = new JSONObject(jsonStr);
-
-        JSONObject endTime = jsonObj.getJSONObject("end").getJSONObject("dateTime");
-        String endTimeString = endTime.toString();
-        endTimeString = endTimeString.substring(24);
-        strMap.put("end", endTimeString);
-
-        JSONObject startTime = jsonObj.getJSONObject("start").getJSONObject("dateTime");
-        String startTimeString = startTime.toString();
-        startTimeString = startTimeString.substring(24);
-        strMap.put("start", startTimeString);
-
-        JSONObject summary = jsonObj.getJSONObject("summary");
-        String summaryString = summary.toString();
-        strMap.put("title", summaryString);
-
-        JSONObject location = jsonObj.getJSONObject("location");
-        String locationString = location.toString();
-        strMap.put("location", locationString);
-
-        return strMap;
-    }
-
-    public void getEventsFromDay()
-    {
-
+        mNotificationManager.notify(NavigationDrawerActivity.id, builder.build());
+        System.err.println("Notified");
     }
 
 }
