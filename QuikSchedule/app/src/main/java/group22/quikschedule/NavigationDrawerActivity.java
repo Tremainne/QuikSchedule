@@ -39,6 +39,7 @@ import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Maps.PollingService;
+import group22.quikschedule.Settings.AlertActivity;
 import group22.quikschedule.Settings.SettingsFragment;
 import group22.quikschedule.Settings.WebregActivity;
 
@@ -51,38 +52,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public static HashMap<Integer, PendingIntent> alarmIntentMap;
     public static HashMap<Integer, AlarmManager> alarmManagerMap;
 
-
-    public void showNotification(View view)
-    {
-        System.err.println("OIJOIDASJOISAJDOIASJDOIJSA");
-        getData(this);
-
-        NotificationCompat.Builder notifBuilder = new
-                NotificationCompat.Builder(this)
-                .setContentTitle("CSE 110")
-                .setContentText("Centre Hall 119 at 630pm")
-                .setTicker("Ticker")
-                .setSmallIcon(R.drawable.qs_icon);
-
-        Intent moreInfoIntent =  new Intent(this, ExpandedEventActivity.class);
-
-        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
-
-        taskStackBuilder.addParentStack(ExpandedEventActivity.class);
-        taskStackBuilder.addNextIntent(moreInfoIntent);
-
-        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        notifBuilder.setContentIntent(pendingIntent);
-
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notifBuilder.setAutoCancel(true);
-        notificationManager.notify(notifID,notifBuilder.build());
-        //isNotificationActive = true;
-
-        getData(getApplicationContext());
-    }
 
     public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
         HashMap<String, String> map = AlertActivity.getDataFromEvent(jsonObj);

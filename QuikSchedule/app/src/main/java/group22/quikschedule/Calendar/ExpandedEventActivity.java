@@ -15,8 +15,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -90,6 +93,26 @@ public class ExpandedEventActivity extends AppCompatActivity
         endTimeContainer = (TextView) findViewById(R.id.endTimePicker);
         location = (EditText) findViewById(R.id.location);
 
+     /*   Spinner dropdown = (Spinner)findViewById(R.id.transportationMode);
+        String[] items = new String[]{"1", "2", "three"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+        dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                Log.v("item", (String) parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        })*/
+
+
+
         Intent i = getIntent();
 
         if(i.hasExtra("Name")) {
@@ -108,11 +131,13 @@ public class ExpandedEventActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
+
             c.setTime(inputDate);
             dateContainer.setText(dateFormat.format(c.getTime()));
 
             startTimeContainer.setText(i.getStringExtra("Start Time"));
             endTimeContainer.setText(i.getStringExtra("End Time"));
+
         }
     }
 
@@ -311,6 +336,7 @@ public class ExpandedEventActivity extends AppCompatActivity
             Intent i  = new Intent(this, NavigationDrawerActivity.class);
             i.putExtra("Location", location.getText().toString());
             i.putExtra("Fragment", 1);
+           // i.putExtra("Transportation", )
             startActivity(i);
         }
     }

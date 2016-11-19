@@ -82,7 +82,7 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="51dp">
 
                     <ImageView
                         android:src="@android:drawable/ic_menu_my_calendar"
@@ -284,6 +284,18 @@
                             style="@style/EditTextStyle"
                             android:layout_weight="1" />
                     </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Spinner
+                        android:id="@+id/transportationMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:drawable/btn_dropdown"
+                        android:spinnerMode="dropdown" />
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
