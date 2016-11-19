@@ -20,13 +20,6 @@
         android:onClick="toWebreg"/>
 
     <Button
-        android:text="Show notification button"
-        android:layout_width="189dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/setAlarmButton"
-        android:onClick="showNotification"/>
-
-    <Button
         android:text="Set Alert Button"
         android:layout_width="189dp"
         android:layout_height="wrap_content"
