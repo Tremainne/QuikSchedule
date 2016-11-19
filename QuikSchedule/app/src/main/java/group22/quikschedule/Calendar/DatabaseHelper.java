@@ -145,7 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * 
+     *
      * @param mContext
      * @param sql
      * @return
