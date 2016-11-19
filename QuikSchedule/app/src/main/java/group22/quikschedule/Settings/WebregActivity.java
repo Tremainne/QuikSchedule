@@ -322,7 +322,7 @@ public class WebregActivity extends AppCompatActivity{
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    startActivity(new Intent(WebregActivity.this, NavigationDrawerActivity.class));
+                                    startActivity(new Intent(WebregActivity.this, NavigationDrawerActivity.class).putExtra("webreg", "webreg"));
                                 }
                             });
                     alertDialog.show();

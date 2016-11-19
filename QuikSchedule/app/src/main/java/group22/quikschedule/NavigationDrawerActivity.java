@@ -48,6 +48,7 @@ import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
 import group22.quikschedule.Calendar.SyncCalendarToSQL;
+import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsFragment;
@@ -328,6 +329,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 .setBackOff(new ExponentialBackOff());
 
         getResultsFromApi();
+
+        if (i.hasExtra("webreg")) {
+            if (i.getStringExtra("webreg").equals("webreg")) {
+                new SyncFirebaseToCalendar(mCredential, this).execute();
+            }
+        }
     }
 
     @Override

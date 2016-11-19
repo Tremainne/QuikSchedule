@@ -33,11 +33,11 @@
         android:id="@+id/showNotificationButton"
         android:onClick="setAlarm"/>
 
-    <Button
+    <!--<Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/syncCalendarToSQL"
         android:text="Sync Calendar to Phone"
-        android:onClick="syncCalendarToSQL"/>
+        android:onClick="syncCalendarToSQL"/>-->
 
 </LinearLayout>
