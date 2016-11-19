@@ -44,6 +44,11 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
     private Activity mActivity;
     private static final String SYNC_TOKEN_KEY = "syncToken";
 
+    /**
+     *
+     * @param credential
+     * @param context
+     */
     public SyncCalendarToSQL(GoogleAccountCredential credential, Context context) {
         mContext = context;
         mActivity = (Activity) context;
@@ -57,6 +62,11 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         Toast.makeText(mContext, "Calendar Sync Complete", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     *
+     * @param params
+     * @return
+     */
     @Override
     protected Void doInBackground(Void... params) {
         try {
@@ -70,10 +80,18 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
+    /**
+     *
+     * @param result
+     */
     @Override
     protected void onPostExecute (Void result) {
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     private void run() throws IOException {
         String calendarId = getCalendarIdFromSummary("QuickSchedule");
         if (calendarId.equals("")) {
@@ -145,6 +163,11 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         System.out.println("Sync complete");
     }
 
+    /**
+     *
+     * @param event
+     * @throws IOException
+     */
     private void syncEvent(Event event) throws IOException {
         DatabaseHelper mDbHelper = new DatabaseHelper(mContext);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -203,6 +226,12 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         }
     }
 
+    /**
+     *
+     * @param field
+     * @param amount
+     * @return
+     */
     private Date getRelativeDate(int field, int amount) {
         Date now = new Date();
         java.util.Calendar cal = java.util.Calendar.getInstance();
@@ -211,6 +240,12 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         return cal.getTime();
     }
 
+    /**
+     *
+     * @param db
+     * @param id
+     * @return
+     */
     private boolean isIdInTable (SQLiteDatabase db, String id) {
         String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
                 " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_ID + "=" +
@@ -222,6 +257,11 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         return inTable;
     }
 
+    /**
+     *
+     * @param db
+     * @return
+     */
     private boolean isTableEmpty (SQLiteDatabase db) {
         try {
             String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME;
@@ -235,6 +275,11 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         }
     }
 
+    /**
+     *
+     * @param summary
+     * @return
+     */
     private String getCalendarIdFromSummary (String summary) {
         try {
             String pageToken = null;
