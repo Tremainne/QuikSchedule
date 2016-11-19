@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BootstrapApplicationTest/BootstrapApplicationTest.iml" filepath="$PROJECT_DIR$/BootstrapApplicationTest/BootstrapApplicationTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MultiDexApplicationTest/MultiDexApplicationTest.iml" filepath="$PROJECT_DIR$/MultiDexApplicationTest/MultiDexApplicationTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/QuikSchedule.iml" filepath="$PROJECT_DIR$/QuikSchedule.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
