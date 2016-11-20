@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -148,6 +149,8 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
                 System.out.println("No new items to sync");
             } else {
                 for (Event event : items) {
+
+                    Log.d("Deleting Events", event.getSummary());
                     syncEvent(event);
                     System.err.println(event.toPrettyString());
                 }

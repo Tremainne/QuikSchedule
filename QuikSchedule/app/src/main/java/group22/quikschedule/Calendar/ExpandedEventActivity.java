@@ -61,6 +61,7 @@ public class ExpandedEventActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks {
 
     private boolean editingEvent = false;
+    private boolean deleteEvent = false;
     private String date;
     private TextView dateContainer;
     private TextView startTimeContainer;
@@ -139,11 +140,18 @@ public class ExpandedEventActivity extends AppCompatActivity
     public void toCalendar(View v) {
         //Send Data to Google Calendar
 
-            mCredential = GoogleAccountCredential.usingOAuth2(
-                    getApplicationContext(), Arrays.asList(SCOPES))
-                    .setBackOff(new ExponentialBackOff());
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
 
+        if(v.getId() == R.id.delete) {
+            Log.d("Delete", "toCalendar");
+            deleteEvent = true;
+            deleteEvent();
+        }
+        else {
             addToCalendar();
+        }
     }
 
     private boolean addToCalendar () {
@@ -198,21 +206,17 @@ public class ExpandedEventActivity extends AppCompatActivity
 
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
-            Log.d("CAL", "1");
             return false;
 
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
-            Log.d("CAL", "2");
             return false;
 
         } else if (!isDeviceOnline()) {
             Toast.makeText(getApplicationContext(), "No network available", Toast.LENGTH_LONG).show();
-            Log.d("CAL", "3");
             return false;
 
         } else {
-            Log.d("CAL", "4");
 
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -332,17 +336,51 @@ public class ExpandedEventActivity extends AppCompatActivity
         onBackPressed();
     }
 
-    public void deleteEvent(View v) {
+    public boolean deleteEvent() {
+
         if(editingEvent) {
-            try {
-                System.err.println("SUCCESS: " + mService.events().delete(getCalendarIdFromSummary("QuickSchedule"), eventID).execute());
-            } catch (IOException e) {
-                System.err.println("Failed to delete event in calendar");
+
+            deleteEvent = true;
+            Log.d("Delete", "Function Delete 1");
+
+            if (!isGooglePlayServicesAvailable()) {
+                acquireGooglePlayServices();
+                return false;
+
+            } else if (mCredential.getSelectedAccountName() == null) {
+                chooseAccount();
+                return false;
+
+            } else if (!isDeviceOnline()) {
+                Toast.makeText(getApplicationContext(), "No network available", Toast.LENGTH_LONG).show();
+                return false;
+
             }
+
+            Log.d("Delete", "Function Delete 2");
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mService = new com.google.api.services.calendar.Calendar.Builder(
+                    transport, jsonFactory, mCredential)
+                    .setApplicationName("Quick Calendar")
+                    .build();
+
+            new addToCalendarInBackground().execute();
+
+            Calendar c = Calendar.getInstance();
+
+            Intent i = new Intent(this, NavigationDrawerActivity.class);
+            i.putExtra("Day", c.get(Calendar.DAY_OF_MONTH));
+            i.putExtra("Year", c.get(Calendar.YEAR));
+            i.putExtra("Month", c.get(Calendar.MONTH));
+            startActivity(i);
+
+            return true;
         }
         else {
-            Toast.makeText(getBaseContext(), "Event does not exist",
+            Toast.makeText(getBaseContext(), "Event does not exist in calendar",
                     Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 
@@ -384,7 +422,12 @@ public class ExpandedEventActivity extends AppCompatActivity
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
                 } else {
-                    addToCalendar();
+                    if(deleteEvent) {
+                        deleteEvent();
+                    }
+                    else{
+                        addToCalendar();
+                    }
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
@@ -399,13 +442,23 @@ public class ExpandedEventActivity extends AppCompatActivity
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
-                        addToCalendar();
+                        if(deleteEvent) {
+                            deleteEvent();
+                        }
+                        else{
+                            addToCalendar();
+                        }
                     }
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
-                    addToCalendar();
+                    if(deleteEvent) {
+                        deleteEvent();
+                    }
+                    else{
+                        addToCalendar();
+                    }
                 }
                 break;
         }
@@ -512,8 +565,17 @@ public class ExpandedEventActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
 
-            if(editingEvent) {
+            if(deleteEvent) {
+                Log.d("Delete", "Delete");
+                /*try {
+                    Log.d("Delete", "SUCCESS: " + mService.events().delete(getCalendarIdFromSummary("QuickSchedule"), eventID).execute());
+                } catch (IOException e) {
+                    System.err.println("Failed to delete event in calendar");
+                }*/
+            }
+            else if(editingEvent) {
 
+                Log.d("Delete", "Editing");
                 try {
                     System.err.println("SUCCESS: " + mService.events().update(getCalendarIdFromSummary("QuickSchedule"), eventID, event).execute());
                 } catch (IOException e) {
@@ -521,6 +583,7 @@ public class ExpandedEventActivity extends AppCompatActivity
                 }
             }
             else {
+                Log.d("Delete", "New");
                 try {
                     System.err.println("SUCCESS: " + mService.events().insert(getCalendarIdFromSummary("QuickSchedule"), event).execute());
                 } catch (IOException e) {

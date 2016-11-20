@@ -127,7 +127,6 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
 
     public void populateAgenda(Context mContext, View view)
     {
-        Log.d("Entered", "populateAgenda");
 
         DateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
 
@@ -157,7 +156,6 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
 
     public void addEvent(final EventView event, View v) {
 
-        Log.d("Event Name", event.name+" "+event.startTime);
         event.setGravity(Gravity.NO_GRAVITY);
         event.setText(" "+event.name+"\n"+
                 " " +event.getTimeAsString(EventView.STARTTIME)+

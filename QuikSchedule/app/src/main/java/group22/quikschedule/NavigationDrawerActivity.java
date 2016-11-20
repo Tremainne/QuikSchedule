@@ -72,7 +72,7 @@ import static group22.quikschedule.InitialActivity.APP_PREFERENCES;
  *
  * @author Rudr Tandon
  * @author Ishjot Suri
- * @author WHOEVER ELSE WORKED ON THIS JUST UPDATE IT
+ * @author Rohan Chhabra
  * @author WHOEVER ELSE WORKED ON THIS JUST UPDATE IT
  */
 public class NavigationDrawerActivity extends AppCompatActivity
