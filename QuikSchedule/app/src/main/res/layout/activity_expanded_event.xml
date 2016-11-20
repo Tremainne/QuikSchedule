@@ -107,7 +107,7 @@
                     <ImageView
                         android:src="@android:drawable/ic_menu_my_calendar"
                         android:id="@+id/imageView2"
-                        android:layout_width="48dp"
+                        android:layout_width="45dp"
                         android:layout_height="40dp" />
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="42dp"
+                        android:layout_width="44dp"
                         android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/imageButton2" />
@@ -165,7 +165,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="42dp"
+                        android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/TimeImage" />
@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="43dp"
+                        android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/TimeImage2" />
@@ -230,7 +230,7 @@
                         android:layout_height="50dp"
                         android:src="@android:drawable/ic_menu_mylocation"
                         android:id="@+id/imageView4"
-                        android:layout_width="43dp" />
+                        android:layout_width="45dp" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -256,7 +256,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="38dp"
+                        android:layout_width="45dp"
                         android:layout_height="50dp"
                         android:src="@drawable/ic_menu_gallery"
                         android:id="@+id/imageView3" />
@@ -269,15 +269,14 @@
                         android:textColorHint="@color/md_pink_A700">
 
                         <EditText
-                            android:layout_width="match_parent"
+                            android:layout_width="303dp"
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:maxLines="1"
                             android:ems="10"
                             android:id="@+id/materials"
                             android:hint="Materials"
-                            style="@style/EditTextStyle"
-                            android:layout_weight="1" />
+                            style="@style/EditTextStyle" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -286,7 +285,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="38dp"
+                        android:layout_width="46dp"
                         android:layout_height="50dp"
                         android:src="@drawable/quantum_ic_closed_caption_grey600_36"
                         android:id="@+id/imageView5" />
@@ -313,7 +312,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="38dp"
+                        android:layout_width="46dp"
                         android:layout_height="50dp"
                         android:src="@drawable/ic_menu_send"
                         android:id="@+id/imageView6" />
