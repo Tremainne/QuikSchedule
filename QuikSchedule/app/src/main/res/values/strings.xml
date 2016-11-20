@@ -13,6 +13,10 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
 
+    <!-- Google Sign-in Strings -->
+    <string name="google_signed_in">Logged into Google...</string>
+    <string name="google_signed_out">Logged out of Google...</string>
+
     <!-- Facebook Strings -->
     <string name="facebook_app_id">596070933908862</string>
     <string name="fb_login_protocol_scheme">fb596070933908862</string>

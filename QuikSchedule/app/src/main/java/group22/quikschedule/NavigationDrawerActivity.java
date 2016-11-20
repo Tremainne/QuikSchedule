@@ -60,11 +60,14 @@ import group22.quikschedule.Settings.WebregActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static group22.quikschedule.InitialActivity.APP_PREFERENCES;
+
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                     EasyPermissions.PermissionCallbacks{
 
     public static boolean inMaps = false;
+    public static boolean loggedIn;
 
     public static HashMap<Integer, PendingIntent> alarmIntentMap;
     public static HashMap<Integer, AlarmManager> alarmManagerMap;
@@ -213,9 +216,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FacebookSdk.sdkInitialize(getApplicationContext()); //Allows for Facebook SDK access
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
+
+        SharedPreferences settings = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+        settings.getBoolean("LoggedIn", loggedIn);
+        if(loggedIn) {
+            startActivity(new Intent(this, NavigationDrawerActivity.class));
+        }
 
         startService( new Intent(this, PollingService.class) );
 
@@ -378,8 +386,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void toWebreg(View view){
         startActivity(new Intent(this, WebregActivity.class));
     }
-
-    public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
 
     public void toMap(View view) {
         startActivity(new Intent(this, MapsFragment.class));
@@ -594,5 +600,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 connectionStatusCode,
                 REQUEST_GOOGLE_PLAY_SERVICES);
         dialog.show();
+    }
+
+    public void toInitial(View view){
+        startActivity(new Intent(this, InitialActivity.class));
     }
 }
