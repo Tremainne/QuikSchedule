@@ -16,11 +16,23 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.PriorityQueue;
+
+import group22.quikschedule.Calendar.DatabaseContract;
+import group22.quikschedule.Calendar.DatabaseHelper;
+import group22.quikschedule.Calendar.EventView;
+
 /**
  * Created by Ty Dewes and David Thomson on 11/14/16.
  */
 
 public class Polling extends BroadcastReceiver {
+
 
     private LatLng start;
     private GoogleApiClient client;
@@ -44,8 +56,27 @@ public class Polling extends BroadcastReceiver {
                 .build();
 
         // Need to get end
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_WEEK);
+
+
+        String sql = "SELECT " + DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
+                DatabaseContract.DatabaseEntry.TABLE_NAME + " WHERE " +
+        DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS '" + (day - 1) +"'";
+        PriorityQueue<EventView> pq = DatabaseHelper.getEvents( context, sql );
         String end = "";
-        Geocode.nameToLatLng(end, listener, false);
+        // try to get rid of room numbers, but keep potential zip codes
+        String[] arr = end.split("\\w");
+        StringBuilder result = new StringBuilder();
+        for (String str : arr) {
+            boolean isNum = str.matches("\\d+");
+            // If its a number or  its a Zip code (length 5), put it back in the address.
+            if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                result.append(str);
+            }
+        }
+
+        Geocode.nameToLatLng(result.toString(), listener, false);
 
         wl.release();
     }
