@@ -87,12 +87,12 @@ public class CalendarSyncActivity extends Activity
         firebaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallApiButton.setEnabled(false);
-                getResultsFromApi();
-                mCallApiButton.setEnabled(true);
-                firebaseButton.setEnabled(false);
-                new SyncFirebaseToCalendar(mCredential, context).execute();
-                firebaseButton.setEnabled(true);
+                //mCallApiButton.setEnabled(false);
+                //getResultsFromApi();
+                //mCallApiButton.setEnabled(true);
+                //firebaseButton.setEnabled(false);
+                //new SyncFirebaseToCalendar(mCredential, context).execute();
+                //firebaseButton.setEnabled(true);
             }
         });
         activityLayout.addView(firebaseButton);

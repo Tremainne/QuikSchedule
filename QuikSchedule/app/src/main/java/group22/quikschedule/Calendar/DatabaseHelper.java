@@ -29,6 +29,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     *
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + DatabaseContract.DatabaseEntry.TABLE_NAME +
@@ -40,6 +44,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     *
+     * @param cursor
+     * @return
+     */
     public JSONArray cursorToJson(Cursor cursor)
     {
         JSONArray resultSet     = new JSONArray();
@@ -79,6 +88,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return resultSet;
     }
 
+    /**
+     *
+     * @param mContext
+     * @return
+     */
     public ArrayList<JSONArray> getData(Context mContext)
     {
         DatabaseHelper mDbHelper = new DatabaseHelper(mContext);
@@ -113,14 +127,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     *
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
+    /**
+     *
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onDowngrade (SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
+    /**
+     *
+     * @param mContext
+     * @param sql
+     * @return
+     */
     public static PriorityQueue<EventView> getEvents(Context mContext, String sql) {
 
         Log.d("Entered", "getEvents");

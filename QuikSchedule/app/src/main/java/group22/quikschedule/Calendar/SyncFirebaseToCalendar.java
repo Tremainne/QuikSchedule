@@ -54,6 +54,11 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference db;
 
+    /**
+     *
+     * @param credential
+     * @param context
+     */
     public SyncFirebaseToCalendar (GoogleAccountCredential credential, Context context) {
         System.err.println("SYNCING FIREBASE TO CALENDAR");
 
@@ -92,6 +97,11 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
         db = FirebaseDatabase.getInstance().getReference();
     }
 
+    /**
+     *
+     * @param params
+     * @return
+     */
     @Override
     protected ArrayList<Event> doInBackground(Void... params) {
         ArrayList<Event> events = new ArrayList<Event>();
@@ -247,10 +257,19 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
         return events;
     }
 
+    /**
+     *
+     * @param result
+     */
     @Override
     protected void onPostExecute (ArrayList<Event> result) {
     }
 
+    /**
+     *
+     * @param summary
+     * @return
+     */
     private String getCalendarIdFromSummary (String summary) {
         try {
             String pageToken = null;

@@ -356,6 +356,12 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
@@ -391,16 +397,30 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param perms
+     */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         // not needed
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param perms
+     */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         // not needed
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean isDeviceOnline() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -408,6 +428,10 @@ public class ExpandedEventActivity extends AppCompatActivity
         return (networkInfo != null && networkInfo.isConnected());
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability apiAvailability =
                 GoogleApiAvailability.getInstance();
@@ -415,6 +439,7 @@ public class ExpandedEventActivity extends AppCompatActivity
                 apiAvailability.isGooglePlayServicesAvailable(this);
         return connectionStatusCode == ConnectionResult.SUCCESS;
     }
+
 
     private void acquireGooglePlayServices() {
         GoogleApiAvailability apiAvailability =
@@ -426,6 +451,10 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
+    /**
+     *
+     * @param connectionStatusCode
+     */
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
@@ -436,6 +465,11 @@ public class ExpandedEventActivity extends AppCompatActivity
         dialog.show();
     }
 
+    /**
+     *
+     * @param summary
+     * @return
+     */
     private String getCalendarIdFromSummary (String summary) {
         try {
             String pageToken = null;
