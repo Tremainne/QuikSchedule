@@ -213,7 +213,12 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_WEEK, weekNum + numOfWeeks);
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_DAY, day);
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_DATA, event.toPrettyString());
-                db.insert(DatabaseContract.DatabaseEntry.TABLE_NAME, null, values);
+
+                if (isIdInTable(db, event.getId())) {
+                    db.update(DatabaseContract.DatabaseEntry.TABLE_NAME, values, DatabaseContract.DatabaseEntry.COLUMN_ID + " = " + event.getId(), null);
+                } else {
+                    db.insert(DatabaseContract.DatabaseEntry.TABLE_NAME, null, values);
+                }
 
                 numOfWeeks--;
             } while (numOfWeeks >= 0);

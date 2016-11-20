@@ -50,6 +50,7 @@ import group22.quikschedule.Calendar.SyncCalendarToSQL;
 import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
+import group22.quikschedule.Maps.Directions;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Maps.PollingService;
 import group22.quikschedule.Settings.AlertActivity;
@@ -268,7 +269,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         if(i.hasExtra("Location")) {
             Bundle mapsBundle = new Bundle();
-            mapsBundle.putString("Location", i.getStringExtra("Location"));
+            String end = i.getStringExtra("Location");
+            String[] arr = end.split("\\w");
+            StringBuilder result = new StringBuilder();
+            for (String str : arr) {
+                boolean isNum = str.matches("\\d+");
+                // If its a number or  its a Zip code (length 5), put it back in the address.
+                if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                    result.append(str + " ");
+                }
+            }
+            mapsBundle.putString("Location", result.toString());
             fragment.setArguments(mapsBundle);
         }
 
@@ -342,7 +353,22 @@ public class NavigationDrawerActivity extends AppCompatActivity
             fragment = (Fragment) fragmentClass.newInstance();
             if (id == R.id.nav_maps) {
                 Bundle mapsBundle = new Bundle();
-                mapsBundle.putString("Location", "CENTR");
+                // Replace with location of days first event.
+                String end = "CENTR 240"; // TODO
+                String[] arr = end.split("[\\s,]+");
+                StringBuilder result = new StringBuilder();
+                for (String str : arr) {
+                    boolean isNum = str.matches("\\d+");
+                    // If its a number or  its a Zip code (length 5), put it back in the address.
+                    if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                        if (result.length() > 0) {
+                            result.append(" ");
+                        }
+                        result.append(str);
+
+                    }
+                }
+                mapsBundle.putString("Location", result.toString());
                 fragment.setArguments(mapsBundle);
             }
         } catch (Exception e) {

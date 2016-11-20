@@ -18,6 +18,7 @@ import java.util.List;
 
 public class Directions {
 
+    public static final int ZIP_LENGTH = 5;
     private static LatLng home;
 
     /**

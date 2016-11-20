@@ -33,6 +33,7 @@ import group22.quikschedule.Calendar.EventView;
 
 public class Polling extends BroadcastReceiver {
 
+
     private LatLng start;
     private GoogleApiClient client;
     int time;
@@ -64,7 +65,18 @@ public class Polling extends BroadcastReceiver {
         DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS '" + (day - 1) +"'";
         PriorityQueue<EventView> pq = DatabaseHelper.getEvents( context, sql );
         String end = "";
-        Geocode.nameToLatLng(end, listener, false);
+        // try to get rid of room numbers, but keep potential zip codes
+        String[] arr = end.split("\\w");
+        StringBuilder result = new StringBuilder();
+        for (String str : arr) {
+            boolean isNum = str.matches("\\d+");
+            // If its a number or  its a Zip code (length 5), put it back in the address.
+            if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                result.append(str);
+            }
+        }
+
+        Geocode.nameToLatLng(result.toString(), listener, false);
 
         wl.release();
     }
