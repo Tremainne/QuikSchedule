@@ -95,7 +95,7 @@ public class ExpandedEventActivity extends AppCompatActivity
 
         dropdown = (Spinner)findViewById(R.id.transportationMode);
         String[] items = new String[]
-                {"Walking", "Cycling", "Driving", "Transit"};
+                {"Transit", "Driving", "Cycling", "Walking"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, items);
         dropdown.setAdapter(adapter);
 
@@ -118,7 +118,7 @@ public class ExpandedEventActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
-            dropdown.setSelection(i.getIntExtra("Transportation", 0));
+            dropdown.setSelection(i.getIntExtra("Transportation", 3));
 
             c.setTime(inputDate);
             dateContainer.setText(dateFormat.format(c.getTime()));
@@ -499,8 +499,9 @@ public class ExpandedEventActivity extends AppCompatActivity
         protected Void doInBackground(Void... params) {
 
             if(editingEvent) {
+
                 try {
-                    System.err.println("SUCCESS: " + mService.events().update(getCalendarIdFromSummary("QuickSchedule"), eventID, event).execute());
+                    System.err.println("FAIL: " + mService.events().update(getCalendarIdFromSummary("QuickSchedule"), eventID, event).execute());
                 } catch (IOException e) {
                     System.err.println("Failed to edit event in calendar");
                 }

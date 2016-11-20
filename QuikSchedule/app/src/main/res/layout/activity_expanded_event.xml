@@ -12,16 +12,34 @@
         android:layout_width="match_parent"
         android:background="@color/md_black_1000">
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <android.support.v7.widget.AppCompatButton
+                    android:text="Cancel"
+                    android:textSize="20dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cancel"
+                    android:layout_alignTop="@+id/edit"
+                    android:background="@color/md_black_1000"
+                    android:textCursorDrawable="@null"
+                    style="@android:style/Theme.Translucent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/colorAccent"
+                    android:layout_width="65dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_alignBottom="@+id/edit"
+                    android:onClick="cancel"
+                android:layout_weight="1" />
 
             <android.support.v7.widget.AppCompatButton
-                android:text="Done"
+                android:text="Delete"
                 android:textSize="20dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/edit"
+                android:id="@+id/delete"
                 android:background="@color/md_black_1000"
                 android:textCursorDrawable="@null"
                 style="@android:style/Theme.Translucent"
@@ -29,31 +47,32 @@
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/colorAccent"
                 android:layout_width="50dp"
+                android:gravity="center"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="13dp"
-                android:layout_marginEnd="13dp"
-                android:onClick="toCalendar"/>
+                android:onClick="toCalendar"
+                android:layout_weight="1" />
 
             <android.support.v7.widget.AppCompatButton
-                android:text="Cancel"
-                android:textSize="20dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/cancel"
-                android:layout_alignTop="@+id/edit"
-                android:background="@color/md_black_1000"
-                android:textCursorDrawable="@null"
-                style="@android:style/Theme.Translucent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:fontFamily="sans-serif-medium"
-                android:textColor="@color/colorAccent"
-                android:layout_width="65dp"
-                android:layout_marginLeft="13dp"
-                android:layout_alignBottom="@+id/edit"
-                android:onClick="cancel"/>
+                    android:text="Done"
+                    android:textSize="20dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edit"
+                    android:background="@color/md_black_1000"
+                    android:textCursorDrawable="@null"
+                    style="@android:style/Theme.Translucent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/colorAccent"
+                    android:layout_width="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="13dp"
+                    android:layout_marginEnd="13dp"
+                    android:onClick="toCalendar"
+                android:layout_weight="1" />
+        </LinearLayout>
 
-        </RelativeLayout>
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
@@ -324,4 +343,5 @@
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
+
 </android.support.design.widget.CoordinatorLayout>

@@ -224,6 +224,19 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         Intent i = getIntent();
 
+        Log.d("SyncWTF", "NavDrawer Syncing");
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
+
+        getResultsFromApi();
+
+        if (i.hasExtra("webreg")) {
+            if (i.getStringExtra("webreg").equals("webreg")) {
+                new SyncFirebaseToCalendar(mCredential, this).execute();
+            }
+        }
+
         int selectFrag = i.getIntExtra("Fragment", 0);
 
         Fragment fragment = null;
@@ -276,18 +289,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
-
-        getResultsFromApi();
-
-        if (i.hasExtra("webreg")) {
-            if (i.getStringExtra("webreg").equals("webreg")) {
-                new SyncFirebaseToCalendar(mCredential, this).execute();
-            }
-        }
     }
 
     @Override

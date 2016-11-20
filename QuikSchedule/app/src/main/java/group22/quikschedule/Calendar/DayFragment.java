@@ -96,6 +96,7 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
         TextView date = (TextView) view.findViewById(R.id.date);
         date.setText(dates[mPage-1]);
 
+        Log.d("SyncWTF", "Day Fragment Adding Events");
         populateAgenda(getContext(), view);
 
         Calendar currentTime = Calendar.getInstance();
@@ -144,8 +145,10 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
 
         PriorityQueue<EventView> events = DatabaseHelper.getEvents(getContext(), sql);
 
+        Log.d("SyncWTF", " "+events.size()+" "+dates[mPage - 1]);
+        int j = 0;
         for(EventView i : events ) {
-            Log.d("event", i.name);
+            Log.d("SyncWTF", i.name + " "+(++j));
             addEvent(i, view);
         }
     }
