@@ -14,7 +14,7 @@ import java.security.AccessControlContext;
 import java.util.HashMap;
 
 import group22.quikschedule.Calendar.ExpandedEventActivity;
-import group22.quikschedule.MainActivity;
+import group22.quikschedule.InitialActivity;
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
 

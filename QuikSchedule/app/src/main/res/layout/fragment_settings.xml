@@ -33,4 +33,11 @@
         android:text="Sync Calendar to Phone"
         android:onClick="syncCalendarToSQL"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/syncCalendarToSQL"
+        android:text="Go to Initial Activity"
+        android:onClick="toInitial"/>
+
 </LinearLayout>

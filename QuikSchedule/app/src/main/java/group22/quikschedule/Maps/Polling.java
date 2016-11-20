@@ -16,6 +16,17 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.PriorityQueue;
+
+import group22.quikschedule.Calendar.DatabaseContract;
+import group22.quikschedule.Calendar.DatabaseHelper;
+import group22.quikschedule.Calendar.EventView;
+
 /**
  * Created by Ty Dewes and David Thomson on 11/14/16.
  */
@@ -44,6 +55,14 @@ public class Polling extends BroadcastReceiver {
                 .build();
 
         // Need to get end
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_WEEK);
+
+
+        String sql = "SELECT " + DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
+                DatabaseContract.DatabaseEntry.TABLE_NAME + " WHERE " +
+        DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS '" + (day - 1) +"'";
+        PriorityQueue<EventView> pq = DatabaseHelper.getEvents( context, sql );
         String end = "";
         Geocode.nameToLatLng(end, listener, false);
 
