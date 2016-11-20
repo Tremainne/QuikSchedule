@@ -44,7 +44,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
 import group22.quikschedule.Calendar.SyncCalendarToSQL;
