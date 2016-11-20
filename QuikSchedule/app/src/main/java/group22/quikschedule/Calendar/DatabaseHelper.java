@@ -194,8 +194,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             String[] lines = jsonObject.getString("description").split("\n");
                             event.comments = lines[0].substring(0, lines[0].length());
                             event.materials = lines[1].substring(0, lines[1].length());
-                           // event.transportation =
-                             //       Integer.parseInt(lines[2].substring(0, lines[2].length()));
+                            Log.d("HELP", " "+lines.length);
+                            event.transportation =
+                                    Integer.parseInt(lines[2].substring(0, lines[2].length()));
                         }
                         catch (JSONException e) {
                             e.printStackTrace();

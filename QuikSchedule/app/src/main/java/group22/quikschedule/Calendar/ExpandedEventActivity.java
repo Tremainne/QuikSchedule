@@ -228,8 +228,9 @@ public class ExpandedEventActivity extends AppCompatActivity
             event = new Event()
                     .setSummary(((EditText) findViewById(R.id.eventName)).getText().toString())
                     .setLocation(location.getText().toString())
-                    .setDescription("Textbooks: " + ((EditText) findViewById(R.id.materials)).getText().toString() +
-                    "\n" + "Comments: " + ((EditText) findViewById(R.id.comments)).getText().toString());
+                    .setDescription(((EditText) findViewById(R.id.materials)).getText().toString() +
+                    "\n"+ ((EditText) findViewById(R.id.comments)).getText().toString() + "\n" +
+                    dropdown.getSelectedItemPosition());
 
             Calendar cal = Calendar.getInstance();
 
