@@ -9,6 +9,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -30,6 +31,7 @@ public class DayFragment extends Fragment {
             {" = 'SUNDAY'", " = 'MONDAY'", " = 'TUESDAY'", " = 'WEDNESDAY'", " = 'THURSDAY'",
                     " = 'FRIDAY'", " = 'SATURDAY'"};
     private int mPage;
+    private View view;
 
     public static DayFragment newInstance(int page, String[] tabTitles) {
         Bundle args = new Bundle();
@@ -53,7 +55,7 @@ public class DayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_full_agenda, container, false);
+        view = inflater.inflate(R.layout.fragment_full_agenda, container, false);
 
         TextView date = (TextView) view.findViewById(R.id.date);
         date.setText(dates[mPage-1]);
@@ -68,7 +70,7 @@ public class DayFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
-
+        populateAgenda(getContext(), view);
     }
 
     public void populateAgenda(Context mContext, View view)
@@ -136,6 +138,9 @@ public class DayFragment extends Fragment {
                 i.putExtra("Start Time", event.getTimeAsString(EventView.STARTTIME));
                 i.putExtra("End Time", event.getTimeAsString(EventView.ENDTIME));
                 i.putExtra("ID", event.id);
+                i.putExtra("Transportation", event.transportation);
+                i.putExtra("Comments", event.comments);
+                i.putExtra("Materials", event.materials);
 
                 startActivity(i);
             }

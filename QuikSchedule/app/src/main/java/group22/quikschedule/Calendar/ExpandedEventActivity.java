@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -58,8 +57,6 @@ import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_AUTHORI
 import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_GOOGLE_PLAY_SERVICES;
 import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_PERMISSION_GET_ACCOUNTS;
 
-//import group22.quikschedule.Maps.MapsActivity;
-
 public class ExpandedEventActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks {
 
@@ -69,6 +66,8 @@ public class ExpandedEventActivity extends AppCompatActivity
     private TextView startTimeContainer;
     private TextView endTimeContainer;
     private EditText location;
+    private Spinner dropdown;
+    private String eventID;
 
     GoogleAccountCredential mCredential;
     private final Calendar c = Calendar.getInstance();
@@ -92,32 +91,20 @@ public class ExpandedEventActivity extends AppCompatActivity
         startTimeContainer = (TextView) findViewById(R.id.startTimePicker);
         endTimeContainer = (TextView) findViewById(R.id.endTimePicker);
         location = (EditText) findViewById(R.id.location);
+        EditText comments = (EditText) findViewById(R.id.comments);
 
-     /*   Spinner dropdown = (Spinner)findViewById(R.id.transportationMode);
-        String[] items = new String[]{"1", "2", "three"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown = (Spinner)findViewById(R.id.transportationMode);
+        String[] items = new String[]
+                {"Walking", "Cycling", "Driving", "Transit"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, items);
         dropdown.setAdapter(adapter);
-        dropdown.setAdapter(adapter);
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        })*/
-
-
 
         Intent i = getIntent();
 
         if(i.hasExtra("Name")) {
             editingEvent = true;
 
+            eventID = i.getStringExtra("ID");
             eventName.setText(i.getStringExtra("Name"));
             location.setText(i.getStringExtra("Location"));
 
@@ -131,6 +118,7 @@ public class ExpandedEventActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
+            dropdown.setSelection(i.getIntExtra("Transportation", 0));
 
             c.setTime(inputDate);
             dateContainer.setText(dateFormat.format(c.getTime()));
@@ -138,25 +126,24 @@ public class ExpandedEventActivity extends AppCompatActivity
             startTimeContainer.setText(i.getStringExtra("Start Time"));
             endTimeContainer.setText(i.getStringExtra("End Time"));
 
+            if(i.hasExtra("Comments")) {
+                comments.setText(i.getStringExtra("Comments"));
+            }
+
+            if(i.hasExtra("Materials")) {
+                comments.setText(i.getStringExtra("Materials"));
+            }
         }
     }
 
     public void toCalendar(View v) {
         //Send Data to Google Calendar
 
-
-        if(editingEvent) {
-            //edit event implementation
-            onBackPressed();
-        }
-        else {
             mCredential = GoogleAccountCredential.usingOAuth2(
                     getApplicationContext(), Arrays.asList(SCOPES))
                     .setBackOff(new ExponentialBackOff());
 
             addToCalendar();
-
-        }
     }
 
     private boolean addToCalendar () {
@@ -336,7 +323,7 @@ public class ExpandedEventActivity extends AppCompatActivity
             Intent i  = new Intent(this, NavigationDrawerActivity.class);
             i.putExtra("Location", location.getText().toString());
             i.putExtra("Fragment", 1);
-           // i.putExtra("Transportation", )
+            i.putExtra("Transportation", dropdown.getSelectedItemPosition());
             startActivity(i);
         }
     }
@@ -476,10 +463,20 @@ public class ExpandedEventActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                System.err.println("SUCCESS: " + mService.events().insert(getCalendarIdFromSummary("QuickSchedule"), event).execute());
-            } catch (IOException e) {
-                System.err.println("Failed to add event to calendar");
+
+            if(editingEvent) {
+                try {
+                    System.err.println("SUCCESS: " + mService.events().update(getCalendarIdFromSummary("QuickSchedule"), eventID, event).execute());
+                } catch (IOException e) {
+                    System.err.println("Failed to edit event in calendar");
+                }
+            }
+            else {
+                try {
+                    System.err.println("SUCCESS: " + mService.events().insert(getCalendarIdFromSummary("QuickSchedule"), event).execute());
+                } catch (IOException e) {
+                    System.err.println("Failed to add event to calendar");
+                }
             }
 
             return null;

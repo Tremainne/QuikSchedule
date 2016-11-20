@@ -1,7 +1,6 @@
 package group22.quikschedule;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +10,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,7 +31,6 @@ import java.util.HashMap;
 import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
-import group22.quikschedule.Calendar.ExpandedEventActivity;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.MapsFragment;
@@ -51,6 +47,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public static HashMap<Integer, PendingIntent> alarmIntentMap;
     public static HashMap<Integer, AlarmManager> alarmManagerMap;
+
+
 
 
     public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
@@ -275,6 +273,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if(i.hasExtra("Location")) {
             Bundle mapsBundle = new Bundle();
             mapsBundle.putString("Location", i.getStringExtra("Location"));
+            mapsBundle.putInt("Transportation", i.getIntExtra("Transportation", 0));
             fragment.setArguments(mapsBundle);
         }
 
