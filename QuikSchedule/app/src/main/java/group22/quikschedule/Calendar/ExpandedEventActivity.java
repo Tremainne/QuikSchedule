@@ -93,6 +93,7 @@ public class ExpandedEventActivity extends AppCompatActivity
         endTimeContainer = (TextView) findViewById(R.id.endTimePicker);
         location = (EditText) findViewById(R.id.location);
         EditText comments = (EditText) findViewById(R.id.comments);
+        EditText materials = (EditText) findViewById(R.id.materials);
 
         dropdown = (Spinner)findViewById(R.id.transportationMode);
         String[] items = new String[]
@@ -119,8 +120,6 @@ public class ExpandedEventActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
-            dropdown.setSelection(i.getIntExtra("Transportation", 3));
-
             c.setTime(inputDate);
             dateContainer.setText(dateFormat.format(c.getTime()));
 
@@ -132,7 +131,14 @@ public class ExpandedEventActivity extends AppCompatActivity
             }
 
             if(i.hasExtra("Materials")) {
-                comments.setText(i.getStringExtra("Materials"));
+                Log.d("Trans", "Tf");
+                materials.setText(i.getStringExtra("Materials"));
+            }
+
+            if(i.hasExtra("Transportation")) {
+
+                int j = i.getIntExtra("Transportation", 2);
+                dropdown.setSelection(j);
             }
         }
     }
