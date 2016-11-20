@@ -44,13 +44,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
 import group22.quikschedule.Calendar.SyncCalendarToSQL;
 import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
+import group22.quikschedule.Maps.Directions;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Maps.PollingService;
 import group22.quikschedule.Settings.AlertActivity;
@@ -59,11 +59,14 @@ import group22.quikschedule.Settings.WebregActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static group22.quikschedule.InitialActivity.APP_PREFERENCES;
+
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                     EasyPermissions.PermissionCallbacks{
 
     public static boolean inMaps = false;
+    public static boolean loggedIn;
 
     public static HashMap<Integer, PendingIntent> alarmIntentMap;
     public static HashMap<Integer, AlarmManager> alarmManagerMap;
@@ -216,6 +219,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
 
+        SharedPreferences settings = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+        settings.getBoolean("LoggedIn", loggedIn);
+        if(loggedIn) {
+            startActivity(new Intent(this, NavigationDrawerActivity.class));
+        }
+
         startService( new Intent(this, PollingService.class) );
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -224,7 +233,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         Intent i = getIntent();
 
-        Log.d("SyncWTF", "NavDrawer Syncing");
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
@@ -274,7 +282,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         if(i.hasExtra("Location")) {
             Bundle mapsBundle = new Bundle();
-            mapsBundle.putString("Location", i.getStringExtra("Location"));
+            String end = i.getStringExtra("Location");
+            String[] arr = end.split("\\w");
+            StringBuilder result = new StringBuilder();
+            for (String str : arr) {
+                boolean isNum = str.matches("\\d+");
+                // If its a number or  its a Zip code (length 5), put it back in the address.
+                if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                    result.append(str + " ");
+                }
+            }
+            mapsBundle.putString("Location", result.toString());
             mapsBundle.putInt("Transportation", i.getIntExtra("Transportation", 0));
             fragment.setArguments(mapsBundle);
         }
@@ -337,7 +355,22 @@ public class NavigationDrawerActivity extends AppCompatActivity
             fragment = (Fragment) fragmentClass.newInstance();
             if (id == R.id.nav_maps) {
                 Bundle mapsBundle = new Bundle();
-                mapsBundle.putString("Location", "CENTR");
+                // Replace with location of days first event.
+                String end = "CENTR 240"; // TODO
+                String[] arr = end.split("[\\s,]+");
+                StringBuilder result = new StringBuilder();
+                for (String str : arr) {
+                    boolean isNum = str.matches("\\d+");
+                    // If its a number or  its a Zip code (length 5), put it back in the address.
+                    if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                        if (result.length() > 0) {
+                            result.append(" ");
+                        }
+                        result.append(str);
+
+                    }
+                }
+                mapsBundle.putString("Location", result.toString());
                 fragment.setArguments(mapsBundle);
             }
         } catch (Exception e) {
@@ -354,8 +387,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void toWebreg(View view){
         startActivity(new Intent(this, WebregActivity.class));
     }
-
-    public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
 
     public void toMap(View view) {
         startActivity(new Intent(this, MapsFragment.class));
@@ -570,5 +601,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 connectionStatusCode,
                 REQUEST_GOOGLE_PLAY_SERVICES);
         dialog.show();
+    }
+
+    public void toInitial(View view){
+        startActivity(new Intent(this, InitialActivity.class));
     }
 }

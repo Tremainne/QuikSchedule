@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import group22.quikschedule.MainActivity;
+import group22.quikschedule.InitialActivity;
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
 
@@ -72,7 +72,7 @@ public class WebregActivity extends AppCompatActivity{
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private String TAG = MainActivity.class.getSimpleName();
+    private String TAG = InitialActivity.class.getSimpleName();
 
     /**
      * Class: JSInterface

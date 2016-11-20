@@ -332,6 +332,20 @@ public class ExpandedEventActivity extends AppCompatActivity
         onBackPressed();
     }
 
+    public void deleteEvent(View v) {
+        if(editingEvent) {
+            try {
+                System.err.println("SUCCESS: " + mService.events().delete(getCalendarIdFromSummary("QuickSchedule"), eventID).execute());
+            } catch (IOException e) {
+                System.err.println("Failed to delete event in calendar");
+            }
+        }
+        else {
+            Toast.makeText(getBaseContext(), "Event does not exist",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
@@ -501,7 +515,7 @@ public class ExpandedEventActivity extends AppCompatActivity
             if(editingEvent) {
 
                 try {
-                    System.err.println("FAIL: " + mService.events().update(getCalendarIdFromSummary("QuickSchedule"), eventID, event).execute());
+                    System.err.println("SUCCESS: " + mService.events().update(getCalendarIdFromSummary("QuickSchedule"), eventID, event).execute());
                 } catch (IOException e) {
                     System.err.println("Failed to edit event in calendar");
                 }

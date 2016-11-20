@@ -49,7 +49,7 @@
                 android:layout_width="50dp"
                 android:gravity="center"
                 android:layout_centerVertical="true"
-                android:onClick="toCalendar"
+                android:onClick="deleteEvent"
                 android:layout_weight="1" />
 
             <android.support.v7.widget.AppCompatButton

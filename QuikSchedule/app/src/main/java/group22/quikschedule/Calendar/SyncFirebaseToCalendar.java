@@ -157,8 +157,10 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
                     Event event = new Event()
                             .setSummary(className + " - " + classType)
                             .setLocation(location)
-                            .setDescription("Section: " + section + "\n"
-                                            + "Textbooks" + textBooks);
+                            // comments, materials, transport
+                            .setDescription("\n" +
+                                            textBooks + "\n" +
+                                            "3");
 
                     String[] recurrence = new String[]{"RRULE:FREQ=WEEKLY;COUNT=11"};
                     event.setRecurrence(Arrays.asList(recurrence));
