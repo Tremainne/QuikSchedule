@@ -214,7 +214,8 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_DAY, day);
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_DATA, event.toPrettyString());
 
-                if (isIdInTable(db, event.getId())) {
+                if (weekIdComboInDb(db, event.getId(), weekNum + numOfWeeks)) {
+                    System.err.println("already in table");
                     db.update(DatabaseContract.DatabaseEntry.TABLE_NAME, values, DatabaseContract.DatabaseEntry.COLUMN_ID + " = " + "'" + event.getId() + "'", null);
                 } else {
                     db.insert(DatabaseContract.DatabaseEntry.TABLE_NAME, null, values);
@@ -258,6 +259,17 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         Cursor cursor = db.rawQuery(sql, null);
 
         boolean inTable = cursor.getCount() <= 0;
+        cursor.close();
+        return inTable;
+    }
+
+    private boolean weekIdComboInDb (SQLiteDatabase db, String id, int week) {
+        String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
+                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_ID + "=" +
+                "'" + id + "'" + " AND " + DatabaseContract.DatabaseEntry.COLUMN_WEEK + " = " + "'" + week + "'";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        boolean inTable = cursor.getCount() > 0;
         cursor.close();
         return inTable;
     }

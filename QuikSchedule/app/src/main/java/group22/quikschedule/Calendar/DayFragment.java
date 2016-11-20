@@ -93,6 +93,7 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
 
         view = inflater.inflate(R.layout.fragment_full_agenda, container, false);
 
+        final RelativeLayout schedule = (RelativeLayout) view.findViewById(R.id.fullAgendaSchedule);
         TextView date = (TextView) view.findViewById(R.id.date);
         date.setText(dates[mPage-1]);
 
@@ -112,6 +113,8 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
             public void onRefresh() {
                 getResultsFromApi();
                 swipeRefreshLayout.setRefreshing(false);
+                schedule.removeAllViews();
+                populateAgenda(getContext(), view);
             }
         });
 
@@ -199,12 +202,6 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
         });
 
     }
-
-
-
-
-
-
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are
