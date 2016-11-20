@@ -353,8 +353,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         startActivity(new Intent(this, WebregActivity.class));
     }
 
-    public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
-
     public void toMap(View view) {
         startActivity(new Intent(this, MapsFragment.class));
     }
