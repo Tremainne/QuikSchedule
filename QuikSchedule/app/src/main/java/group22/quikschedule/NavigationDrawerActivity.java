@@ -57,16 +57,25 @@ import group22.quikschedule.Settings.SettingsFragment;
 import group22.quikschedule.Settings.WebregActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-
+/**
+ * Class: NavigationDrawerActivity
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/5/16
+ *
+ * Description: Sets the pendingIntents for the alarms that are created.
+ *
+ * @author Rudr Tandon
+ * @author Ishjot Suri
+ * @author WHOEVER ELSE WORKED ON THIS JUST UPDATE IT
+ * @author WHOEVER ELSE WORKED ON THIS JUST UPDATE IT
+ */
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                     EasyPermissions.PermissionCallbacks{
 
     public static boolean inMaps = false;
-
-    public static HashMap<Integer, PendingIntent> alarmIntentMap;
-    public static HashMap<Integer, AlarmManager> alarmManagerMap;
-
 
     GoogleAccountCredential mCredential;
 
@@ -78,81 +87,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private static final String BUTTON_TEXT = "Sync Calendar to Phone";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
-    public static int id;
-
-
-
-    public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
-
-        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt("")); //GET SHIT FROM TY
-        cal.set(Calendar.MINUTE, Integer.parseInt("")); //GET SHIT FROM TY
-
-        return Integer.parseInt(""); //GET SHIT FROM TY
-    }
 
     public void setAlarm(View view) throws JSONException {
-        System.err.println("Setting Alarm");
-
-            Calendar c = Calendar.getInstance();
-            //Set the alarm time for event i based on the start time and get the time back
-            //id = setAlarmtime(null, c); //GET SHIT FROM TY
-
-                id = 0;
-                c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
-                c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
-                c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
-
-            //Set a new alertIntent for the notification
-            Intent alertIntent = new Intent(this, AlertActivity.class);
-
-            //set a pending intent where the unique id is the time of the event
-            //If you have two events with the same time then it wont notify you for second
-            PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), id, alertIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            //Add this to my static map so it can be accessed later to cancel
-            //alarmIntentMap.put(id, contentIntent);
-
-            //Create an AlarmManager for each event
-            AlarmManager alarmManager  = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-            ////Add this to my static map so it can be accessed later to cancel the pendingIntent
-            //alarmManagerMap.put(id, alarmManager);
-
-            //Set the alarm
-            alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);
-
-    }
-
-    public ArrayList<JSONObject> cursorToJson(Cursor cursor)
-    {
-
-        ArrayList<JSONObject> events = new ArrayList<>();
-        Log.d("FUCK", "ME");
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                System.err.println("AYYY2");
-                do {
-                    System.err.println("AYYY3");
-                    String json = cursor.getString(
-                            cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_DATA));
-                    Log.d("Pls", "help");
-                    System.err.println(json);
-                    JSONObject j;
-                    try {
-                        j = new JSONObject(json);
-                        Log.d("New JSON", json);
-                        events.add(j);
-                    } catch (JSONException e) {
-                        Log.i("FUCK", "OFF");
-                    }
-                } while (cursor.moveToNext());
-            }
-        }
-
-        return events;
-
+       AlertActivity.setAlarm(view);
     }
 
     public static String getDayString()
@@ -183,29 +120,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 return "Saturday";
         }
         return "null";
-    }
-
-    public ArrayList<JSONObject> getData(Context mContext)
-    {
-
-        Log.d("Entered", "JSON getData");
-        DatabaseHelper mDbHelper = new DatabaseHelper(mContext);
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
-                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_DAY + " = '" +getDayString()+ "'";
-
-        // COLUMN_WEEK is number
-        //+ DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
-        //DatabaseContract.DatabaseEntry.TABLE_NAME + " WHERE "
-        //+ DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS 'MONDAY'"; // + " WHERE " +
-        //DatabaseContract.DatabaseEntry.COLUMN_DAY; // + " IS MONDAY";
-        Cursor cursor = db.rawQuery(sql, null); //+ "MONDAY", null);
-        ArrayList<JSONObject> events = cursorToJson(cursor);
-        Log.d("JSON Objects", events.toString());
-        Log.d("JSON Objects size", ""+events.size());
-        cursor.close();
-        return events;
     }
 
 
