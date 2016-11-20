@@ -214,8 +214,8 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_DAY, day);
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_DATA, event.toPrettyString());
 
-                if (isIdInTable(db, event.getId())) {
-                    db.update(DatabaseContract.DatabaseEntry.TABLE_NAME, values, DatabaseContract.DatabaseEntry.COLUMN_ID + " = " + event.getId(), null);
+                if (!isIdInTable(db, event.getId())) {
+                    db.update(DatabaseContract.DatabaseEntry.TABLE_NAME, values, DatabaseContract.DatabaseEntry.COLUMN_ID + " = " + "'" + event.getId() + "'", null);
                 } else {
                     db.insert(DatabaseContract.DatabaseEntry.TABLE_NAME, null, values);
                 }
