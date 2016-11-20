@@ -6,14 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.google.api.client.repackaged.org.apache.commons.codec.binary.StringUtils;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -195,7 +192,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             event.endTime = time.getString("dateTime");
 
                             String[] lines = jsonObject.getString("description").split("\n");
-                            Log.d("String", Arrays.toString(lines));
                             event.comments = lines[0].substring(0, lines[0].length());
                             event.materials = lines[1].substring(0, lines[1].length());
                            // event.transportation =
