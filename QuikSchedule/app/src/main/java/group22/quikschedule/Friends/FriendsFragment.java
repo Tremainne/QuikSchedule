@@ -1,6 +1,7 @@
 package group22.quikschedule.Friends;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -133,6 +134,27 @@ public class FriendsFragment extends Fragment {
         return view;
     }
 
+    public void toFacebook(View v) {
+/*
+        String FACEBOOK_URL = "https://www.facebook.com/";
+        String url;
+            PackageManager packageManager = getContext().getPackageManager();
+            try {
+                int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+                if (versionCode >= 3002850) { //newer versions of fb app
+                    return "fb://";
+                } else { //older versions of fb app
+                    return "fb://";
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                return FACEBOOK_URL; //normal web url
+            }
+
+        Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+        String facebookUrl = getFacebookPageURL(this);
+        facebookIntent.setData(Uri.parse(facebookUrl));
+        startActivity(facebookIntent);*/
+    }
     /**
      * Description: Determines the current status of the activity upon competion of methods
      * @param requestCode - determines which activity is sending data
