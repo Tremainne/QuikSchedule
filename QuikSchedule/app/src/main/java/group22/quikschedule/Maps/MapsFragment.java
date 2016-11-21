@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -394,6 +396,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public void showDirections(String end) {
         Log.d("MapsFragment", "showing directions");
         Geocode.nameToLatLng(end, this, false);
+
     }
 
     /**

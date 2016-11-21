@@ -48,6 +48,7 @@ public class Polling extends BroadcastReceiver {
     private Context context;
     int duration;
     private int transitMode = 0;
+    EventView curr = null;
 
     @Override
     public void onReceive( Context context, Intent intent )
@@ -67,6 +68,7 @@ public class Polling extends BroadcastReceiver {
         // Workaround, only need this the first time of every day
         if (first) {
             setTwoHourAlarms(context, pq);
+            first = false;
         }
         // Set alarms based on distances
         else {
@@ -98,10 +100,10 @@ public class Polling extends BroadcastReceiver {
     }
 
     public void getDir( Context context, PriorityQueue<EventView> pq ) {
-        EventView curr = null;
         for( int i = 0; i < counter; i++ ) {
             if( pq.isEmpty() ) {
                 Log.d( "Error", "Too many calls on priority queue" );
+                //first = true;
                 return;
             }
             curr = pq.peek();
@@ -118,6 +120,7 @@ public class Polling extends BroadcastReceiver {
         client.connect();
 
         String end = curr.location;
+        Toast.makeText(context, "hi", Toast.LENGTH_LONG);
 
         // try to get rid of room numbers, but keep potential zip codes
         String[] arr = end.split("\\w");
@@ -126,27 +129,16 @@ public class Polling extends BroadcastReceiver {
             boolean isNum = str.matches("\\d+");
             // If its a number or  its a Zip code (length 5), put it back in the address.
             if (!isNum || str.length() == Directions.ZIP_LENGTH) {
-                result.append(str);
+                if (Directions.converter.containsKey(str)) {
+                    result.append(Directions.converter.get(str));
+                }
+                else {
+                    result.append(str);
+                }
             }
         }
-
+        Toast.makeText(context, result.toString() + " hi", Toast.LENGTH_LONG);
         Geocode.nameToLatLng(result.toString(), listener, false);
-
-        Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
-
-        int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - duration - 10;
-
-        Intent intent = new Intent(context, AlertActivity.class);
-
-        intent.putExtra( "Name", curr.name );
-        intent.putExtra( "Location", curr.location );
-        intent.putExtra( "Start", curr.getTimeAsString( EventView.STARTTIME ) );
-        intent.putExtra( "End", curr.getTimeAsString( EventView.ENDTIME ) );
-        intent.putExtra( "Id", curr.id );
-        intent.putExtra( "Name", curr.name );
-        intent.putExtra( "Calculate Minutes", curr.getTimeAsInt( EventView.STARTTIME ) - duration );
-        intent.putExtra( "Time To Display", toDisplay );
-        context.sendBroadcast( intent );
     }
 
     public void setAlarm( Context context ) {
@@ -192,6 +184,7 @@ public class Polling extends BroadcastReceiver {
                 double latDbl = Double.parseDouble(lat);
                 double lngDbl = Double.parseDouble(lng);
                 setStart( new LatLng(latDbl, lngDbl) );
+                onLatLngComplete();
             }
         }
 
@@ -227,6 +220,7 @@ public class Polling extends BroadcastReceiver {
          */
         @Override
         public void setEnd(LatLng end) {
+            Toast.makeText(context, end.toString(), Toast.LENGTH_LONG ).show();
             this.end = end;
         }
 
@@ -235,6 +229,7 @@ public class Polling extends BroadcastReceiver {
          */
         @Override
         public void onLatLngComplete() {
+            Toast.makeText(context, start.toString(), Toast.LENGTH_LONG ).show();
             //Toast.makeText( context, end.toString(), Toast.LENGTH_LONG ).show();
             if (this.end != null && start != null) {
                 Directions.makeTimeRequest(start, end, transitMode, this);
@@ -247,6 +242,22 @@ public class Polling extends BroadcastReceiver {
         @Override
         public void onGeocodeListenerComplete() {
             duration = Directions.getStaticTime();
+
+            Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
+
+            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - duration - 10;
+
+            Intent intent = new Intent(context, AlertActivity.class);
+
+            intent.putExtra( "Name", curr.name );
+            intent.putExtra( "Location", curr.location );
+            intent.putExtra( "Start", curr.getTimeAsString( EventView.STARTTIME ) );
+            intent.putExtra( "End", curr.getTimeAsString( EventView.ENDTIME ) );
+            intent.putExtra( "Id", curr.id );
+            intent.putExtra( "Name", curr.name );
+            intent.putExtra( "Calculate Minutes", curr.getTimeAsInt( EventView.STARTTIME ) - duration );
+            intent.putExtra( "Time To Display", toDisplay );
+            context.sendBroadcast( intent );
         }
 
         /**
@@ -257,6 +268,8 @@ public class Polling extends BroadcastReceiver {
         public void onGeocodeListenerFail() {
             // Set time to be two hours if there was an error.
             duration = 60*60*2*100;
+            //Toast.makeText(context, "Location could not be found", Toast.LENGTH_LONG).show();
+
         }
     }
 }

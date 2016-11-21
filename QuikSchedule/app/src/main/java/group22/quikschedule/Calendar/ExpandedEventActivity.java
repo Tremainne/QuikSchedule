@@ -125,6 +125,8 @@ public class ExpandedEventActivity extends AppCompatActivity
             eventName.setText(i.getStringExtra("Name"));
             location.setText(i.getStringExtra("Location"));
 
+            System.err.println( i.getStringExtra("Date") );
+
             date = i.getStringExtra("Date");
             DateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
             Date inputDate = null;

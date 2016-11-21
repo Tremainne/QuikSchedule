@@ -67,7 +67,7 @@ public class AlertActivity extends BroadcastReceiver {
 
         //mPage = i.getExtras().getInt("Page");
         //date = i.getExtras().getString("Date");
-        DateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSS" );
+        DateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
         Calendar cal = Calendar.getInstance();
         date = formatter.format( cal.getTime() );
         name = i.getExtras().getString("Name");
@@ -94,11 +94,6 @@ public class AlertActivity extends BroadcastReceiver {
         // Code to populate Event from notification.
 
         i.putExtra("Date", date);
-        /*
-        if (dates != null) {
-            i.putExtra("Date", dates[mPage - 1]);
-        }
-        */
         i.putExtra("Name", name);
         i.putExtra("Location", location);
         i.putExtra("Start Time", startTime);
