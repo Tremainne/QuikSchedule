@@ -12,8 +12,6 @@ import org.json.JSONObject;
  */
 
 public class Geocode {
-
-
     /**
      * Perfroms a Google Geocode API request to find the latitude and longitude of the address
      * @param address Address to look up

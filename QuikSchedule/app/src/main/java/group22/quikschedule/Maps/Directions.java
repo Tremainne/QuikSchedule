@@ -1,6 +1,7 @@
 package group22.quikschedule.Maps;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -34,12 +35,12 @@ public class Directions {
      *
      * @return time of travel for a route.
      */
-    public static Integer getStaticTime() {
+    public static int getStaticTime() {
         return staticTime;
     }
 
     private static List<List<HashMap<String, String>>> staticDirections;
-    private static Integer staticTime;
+    private static int staticTime;
 
     //converter from classrom code to Location name
     public static final HashMap<String, String> converter = new HashMap<String, String>();
@@ -161,8 +162,7 @@ public class Directions {
     private static int getTimeJson(String jsonStr) throws JSONException {
 
         JSONObject dirJSON = new JSONObject(jsonStr);
-        Log.d("Directions", jsonStr);
-
+        Log.d("Time", jsonStr);
 
         JSONArray routesArr, legsArr;
         JSONObject routes, legs, duration;
@@ -175,7 +175,6 @@ public class Directions {
         legs = legsArr.getJSONObject(0);
         duration = legs.getJSONObject("duration");
         time = duration.getInt("value");
-
 
         return time;
     }
@@ -231,7 +230,6 @@ public class Directions {
 
         return routesList;
     }
-
 
 
     /**

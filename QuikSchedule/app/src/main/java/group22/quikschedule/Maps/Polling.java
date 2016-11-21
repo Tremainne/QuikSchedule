@@ -41,11 +41,14 @@ public class Polling extends BroadcastReceiver {
     private LatLng start;
     private GoogleApiClient client;
     private static boolean first = true;
-    int time;
+    private static int counter = 1;
+    private Context context;
+    int duration;
 
     @Override
     public void onReceive( Context context, Intent intent )
     {
+        this.context = context;
         PowerManager pm = (PowerManager) context.getSystemService( Context.POWER_SERVICE );
         PowerManager.WakeLock wl = pm.newWakeLock( PowerManager.PARTIAL_WAKE_LOCK, "" );
         wl.acquire();
@@ -63,18 +66,19 @@ public class Polling extends BroadcastReceiver {
         }
         // Set alarms based on distances
         else {
-            Toast.makeText( context, pq.toString(), Toast.LENGTH_LONG ).show();
             // Get map of evs w/ start time
-            Map<Integer, EventView> map = new HashMap<Integer, EventView>();
-            // Get PriorityQueue of start times
-            PriorityQueue<Integer> timePQ = new PriorityQueue<Integer>(10);
-            // Go through EventView PQ and add to map/PQ
+            PriorityQueue<EventView> events = new PriorityQueue<>(10, new Comparator<EventView>() {
+                public int compare(EventView event1, EventView event2) {
+                    int start1 = event1.getTimeAsInt(EventView.STARTTIME);
+                    int start2 = event2.getTimeAsInt(EventView.STARTTIME);
+                    return (start1 > start2) ? -1 : 1;
+                }
+            });
+            // Go through EventView PQ and add to new PQ based on start time
             for ( EventView ev : pq ) {
-                int start = ev.getTimeAsInt( EventView.STARTTIME );
-                timePQ.add( start );
-                map.put( start, ev );
+                events.add( ev );
             }
-            getDir( context, map, timePQ );
+            getDir( context, events );
         }
 
         wl.release();
@@ -82,32 +86,32 @@ public class Polling extends BroadcastReceiver {
 
     public void setTwoHourAlarms( Context context, PriorityQueue<EventView> pq ) {
         for ( EventView ev : pq ) {
+            Toast.makeText( context, "Set two hour alarm", Toast.LENGTH_LONG ).show();
             int start = ev.getTimeAsInt(0);
-            setEventAlarm(context, start - 120);
+            setEventAlarm( context, start - 120 );
         }
         first = false;
     }
 
-    public void getDir( Context context, Map<Integer, EventView> map, PriorityQueue<Integer> timePQ ) {
-        // TODO
-        // For now, just get the first event until we know it works, better way around this?
-        // Will need a counter to figure out how many we have been through in the PQ
-        Integer start = timePQ.peek();
-        timePQ.remove();
-
-        EventView curr = map.get( start );
-
-        if( curr == null ) {
-            Log.d( "Error", "Null object" );
+    public void getDir( Context context, PriorityQueue<EventView> pq ) {
+        EventView curr = null;
+        for( int i = 0; i < counter; i++ ) {
+            if( pq.isEmpty() ) {
+                Log.d( "Error", "Too many calls on priority queue" );
+                return;
+            }
+            curr = pq.peek();
+            pq.remove();
         }
+        ++counter;
 
         LocationListener listener = new LocationListener();
-
         client = new GoogleApiClient.Builder( context )
                 .addApi( LocationServices.API )
                 .addConnectionCallbacks( listener )
                 .addOnConnectionFailedListener( listener )
                 .build();
+        client.connect();
 
         String end = curr.location;
 
@@ -123,13 +127,13 @@ public class Polling extends BroadcastReceiver {
         }
 
         Geocode.nameToLatLng(result.toString(), listener, false);
-        int duration = Directions.getStaticTime();
 
-        Toast.makeText( context, duration, Toast.LENGTH_LONG ).show();
+        Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
 
         int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - duration - 10;
 
         Intent intent = new Intent(context, AlertActivity.class);
+
         intent.putExtra( "Name", curr.name );
         intent.putExtra( "Location", curr.location );
         intent.putExtra( "Start", curr.getTimeAsString( EventView.STARTTIME ) );
@@ -138,21 +142,21 @@ public class Polling extends BroadcastReceiver {
         intent.putExtra( "Name", curr.name );
         intent.putExtra( "Calculate Minutes", curr.getTimeAsInt( EventView.STARTTIME ) - duration );
         intent.putExtra( "Time To Display", toDisplay );
-        context.startActivity( intent );
+        context.sendBroadcast( intent );
     }
 
     public void setAlarm( Context context ) {
         AlarmManager am = (AlarmManager) context.getSystemService( Context.ALARM_SERVICE );
         Intent i = new Intent( context, Polling.class );
         PendingIntent pi = PendingIntent.getBroadcast( context, 0, i, 0 );
-        am.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60, pi );
+        am.setRepeating( AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60, pi );
     }
 
     public void setEventAlarm( Context context, int time ) {
         AlarmManager am = (AlarmManager) context.getSystemService( Context.ALARM_SERVICE );
         Intent i = new Intent( context, Polling.class );
         PendingIntent pi = PendingIntent.getBroadcast( context, 0, i, 0 );
-        am.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60, pi );
+        am.set( AlarmManager.RTC, System.currentTimeMillis() + 1000 * 5, pi );
     }
 
     public void cancelAlarm( Context context ) {
@@ -164,7 +168,6 @@ public class Polling extends BroadcastReceiver {
 
     private class LocationListener implements GoogleApiClient.ConnectionCallbacks,
                 GoogleApiClient.OnConnectionFailedListener, GeoCodeListener {
-
 
         private LatLng end;
 
@@ -184,7 +187,6 @@ public class Polling extends BroadcastReceiver {
                 double latDbl = Double.parseDouble(lat);
                 double lngDbl = Double.parseDouble(lng);
                 setStart( new LatLng(latDbl, lngDbl) );
-                onLatLngComplete();
             }
         }
 
@@ -225,6 +227,7 @@ public class Polling extends BroadcastReceiver {
          */
         @Override
         public void onLatLngComplete() {
+            //Toast.makeText( context, end.toString(), Toast.LENGTH_LONG ).show();
             if (this.end != null && start != null) {
                 Directions.makeTimeRequest(start, end, this);
             }
@@ -235,7 +238,7 @@ public class Polling extends BroadcastReceiver {
          */
         @Override
         public void onGeocodeListenerComplete() {
-            time = Directions.getStaticTime();
+            duration = Directions.getStaticTime();
         }
 
         /**
@@ -245,7 +248,7 @@ public class Polling extends BroadcastReceiver {
         @Override
         public void onGeocodeListenerFail() {
             // Set time to be two hours if there was an error.
-            time = 60*60*2*100;
+            duration = 60*60*2*100;
         }
     }
 }

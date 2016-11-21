@@ -134,7 +134,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         //Get the google map
         mapFragment.getMapAsync(this);
 
-        // Show the directions, poissbly use class code lookup.
+        // Show the directions, possibly use class code lookup.
         if (Directions.converter.containsKey(destination)) {
             showDirections(Directions.converter.get(destination));
         }

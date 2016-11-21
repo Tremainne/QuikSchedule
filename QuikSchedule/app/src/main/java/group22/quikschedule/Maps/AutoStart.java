@@ -9,7 +9,6 @@ import android.content.Intent;
  */
 
 public class AutoStart extends BroadcastReceiver {
-
     Polling polling = new Polling();
 
     /**
@@ -18,10 +17,8 @@ public class AutoStart extends BroadcastReceiver {
      * @param intent the intent that was received, checked to see if it was a reboot.
      */
     @Override
-    public void onReceive( Context context, Intent intent )
-    {
-        if (intent.getAction().equals( Intent.ACTION_BOOT_COMPLETED ) )
-        {
+    public void onReceive( Context context, Intent intent ) {
+        if (intent.getAction().equals( Intent.ACTION_BOOT_COMPLETED ) ) {
             polling.setAlarm( context );
         }
     }
