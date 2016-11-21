@@ -1,17 +1,13 @@
 package group22.quikschedule;
 
-import android.*;
 import android.accounts.AccountManager;
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -19,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -36,9 +30,7 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -52,7 +44,6 @@ import group22.quikschedule.Calendar.EventView;
 import group22.quikschedule.Calendar.SyncCalendarToSQL;
 import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
-import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.Directions;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Maps.PollingService;
@@ -175,11 +166,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
             case 1:
                 fragmentClass = MapsFragment.class;
                 break;
-            case 2:
-                fragmentClass = FriendsFragment.class;
-                break;
             case 3:
                 fragmentClass = SettingsFragment.class;
+                break;
+            default:
+                fragmentClass = WeekFragment.class;
                 break;
         }
 
@@ -262,8 +253,16 @@ public class NavigationDrawerActivity extends AppCompatActivity
             Log.i("Fragment Selected", "Maps");
             inMaps = true;
         } else if (id == R.id.nav_friends) {
-            fragmentClass = FriendsFragment.class;
             Log.i("Fragment Selected", "Friends");
+            Intent i;
+            try {
+                this.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+                i = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://"));
+            } catch (Exception e) {
+                i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"));
+            }
+            startActivity(i);
+            return true;
         } else if (id == R.id.nav_settings) {
             fragmentClass = SettingsFragment.class;
             Log.i("Fragment Selected", "Settings");
@@ -544,4 +543,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void toInitial(View view){
         startActivity(new Intent(this, InitialActivity.class));
     }
+
+
 }
