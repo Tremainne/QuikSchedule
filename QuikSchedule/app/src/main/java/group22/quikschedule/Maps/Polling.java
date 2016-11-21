@@ -21,6 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +47,7 @@ public class Polling extends BroadcastReceiver {
     private static int counter = 1;
     private Context context;
     int duration;
-    private int transitMode;
+    private int transitMode = 0;
 
     @Override
     public void onReceive( Context context, Intent intent )

@@ -97,7 +97,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
 
     public void setAlarm(View view) throws JSONException {
-       AlertActivity.setAlarm(getApplicationContext(), view);
+       AlertActivity.setAlarm(getApplicationContext());
     }
 
     public static String getDayString()

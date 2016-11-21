@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class Geocode {
     /**
-     * Perfroms a Google Geocode API request to find the latitude and longitude of the address
+     * Performs a Google Geocode API request to find the latitude and longitude of the address
      * @param address Address to look up
      * @param map The listener to tell the result of the address lookup.
      * @param isStart Which value to set in the listener

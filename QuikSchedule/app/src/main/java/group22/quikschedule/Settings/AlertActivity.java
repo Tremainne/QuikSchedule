@@ -7,12 +7,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.AccessControlContext;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -42,6 +45,7 @@ public class AlertActivity extends BroadcastReceiver {
 
     private int mPage;
     private String[] dates;
+    private String date;
     private String name;
     private String location;
     private String startTime;
@@ -62,7 +66,10 @@ public class AlertActivity extends BroadcastReceiver {
         System.err.println("Received Broadcast");
 
         //mPage = i.getExtras().getInt("Page");
-        dates = i.getExtras().getStringArray("Dates");
+        //date = i.getExtras().getString("Date");
+        DateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSS" );
+        Calendar cal = Calendar.getInstance();
+        date = formatter.format( cal.getTime() );
         name = i.getExtras().getString("Name");
         location = i.getExtras().getString("Location");
         startTime = i.getExtras().getString("Start");
@@ -84,12 +91,14 @@ public class AlertActivity extends BroadcastReceiver {
 
         // Parse the string here
 
-
         // Code to populate Event from notification.
-        //i.putExtra("Date", dates[mPage - 1]);
+
+        i.putExtra("Date", date);
+        /*
         if (dates != null) {
             i.putExtra("Date", dates[mPage - 1]);
         }
+        */
         i.putExtra("Name", name);
         i.putExtra("Location", location);
         i.putExtra("Start Time", startTime);
@@ -125,7 +134,7 @@ public class AlertActivity extends BroadcastReceiver {
         return Integer.parseInt(""); //GET SHIT FROM TY
     }
 
-    public static void setAlarm(Context context, View view) throws JSONException {
+    public static void setAlarm(Context context) throws JSONException {
         System.err.println("Setting Alarm");
 
         Calendar c = Calendar.getInstance();
@@ -150,7 +159,6 @@ public class AlertActivity extends BroadcastReceiver {
 
         //Set the alarm
         alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);
-
     }
 
 }

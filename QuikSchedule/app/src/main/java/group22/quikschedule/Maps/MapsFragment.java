@@ -106,12 +106,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     private LatLng end;
 
-
-
     // temporary default
     private String destination = "CENTR";
-
-
 
     /**
      * sets up the map when the fragment is created. Also begins directions look up and display
