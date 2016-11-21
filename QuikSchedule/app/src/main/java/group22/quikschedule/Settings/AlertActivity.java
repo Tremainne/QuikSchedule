@@ -43,8 +43,6 @@ import static java.security.AccessController.getContext;
 
 public class AlertActivity extends BroadcastReceiver {
 
-    private int mPage;
-    private String[] dates;
     private String date;
     private String name;
     private String location;
@@ -87,12 +85,13 @@ public class AlertActivity extends BroadcastReceiver {
         calculateminutes_mins = calculateminutes%60;
 
         String ampm = "AM";
-
-        if(calculateminutes_hr > 12)
-            ampm ="PM";
+        if(calculateminutes_hr > 12) {
+            calculateminutes_hr -= 12;
+            ampm = "PM";
+        }
 
         // createNotification(context, name, location + " at " + startTime + " - " + endTime , "");
-        createNotification(context, name, location + " at " + startTime + " - " + endTime, "Leave at " +
+        createNotification(context, name, location + " at " + startTime + " - " + endTime + ".", "Leave at " +
                 calculateminutes_hr + ":" + calculateminutes_mins + " " + ampm + ".", "");
     }
 
@@ -102,10 +101,7 @@ public class AlertActivity extends BroadcastReceiver {
         Intent i = new Intent(context, ExpandedEventActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        // Parse the string here
-
         // Code to populate Event from notification.
-
         i.putExtra("Date", date);
         i.putExtra("Name", name);
         i.putExtra("Location", location);
@@ -114,7 +110,6 @@ public class AlertActivity extends BroadcastReceiver {
         i.putExtra("ID", id);
         i.putExtra("Materials", materials);
         i.putExtra("Comments", comments);
-
 
         PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
                 i, 0);
@@ -150,12 +145,11 @@ public class AlertActivity extends BroadcastReceiver {
     }
 
     public static int setAlarmtime(Calendar cal) throws JSONException {
-
         System.err.println("Setting Time");
         int mins = 0, hours = 0;
 
-        mins = timeToDisplay%60;
-        hours = timeToDisplay/60;
+        mins = timeToDisplay % 60;
+        hours = timeToDisplay / 60;
         System.err.println("Hours: " + mins + "Mins");
 
         cal.set(Calendar.HOUR_OF_DAY, hours);
