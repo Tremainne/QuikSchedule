@@ -223,7 +223,8 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
 
         if(startDate.after(endDate)) {
-            Toast.makeText(this, "Start time should be before end time", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Start time should be before end time and on the same day ",
+                    Toast.LENGTH_LONG).show();
             return false;
         }
 
