@@ -66,7 +66,7 @@ public class Polling extends BroadcastReceiver {
                 public int compare(EventView event1, EventView event2) {
                     int start1 = event1.getTimeAsInt(EventView.STARTTIME);
                     int start2 = event2.getTimeAsInt(EventView.STARTTIME);
-                    return (start1 > start2) ? -1 : 1;
+                    return (start1 < start2) ? -1 : 1;
                 }
             });
             // Go through EventView PQ and add to new PQ based on start time

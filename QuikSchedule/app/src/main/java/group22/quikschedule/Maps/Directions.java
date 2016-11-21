@@ -48,26 +48,26 @@ public class Directions {
 
     // Place locations into converter
     static {
-        converter.put("TM", "Marshall College, La Jolla");
+        converter.put("TM", "Marshall College, La Jolla, CA 92161");
         converter.put("APM", "Applied Physics and Mathematics " +
                 "La Jolla, CA 92161");
         converter.put("CENTR", "Center Hall Library Walk, La Jolla, CA 92161");
-        converter.put("CSB", "Cognitive Science Building, La Jolla");
-        converter.put("CICC", "Copley International Conference Center, La Jolla");
-        converter.put("GH", "Galbraith Hall, La Jolla");
-        converter.put("HSS", "Humanities and Social Sciences, La Jolla");
-        converter.put("LEDDN", "Humanities and Social Sciences, La Jolla");
-        converter.put("MANDE", "Mandeville Center, La Jolla");
-        converter.put("MCGIL", "McGill Hall, La Jolla");
-        converter.put("PCYNH", "Pepper Canyon Hall, La Jolla");
-        converter.put("PETER", "Peterson Hall, La Jolla");
-        converter.put("PRICE", "Price Center, La Jolla");
-        converter.put("RBC", "Robinson Building, La Jolla");
-        converter.put("SEQUO", "Sequoyah Hall, La Jolla");
-        converter.put("SSB", "Social Sciences Building, La Jolla");
-        converter.put("SOLIS", "Solis Hall, La Jolla");
-        converter.put("WLH", "Warren Lecture Hall, La Jolla");
-        converter.put("YORK", "York Hall, La Jolla");
+        converter.put("CSB", "Cognitive Science Building, La Jolla, CA 92161");
+        converter.put("CICC", "Copley International Conference Center, La Jolla, CA 92161");
+        converter.put("GH", "Galbraith Hall, La Jolla, CA 92161");
+        converter.put("HSS", "Humanities and Social Sciences, La Jolla, CA 92161");
+        converter.put("LEDDN", "Humanities and Social Sciences, La Jolla, CA 92161");
+        converter.put("MANDE", "Mandeville Center, La Jolla, CA 92161");
+        converter.put("MCGIL", "McGill Hall, La Jolla, CA 92161");
+        converter.put("PCYNH", "Pepper Canyon Hall, La Jolla, CA 92161");
+        converter.put("PETER", "Peterson Hall, La Jolla, CA 92161");
+        converter.put("PRICE", "Price Center, La Jolla, CA 92161");
+        converter.put("RBC", "Robinson Building, La Jolla, CA 92161");
+        converter.put("SEQUO", "Sequoyah Hall, La Jolla, CA 92161");
+        converter.put("SSB", "Social Sciences Building, La Jolla, CA 92161");
+        converter.put("SOLIS", "Solis Hall, La Jolla, CA 92161");
+        converter.put("WLH", "Warren Lecture Hall, La Jolla, CA 92161");
+        converter.put("YORK", "York Hall, La Jolla, CA 92161");
     }
 
     /**
@@ -282,18 +282,23 @@ public class Directions {
         String[] arr = addr.split("[\\s,]+");
         StringBuilder result = new StringBuilder();
         for (String str : arr) {
+            Log.d("Directions", str);
             boolean isNum = str.matches("\\d+");
+            if (result.length() > 0) {
+                result.append(" ");
+            }
             // If its a number or  its a Zip code (length 5), put it back in the address.
             if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+
                 if (Directions.converter.containsKey(str)) {
-                    result.append(Directions.converter.get(str) + " ");
+                    result.append(Directions.converter.get(str));
                 }
                 else {
-                    result.append(str + " ");
+                    result.append(str);
                 }
-
             }
         }
+        Log.d("Directions", result.toString());
         return result.toString();
     }
 

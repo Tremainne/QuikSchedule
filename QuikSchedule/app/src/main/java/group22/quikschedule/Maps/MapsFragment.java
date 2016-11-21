@@ -65,11 +65,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-        Bundle extras = getActivity().getIntent().getExtras();
         // If we have a destination, get it
-        if (extras != null) {
-            destination = extras.getString("Location");
-            transitMode = extras.getInt("Transportation", 0);
+        if (savedInstanceState != null) {
+            destination = savedInstanceState.getString("Location");
+            transitMode = savedInstanceState.getInt("Transportation", 0);
         }
         create();
         return view;
