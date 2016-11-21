@@ -17,13 +17,13 @@ public class EventView extends TextView {
 
     public static final int STARTTIME = 0;
     public static final int ENDTIME = 1;
-    String name;
-    String location;
-    String startTime;
-    String endTime;
-    String id;
-    String comments;
-    String materials;
+    public String name;
+    public String location;
+    public String startTime;
+    public String endTime;
+    public String id;
+    public String comments;
+    public String materials;
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
     int transportation; //0=transit, 1=driving, 2=cycling, 3=walking
 

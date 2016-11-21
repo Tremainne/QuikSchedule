@@ -122,7 +122,7 @@ public class AlertActivity extends BroadcastReceiver {
         return Integer.parseInt(""); //GET SHIT FROM TY
     }
 
-    public static void setAlarm(View view) throws JSONException {
+    public static void setAlarm(Context context, View view) throws JSONException {
         System.err.println("Setting Alarm");
 
         Calendar c = Calendar.getInstance();
@@ -135,15 +135,15 @@ public class AlertActivity extends BroadcastReceiver {
         c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
 
         //Set a new alertIntent for the notification
-        Intent alertIntent = new Intent(getApplicationContext(), AlertActivity.class);
+        Intent alertIntent = new Intent(context, AlertActivity.class);
 
         //set a pending intent where the unique id is the time of the event
         //If you have two events with the same time then it wont notify you for second
-        PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), id2, alertIntent,
+        PendingIntent contentIntent = PendingIntent.getBroadcast(context, id2, alertIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Create an AlarmManager for each event
-        AlarmManager alarmManager  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager  = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         //Set the alarm
         alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);

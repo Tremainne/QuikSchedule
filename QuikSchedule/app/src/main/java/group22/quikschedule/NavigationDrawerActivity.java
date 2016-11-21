@@ -43,9 +43,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
+import group22.quikschedule.Calendar.EventView;
 import group22.quikschedule.Calendar.SyncCalendarToSQL;
 import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
@@ -94,7 +96,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
 
     public void setAlarm(View view) throws JSONException {
-       AlertActivity.setAlarm(view);
+       AlertActivity.setAlarm(getApplicationContext(), view);
     }
 
     public static String getDayString()
@@ -104,25 +106,25 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         switch (day) {
             case Calendar.SUNDAY:
-                return "Sunday";
+                return "SUNDAY";
 
             case Calendar.MONDAY:
-                return "Monday";
+                return "MONDAY";
 
             case Calendar.TUESDAY:
-                return "Tuesday";
+                return "TUESDAY";
 
             case Calendar.WEDNESDAY:
-                return "Wednesday";
+                return "WEDNESDAY";
 
             case Calendar.THURSDAY:
-                return "Thursday";
+                return "THURSDAY";
 
             case Calendar.FRIDAY:
-                return "Friday";
+                return "FRIDAY";
 
             case Calendar.SATURDAY:
-                return "Saturday";
+                return "SATURDAY";
         }
         return "null";
     }
@@ -225,6 +227,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {

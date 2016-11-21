@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -16,16 +18,19 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
 import group22.quikschedule.Calendar.EventView;
+import group22.quikschedule.NavigationDrawerActivity;
+import group22.quikschedule.Settings.AlertActivity;
 
 /**
  * Created by Ty Dewes and David Thomson on 11/14/16.
@@ -33,9 +38,9 @@ import group22.quikschedule.Calendar.EventView;
 
 public class Polling extends BroadcastReceiver {
 
-
     private LatLng start;
     private GoogleApiClient client;
+    private static boolean first = true;
     int time;
 
     @Override
@@ -45,7 +50,56 @@ public class Polling extends BroadcastReceiver {
         PowerManager.WakeLock wl = pm.newWakeLock( PowerManager.PARTIAL_WAKE_LOCK, "" );
         wl.acquire();
 
-        Toast.makeText( context, "Alarm", Toast.LENGTH_LONG ).show();
+        String sql = "SELECT " + DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
+                DatabaseContract.DatabaseEntry.TABLE_NAME + " WHERE " +
+                DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS '" +
+                NavigationDrawerActivity.getDayString() + "'";
+
+        PriorityQueue<EventView> pq = DatabaseHelper.getEvents( context, sql );
+
+        // Workaround, only need this the first time of every day
+        if( first ) {
+            setTwoHourAlarms( context, pq );
+        }
+        // Set alarms based on distances
+        else {
+            Toast.makeText( context, pq.toString(), Toast.LENGTH_LONG ).show();
+            // Get map of evs w/ start time
+            Map<Integer, EventView> map = new HashMap<Integer, EventView>();
+            // Get PriorityQueue of start times
+            PriorityQueue<Integer> timePQ = new PriorityQueue<Integer>(10);
+            // Go through EventView PQ and add to map/PQ
+            for ( EventView ev : pq ) {
+                int start = ev.getTimeAsInt( EventView.STARTTIME );
+                timePQ.add( start );
+                map.put( start, ev );
+            }
+            getDir( context, map, timePQ );
+        }
+
+        wl.release();
+    }
+
+    public void setTwoHourAlarms( Context context, PriorityQueue<EventView> pq ) {
+        for ( EventView ev : pq ) {
+            int start = ev.getTimeAsInt(0);
+            setEventAlarm(context, start - 120);
+        }
+        first = false;
+    }
+
+    public void getDir( Context context, Map<Integer, EventView> map, PriorityQueue<Integer> timePQ ) {
+        // TODO
+        // For now, just get the first event until we know it works, better way around this?
+        // Will need a counter to figure out how many we have been through in the PQ
+        Integer start = timePQ.peek();
+        timePQ.remove();
+
+        EventView curr = map.get( start );
+
+        if( curr == null ) {
+            Log.d( "Error", "Null object" );
+        }
 
         LocationListener listener = new LocationListener();
 
@@ -55,16 +109,8 @@ public class Polling extends BroadcastReceiver {
                 .addOnConnectionFailedListener( listener )
                 .build();
 
-        // Need to get end
-        Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_WEEK);
+        String end = curr.location;
 
-
-        String sql = "SELECT " + DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
-                DatabaseContract.DatabaseEntry.TABLE_NAME + " WHERE " +
-        DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS '" + (day - 1) +"'";
-        PriorityQueue<EventView> pq = DatabaseHelper.getEvents( context, sql );
-        String end = "";
         // try to get rid of room numbers, but keep potential zip codes
         String[] arr = end.split("\\w");
         StringBuilder result = new StringBuilder();
@@ -77,22 +123,36 @@ public class Polling extends BroadcastReceiver {
         }
 
         Geocode.nameToLatLng(result.toString(), listener, false);
+        int duration = Directions.getStaticTime();
 
-        wl.release();
+        Toast.makeText( context, duration, Toast.LENGTH_LONG ).show();
+
+        int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - duration - 10;
+
+        Intent intent = new Intent(context, AlertActivity.class);
+        intent.putExtra( "Name", curr.name );
+        intent.putExtra( "Location", curr.location );
+        intent.putExtra( "Start", curr.getTimeAsString( EventView.STARTTIME ) );
+        intent.putExtra( "End", curr.getTimeAsString( EventView.ENDTIME ) );
+        intent.putExtra( "Id", curr.id );
+        intent.putExtra( "Name", curr.name );
+        intent.putExtra( "Calculate Minutes", curr.getTimeAsInt( EventView.STARTTIME ) - duration );
+        intent.putExtra( "Time To Display", toDisplay );
+        context.startActivity( intent );
     }
 
     public void setAlarm( Context context ) {
         AlarmManager am = (AlarmManager) context.getSystemService( Context.ALARM_SERVICE );
         Intent i = new Intent( context, Polling.class );
         PendingIntent pi = PendingIntent.getBroadcast( context, 0, i, 0 );
-        am.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 60 * 24, pi );
+        am.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60, pi );
     }
 
     public void setEventAlarm( Context context, int time ) {
         AlarmManager am = (AlarmManager) context.getSystemService( Context.ALARM_SERVICE );
         Intent i = new Intent( context, Polling.class );
         PendingIntent pi = PendingIntent.getBroadcast( context, 0, i, 0 );
-        am.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), time, pi );
+        am.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60, pi );
     }
 
     public void cancelAlarm( Context context ) {
