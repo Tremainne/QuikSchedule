@@ -180,7 +180,7 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         if ("cancelled".equals(event.getStatus()) && isIdInTable(db, event.getId())) {
             String sql ="DELETE FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
                     " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_ID +
-                    "=" + "'" + event.getId() + "'";
+                    " = " + "'" + event.getId() + "'";
 
             db.execSQL(sql);
             db.close();
@@ -260,11 +260,11 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
      */
     private boolean isIdInTable (SQLiteDatabase db, String id) {
         String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
-                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_ID + "=" +
+                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_ID + " = " +
                 "'" + id + "'";
         Cursor cursor = db.rawQuery(sql, null);
 
-        boolean inTable = cursor.getCount() <= 0;
+        boolean inTable = cursor.getCount() > 0;
         cursor.close();
         return inTable;
     }
