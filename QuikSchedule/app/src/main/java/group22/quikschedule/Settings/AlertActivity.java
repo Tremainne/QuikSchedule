@@ -51,11 +51,13 @@ public class AlertActivity extends BroadcastReceiver {
     private String startTime;
     private String endTime;
     private String id;
+    private String materials;
+    private String comments;
 
     public static int id2;
 
     private int calculateminutes;
-    private int timeToDisplay;
+    private static int timeToDisplay = 771;
     /**
      * Description: OnCreate function called on create of the Activity utilized to navigate the user
      * through a series of Webviews
@@ -76,7 +78,9 @@ public class AlertActivity extends BroadcastReceiver {
         endTime = i.getExtras().getString("End");
         id = i.getExtras().getString("Id");
         calculateminutes = i.getExtras().getInt("Calculate Minutes");
-        timeToDisplay = i.getExtras().getInt("Time To Display");
+        //timeToDisplay = i.getExtras().getInt("Time To Display");
+        materials = i.getExtras().getString("Materials");
+        comments = i.getExtras().getString("Comments");
 
        // createNotification(context, name, location + " at " + startTime + " - " + endTime , "");
         createNotification(context, name, location + " at " + startTime + " - " + endTime + "\nLeave in " +
@@ -99,6 +103,9 @@ public class AlertActivity extends BroadcastReceiver {
         i.putExtra("Start Time", startTime);
         i.putExtra("End Time", endTime);
         i.putExtra("ID", id);
+        i.putExtra("Materials", materials);
+        i.putExtra("Comments", comments);
+
 
         PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
                 i, 0);
@@ -121,12 +128,19 @@ public class AlertActivity extends BroadcastReceiver {
         System.err.println("Notified");
     }
 
-    public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
+    public static int setAlarmtime(Calendar cal) throws JSONException {
 
-        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt("")); //GET SHIT FROM TY
-        cal.set(Calendar.MINUTE, Integer.parseInt("")); //GET SHIT FROM TY
+        System.err.println("Setting Time");
+        int mins = 0, hours = 0;
 
-        return Integer.parseInt(""); //GET SHIT FROM TY
+        mins = timeToDisplay%60;
+        hours = timeToDisplay/60;
+        System.err.println("Hours: " + mins + "Mins");
+
+        cal.set(Calendar.HOUR_OF_DAY, hours);
+        cal.set(Calendar.MINUTE, mins);
+
+        return timeToDisplay;
     }
 
     public static void setAlarm(Context context) throws JSONException {
@@ -134,12 +148,11 @@ public class AlertActivity extends BroadcastReceiver {
 
         Calendar c = Calendar.getInstance();
         //Set the alarm time for event i based on the start time and get the time back
-        //id = setAlarmtime(null, c); //GET SHIT FROM TY
+        id2 = setAlarmtime(c); //GET SHIT FROM TY
 
-        id2 = 0;
-        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
-        c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
-        c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
+        //c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
+        //c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+        //c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
 
         //Set a new alertIntent for the notification
         Intent alertIntent = new Intent(context, AlertActivity.class);
