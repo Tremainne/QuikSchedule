@@ -33,6 +33,7 @@ import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,7 +157,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         Fragment fragment = null;
         Class fragmentClass;
-        fragmentClass = WeekFragment.class;
 
         switch (selectFrag) {
             case 0:
@@ -190,7 +190,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if (i.hasExtra("Location")) {
             Bundle mapsBundle = new Bundle();
             String result = Directions.convertAddress(i.getStringExtra("Location"));
-            mapsBundle.putString("Location", result.toString());
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            mapsBundle.putString("Location", result);
             mapsBundle.putInt("Transportation", i.getIntExtra("Transportation", 0));
             fragment.setArguments(mapsBundle);
         }
@@ -214,7 +215,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (inMaps == true) {
+        } else if (inMaps) {
             startActivity(new Intent(NavigationDrawerActivity.this, NavigationDrawerActivity.class));
             inMaps = false;
         } else {
@@ -268,21 +269,32 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 // get location of days first event.
                 PriorityQueue<EventView> pq = DatabaseHelper.getEvents(getApplicationContext(),
                         sql);
-                Map<Integer, EventView> map = new HashMap<Integer, EventView>();
-                PriorityQueue<Integer> timePQ = new PriorityQueue<Integer>(10);
-                // Go through EventView PQ and add to map/PQ
+                PriorityQueue<EventView> events = new PriorityQueue<>(10, new Comparator<EventView>() {
+                    public int compare(EventView event1, EventView event2) {
+                        int start1 = event1.getTimeAsInt(EventView.STARTTIME);
+                        int start2 = event2.getTimeAsInt(EventView.STARTTIME);
+                        if (start1 == start2 ) { return 0; }
+                        return (start1 < start2) ? -1 : 1;
+                    }
+                });
+                // Go through EventView PQ and add to new PQ based on start time
                 for (EventView ev : pq) {
+                    events.add(ev);
+                }
+                Map<Integer, EventView> map = new HashMap<Integer, EventView>();
+                // Go through EventView PQ and add to map/PQ
+                for (EventView ev : events) {
                     int start = ev.getTimeAsInt(EventView.STARTTIME);
-                    timePQ.add(start);
+
                     map.put(start, ev);
                 }
-                Integer start = timePQ.peek();
-                timePQ.remove();
+                Integer start = events.peek().getTimeAsInt(EventView.STARTTIME);
+                events.remove();
 
                 EventView curr = map.get(start);
+                Log.d("NavBar", curr.getTimeAsString(EventView.STARTTIME));
                 String end = curr.location;
                 String result = Directions.convertAddress(end);
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG);
                 mapsBundle.putString("Location", result);
                 fragment.setArguments(mapsBundle);
             }
