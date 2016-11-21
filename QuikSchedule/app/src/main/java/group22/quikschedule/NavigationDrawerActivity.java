@@ -245,7 +245,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             Intent i;
             try {
                 this.getPackageManager().getPackageInfo("com.facebook.katana", 0);
-                i = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://"));
+                i = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href="));
             } catch (Exception e) {
                 i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"));
             }
