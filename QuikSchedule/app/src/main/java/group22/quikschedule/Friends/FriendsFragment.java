@@ -65,10 +65,12 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
+        FacebookSdk.sdkInitialize(this.getContext());
+
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
         //Beginning FacebookSDK utilizing current context
-        FacebookSdk.sdkInitialize(this.getContext());
+
 
         //Beginning Firebase connection in current context
         callbackManager = CallbackManager.Factory.create();
