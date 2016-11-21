@@ -107,28 +107,11 @@ public class Polling extends BroadcastReceiver {
 
         String end = curr.location;
 
+        String result = Directions.convertAddress(end);
         // try to get rid of room numbers, but keep potential zip codes
-        String[] arr = end.split("\\w");
-        StringBuilder result = new StringBuilder();
-        for (String str : arr) {
-            boolean isNum = str.matches("\\d+");
-            // If its a number or  its a Zip code (length 5), put it back in the address.
-            if (!isNum || str.length() == Directions.ZIP_LENGTH) {
-                Toast.makeText( context, str, Toast.LENGTH_LONG ).show();
-                if (Directions.converter.containsKey(str)) {
-                    result.append(Directions.converter.get(str));
-                }
-                else {
-                    result.append(str);
-                }
-            }
-        }
 
-        //Toast.makeText( context, result.toString(), Toast.LENGTH_LONG ).show();
-        if (Directions.converter.containsKey(end)) {
-            Geocode.nameToLatLng( Directions.converter.get(end), listener, false );
-        }
-        //Geocode.nameToLatLng(end, listener, false);
+        Toast.makeText(context, result + " hi", Toast.LENGTH_LONG);
+        Geocode.nameToLatLng(result, listener, false);
     }
 
     public void setAlarm(Context context) {
@@ -237,7 +220,7 @@ public class Polling extends BroadcastReceiver {
 
             Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
 
-            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - duration - 10;
+            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10;
 
             Intent intent = new Intent(context, AlertActivity.class);
 
@@ -265,7 +248,7 @@ public class Polling extends BroadcastReceiver {
 
             Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
 
-            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - duration - 10;
+            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10;
 
             Intent intent = new Intent(context, AlertActivity.class);
 

@@ -278,5 +278,24 @@ public class Directions {
         return poly;
     }
 
+    public static String convertAddress(String addr) {
+        String[] arr = addr.split("[\\s,]+");
+        StringBuilder result = new StringBuilder();
+        for (String str : arr) {
+            boolean isNum = str.matches("\\d+");
+            // If its a number or  its a Zip code (length 5), put it back in the address.
+            if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                if (Directions.converter.containsKey(str)) {
+                    result.append(Directions.converter.get(str) + " ");
+                }
+                else {
+                    result.append(str + " ");
+                }
+
+            }
+        }
+        return result.toString();
+    }
+
 
 }
