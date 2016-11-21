@@ -2,6 +2,7 @@ package group22.quikschedule.Friends;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -26,6 +28,8 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import group22.quikschedule.Calendar.EventView;
+import group22.quikschedule.Calendar.ExpandedEventActivity;
 import group22.quikschedule.R;
 
 /**
@@ -131,19 +135,55 @@ public class FriendsFragment extends Fragment {
             }
         };
 
+        Button toFacebook = (Button) view.findViewById(R.id.toFacebook);
+
+        toFacebook.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i;
+                try {
+                    getContext().getPackageManager().getPackageInfo("com.facebook.katana", 0);
+                    i = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://"));
+                } catch (Exception e) {
+                    i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"));
+                }
+                startActivity(i);
+            }
+        });
+
         return view;
     }
 
-    public void toFacebook(View v) {
-/*
+   /* public void toFacebook(View view) {
+
+        Intent i;
+        try {
+            getContext().getPackageManager().getPackageInfo("com.facebook.katana", 0);
+            i = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://"));
+        } catch (Exception e) {
+            i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"));
+        }
+
+        startActivity(i);
+
+        PackageManager packageManager = getContext().getPackageManager();
+        boolean messengerInstalled = isPackageInstalled("com.facebook.orca", packageManager);
+
         String FACEBOOK_URL = "https://www.facebook.com/";
         String url;
-            PackageManager packageManager = getContext().getPackageManager();
-            try {
-                int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
-                if (versionCode >= 3002850) { //newer versions of fb app
-                    return "fb://";
-                } else { //older versions of fb app
+
+        if(messengerInstalled) {
+
+        }
+        else {
+
+        }
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://";
+            } else { //older versions of fb app
                     return "fb://";
                 }
             } catch (PackageManager.NameNotFoundException e) {
@@ -153,8 +193,9 @@ public class FriendsFragment extends Fragment {
         Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
         String facebookUrl = getFacebookPageURL(this);
         facebookIntent.setData(Uri.parse(facebookUrl));
-        startActivity(facebookIntent);*/
-    }
+        startActivity(facebookIntent);
+    }*/
+
     /**
      * Description: Determines the current status of the activity upon competion of methods
      * @param requestCode - determines which activity is sending data
