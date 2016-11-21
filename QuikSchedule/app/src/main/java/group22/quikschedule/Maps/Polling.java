@@ -37,7 +37,6 @@ public class Polling extends BroadcastReceiver {
     private static int counter = 1;
     private Context context;
     int duration;
-    private int transitMode = 0;
     EventView curr = null;
 
     @Override
@@ -89,6 +88,7 @@ public class Polling extends BroadcastReceiver {
 
     public void getDir( Context context, PriorityQueue<EventView> pq ) {
         if( pq.isEmpty() ) {
+            first = true;
             return;
         }
         for( int i = 0; i < counter; i++ ) {
@@ -210,7 +210,7 @@ public class Polling extends BroadcastReceiver {
         @Override
         public void onLatLngComplete() {
             if (this.end != null && start != null) {
-                Directions.makeTimeRequest(start, end, transitMode, this);
+                Directions.makeTimeRequest(start, end, curr.transportation, this);
             }
         }
 

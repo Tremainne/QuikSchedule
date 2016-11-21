@@ -25,7 +25,7 @@ public class EventView extends TextView {
     public String comments;
     public String materials;
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-    int transportation; //0=transit, 1=driving, 2=cycling, 3=walking
+    public int transportation; //0=transit, 1=driving, 2=cycling, 3=walking
 
     public EventView(Context context) {
         super(context);
