@@ -37,7 +37,6 @@ public class Polling extends BroadcastReceiver {
     private static int counter = 1;
     private Context context;
     int duration;
-    private int transitMode = 0;
     EventView curr = null;
 
     @Override
@@ -89,6 +88,7 @@ public class Polling extends BroadcastReceiver {
 
     public void getDir( Context context, PriorityQueue<EventView> pq ) {
         if( pq.isEmpty() ) {
+            first = true;
             return;
         }
         for( int i = 0; i < counter; i++ ) {
@@ -117,14 +117,14 @@ public class Polling extends BroadcastReceiver {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60, pi);
+        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60 * 60, pi);
     }
 
     public void setEventAlarm(Context context, int time) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.set(AlarmManager.RTC, System.currentTimeMillis() + 1000 * 5, pi);
+        am.set(AlarmManager.RTC, System.currentTimeMillis() + time * 60 * 1000, pi);
     }
 
     public void cancelAlarm(Context context) {
@@ -210,7 +210,7 @@ public class Polling extends BroadcastReceiver {
         @Override
         public void onLatLngComplete() {
             if (this.end != null && start != null) {
-                Directions.makeTimeRequest(start, end, transitMode, this);
+                Directions.makeTimeRequest(start, end, curr.transportation, this);
             }
         }
 
