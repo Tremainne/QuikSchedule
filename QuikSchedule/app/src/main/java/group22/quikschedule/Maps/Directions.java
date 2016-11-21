@@ -20,7 +20,6 @@ import java.util.List;
 public class Directions {
 
     public static final int ZIP_LENGTH = 5;
-    private static LatLng home;
 
     /**
      * Getter for the staticDirections
@@ -30,6 +29,7 @@ public class Directions {
         return staticDirections;
     }
 
+    private static final String[] transitTypes = {"transit", "driving", "cycling", "walking"};
     /**
      * Getter for travel time
      *
@@ -76,12 +76,12 @@ public class Directions {
      * @param end   ending point of the trip to get directions for
      * @return The URL request string
      */
-    private static String buildURLRequest(LatLng start, LatLng end) {
+    private static String buildURLRequest(LatLng start, LatLng end, int transitMode) {
         String startStr = parseLatLong(start);
         String endStr = parseLatLong(end);
         String request = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
                 startStr + "&destination=" + endStr +
-                "&key=AIzaSyBFaJcedR1gHACBsISOnAajioMQqyVKVyg&mode=transit";
+                "&key=AIzaSyBFaJcedR1gHACBsISOnAajioMQqyVKVyg&mode=" + transitTypes[transitMode];
         return request;
     }
 
@@ -104,9 +104,9 @@ public class Directions {
      * @param dest The ending location of the route
      * @param maps The listener to the result, handles using the time value.
      */
-    public static void makeTimeRequest(final LatLng start, LatLng dest,
+    public static void makeTimeRequest(final LatLng start, LatLng dest, int transitMode,
                                        final GeoCodeListener maps) {
-        String request = buildURLRequest(start, dest);
+        String request = buildURLRequest(start, dest, transitMode);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
@@ -132,9 +132,9 @@ public class Directions {
      * @param dest The ending location for the route
      * @param maps The listener that will use the route info.
      */
-    public static void makeDirectionsRequest(final LatLng start, LatLng dest,
+    public static void makeDirectionsRequest(final LatLng start, LatLng dest, int transitMode,
                                              final GeoCodeListener maps) {
-        String request = buildURLRequest(start, dest);
+        String request = buildURLRequest(start, dest, transitMode);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {

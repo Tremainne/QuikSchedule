@@ -183,23 +183,23 @@ public class ExpandedEventActivity extends AppCompatActivity
         String endTime = ((TextView) findViewById(R.id.endTimePicker)).getText().toString();
         String locationName = ((EditText) findViewById(R.id.location)).getText().toString();
 
-        if (eventName.matches(".*[a-zA-Z].*") == false) {
+        if (!eventName.matches(".*[a-zA-Z].*")) {
             Toast.makeText(this, "Enter an event name", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (date == "" || date == null || date.length() < 10) {
+        if (date.equals("") || date == null || date.length() < 10) {
             Toast.makeText(this, "Enter a date", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (startTime == "" || startTime == null || startTime.length() < 5) {
+        if (startTime.equals("") || startTime == null || startTime.length() < 5) {
             Toast.makeText(this, "Enter a start time", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (endTime == "" || endTime == null || endTime.length() < 5) {
+        if (endTime.equals("") || endTime == null || endTime.length() < 5) {
             Toast.makeText(this, "Enter an end time", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (locationName.matches(".*[a-zA-Z].*") == false) {
+        if (!locationName.matches(".*[a-zA-Z].*")) {
             Toast.makeText(this, "Enter a location", Toast.LENGTH_LONG).show();
             return false;
         }

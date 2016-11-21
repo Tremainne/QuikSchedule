@@ -44,6 +44,7 @@ public class Polling extends BroadcastReceiver {
     private static int counter = 1;
     private Context context;
     int duration;
+    private int transitMode;
 
     @Override
     public void onReceive( Context context, Intent intent )
@@ -58,11 +59,11 @@ public class Polling extends BroadcastReceiver {
                 DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS '" +
                 NavigationDrawerActivity.getDayString() + "'";
 
-        PriorityQueue<EventView> pq = DatabaseHelper.getEvents( context, sql );
+        PriorityQueue<EventView> pq = DatabaseHelper.getEvents(context, sql);
 
         // Workaround, only need this the first time of every day
-        if( first ) {
-            setTwoHourAlarms( context, pq );
+        if (first) {
+            setTwoHourAlarms(context, pq);
         }
         // Set alarms based on distances
         else {
@@ -159,31 +160,32 @@ public class Polling extends BroadcastReceiver {
         am.set( AlarmManager.RTC, System.currentTimeMillis() + 1000 * 5, pi );
     }
 
-    public void cancelAlarm( Context context ) {
-        Intent intent = new Intent( context, Polling.class );
-        PendingIntent pi = PendingIntent.getBroadcast( context, 0, intent, 0 );
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService( Context.ALARM_SERVICE );
-        alarmManager.cancel( pi );
+    public void cancelAlarm(Context context) {
+        Intent intent = new Intent(context, Polling.class);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pi);
     }
 
     private class LocationListener implements GoogleApiClient.ConnectionCallbacks,
-                GoogleApiClient.OnConnectionFailedListener, GeoCodeListener {
+            GoogleApiClient.OnConnectionFailedListener, GeoCodeListener {
 
         private LatLng end;
 
         /**
          * When the Google API client connection succeeds, lookup our current location and parse it
          * to set the start.
+         *
          * @param connectionHint unused.
          */
         @Override
-        public void onConnected( Bundle connectionHint ) {
-            Location myLoc = LocationServices.FusedLocationApi.getLastLocation( client );
+        public void onConnected(Bundle connectionHint) {
+            Location myLoc = LocationServices.FusedLocationApi.getLastLocation(client);
             String lat;
             String lng;
-            if( myLoc != null ) {
-                lat = String.valueOf( myLoc.getLatitude() );
-                lng = String.valueOf( myLoc.getLongitude() );
+            if (myLoc != null) {
+                lat = String.valueOf(myLoc.getLatitude());
+                lng = String.valueOf(myLoc.getLongitude());
                 double latDbl = Double.parseDouble(lat);
                 double lngDbl = Double.parseDouble(lng);
                 setStart( new LatLng(latDbl, lngDbl) );
@@ -191,21 +193,23 @@ public class Polling extends BroadcastReceiver {
         }
 
         @Override
-        public void onConnectionSuspended (int cause) {
-            Log.d( "Maps", "Connection suspended"  );
+        public void onConnectionSuspended(int cause) {
+            Log.d("Maps", "Connection suspended");
         }
 
         /**
          * If the Google API connection fails
+         *
          * @param result The result of the connection.
          */
         @Override
-        public void onConnectionFailed ( ConnectionResult result ) {
-            Log.d( "Maps", "Connection failed"  );
+        public void onConnectionFailed(ConnectionResult result) {
+            Log.d("Maps", "Connection failed");
         }
 
         /**
          * Set the start value for the event being polled for.
+         *
          * @param start The start value to set to.
          */
         @Override
@@ -215,6 +219,7 @@ public class Polling extends BroadcastReceiver {
 
         /**
          * Set the destination for the even being polled for.
+         *
          * @param end The destination to route to.
          */
         @Override
@@ -229,7 +234,7 @@ public class Polling extends BroadcastReceiver {
         public void onLatLngComplete() {
             //Toast.makeText( context, end.toString(), Toast.LENGTH_LONG ).show();
             if (this.end != null && start != null) {
-                Directions.makeTimeRequest(start, end, this);
+                Directions.makeTimeRequest(start, end, transitMode, this);
             }
         }
 

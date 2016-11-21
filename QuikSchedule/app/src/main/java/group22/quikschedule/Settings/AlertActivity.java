@@ -85,8 +85,11 @@ public class AlertActivity extends BroadcastReceiver {
         // Parse the string here
 
 
-         // Code to populate Event from notification.
+        // Code to populate Event from notification.
         //i.putExtra("Date", dates[mPage - 1]);
+        if (dates != null) {
+            i.putExtra("Date", dates[mPage - 1]);
+        }
         i.putExtra("Name", name);
         i.putExtra("Location", location);
         i.putExtra("Start Time", startTime);

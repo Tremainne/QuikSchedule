@@ -49,6 +49,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         GeoCodeListener
 {
 
+    private int transitMode = 0;
     /**
      * called when the maps fragment is started, creates the view, calls create to make the map,
      * and begins the directions showing process if needed.
@@ -66,6 +67,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         // If we have a destination, get it
         if( extras != null ) {
             destination = extras.getString("Location");
+            transitMode = extras.getInt("Transportation", 0);
         }
         create();
         return view;
@@ -371,7 +373,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
      */
     public void onLatLngComplete() {
         if (start != null && end != null) {
-            Directions.makeDirectionsRequest(start, end, this);
+            Directions.makeDirectionsRequest(start, end, transitMode, this);
             Log.d("MapsFragment", "making routing request");
         }
     }
