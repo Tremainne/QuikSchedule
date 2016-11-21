@@ -22,9 +22,10 @@ public class EventView extends TextView {
     String startTime;
     String endTime;
     String id;
-    String description;
+    String comments;
+    String materials;
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-    int transportation; //0=walking,1=bike, 2=car, 3=bus
+    int transportation; //0=transit, 1=driving, 2=cycling, 3=walking
 
     public EventView(Context context) {
         super(context);

@@ -12,16 +12,34 @@
         android:layout_width="match_parent"
         android:background="@color/md_black_1000">
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <android.support.v7.widget.AppCompatButton
+                    android:text="Cancel"
+                    android:textSize="20dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cancel"
+                    android:layout_alignTop="@+id/edit"
+                    android:background="@color/md_black_1000"
+                    android:textCursorDrawable="@null"
+                    style="@android:style/Theme.Translucent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/colorAccent"
+                    android:layout_width="65dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_alignBottom="@+id/edit"
+                    android:onClick="cancel"
+                android:layout_weight="1" />
 
             <android.support.v7.widget.AppCompatButton
-                android:text="Done"
+                android:text="Delete"
                 android:textSize="20dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/edit"
+                android:id="@+id/delete"
                 android:background="@color/md_black_1000"
                 android:textCursorDrawable="@null"
                 style="@android:style/Theme.Translucent"
@@ -29,34 +47,35 @@
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/colorAccent"
                 android:layout_width="50dp"
+                android:gravity="center"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="13dp"
-                android:layout_marginEnd="13dp"
-                android:onClick="toCalendar"/>
+                android:onClick="toCalendar"
+                android:layout_weight="1" />
 
             <android.support.v7.widget.AppCompatButton
-                android:text="Cancel"
-                android:textSize="20dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/cancel"
-                android:layout_alignTop="@+id/edit"
-                android:background="@color/md_black_1000"
-                android:textCursorDrawable="@null"
-                style="@android:style/Theme.Translucent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:fontFamily="sans-serif-medium"
-                android:textColor="@color/colorAccent"
-                android:layout_width="65dp"
-                android:layout_marginLeft="13dp"
-                android:layout_alignBottom="@+id/edit"
-                android:onClick="cancel"/>
+                    android:text="Done"
+                    android:textSize="20dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edit"
+                    android:background="@color/md_black_1000"
+                    android:textCursorDrawable="@null"
+                    style="@android:style/Theme.Translucent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/colorAccent"
+                    android:layout_width="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="13dp"
+                    android:layout_marginEnd="13dp"
+                    android:onClick="toCalendar"
+                android:layout_weight="1" />
+        </LinearLayout>
 
-        </RelativeLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
@@ -64,11 +83,12 @@
         <RelativeLayout
             android:id="@+id/activity_expanded_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="550dp"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
+            android:nestedScrollingEnabled="true"
             tools:context="group22.quikschedule.ExpandedViewActivity">
 
             <LinearLayout
@@ -87,7 +107,7 @@
                     <ImageView
                         android:src="@android:drawable/ic_menu_my_calendar"
                         android:id="@+id/imageView2"
-                        android:layout_width="48dp"
+                        android:layout_width="45dp"
                         android:layout_height="40dp" />
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -95,10 +115,12 @@
                         android:layout_marginTop="8dp"
                         android:textColorHint="@color/md_pink_A700"
                         android:layout_marginBottom="4dp">
+
                         <EditText
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="45dp"
                             android:inputType="textPersonName"
+                            android:maxLines="1"
                             android:ems="10"
                             android:id="@+id/eventName"
                             android:hint="Event Name"
@@ -112,7 +134,7 @@
                 android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="42dp"
+                        android:layout_width="44dp"
                         android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/imageButton2" />
@@ -143,7 +165,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="42dp"
+                        android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/TimeImage" />
@@ -174,7 +196,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="43dp"
+                        android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:src="@android:drawable/ic_lock_idle_alarm"
                         android:id="@+id/TimeImage2" />
@@ -208,7 +230,7 @@
                         android:layout_height="50dp"
                         android:src="@android:drawable/ic_menu_mylocation"
                         android:id="@+id/imageView4"
-                        android:layout_width="43dp" />
+                        android:layout_width="45dp" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -234,7 +256,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="38dp"
+                        android:layout_width="45dp"
                         android:layout_height="50dp"
                         android:src="@drawable/ic_menu_gallery"
                         android:id="@+id/imageView3" />
@@ -245,15 +267,16 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="4dp"
                         android:textColorHint="@color/md_pink_A700">
+
                         <EditText
-                            android:layout_width="match_parent"
+                            android:layout_width="303dp"
                             android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
+                            android:inputType="text"
+                            android:maxLines="1"
                             android:ems="10"
                             android:id="@+id/materials"
-                            android:hint="BookList"
-                            style="@style/EditTextStyle"
-                            android:layout_weight="1" />
+                            android:hint="Materials"
+                            style="@style/EditTextStyle" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -262,7 +285,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="38dp"
+                        android:layout_width="46dp"
                         android:layout_height="50dp"
                         android:src="@drawable/quantum_ic_closed_caption_grey600_36"
                         android:id="@+id/imageView5" />
@@ -270,20 +293,36 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="4dp"
                         android:textColorHint="@color/md_pink_A700">
 
                         <EditText
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:inputType="textMultiLine"
-                            android:ems="10"
+                            android:ems="8"
                             android:id="@+id/comments"
                             android:hint="Comments"
-                            style="@style/EditTextStyle"
-                            android:layout_weight="1" />
+                            style="@style/EditTextStyle" />
                     </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="46dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_menu_send"
+                        android:id="@+id/imageView6" />
+                    <Spinner
+                        android:id="@+id/transportationMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:popupBackground="@color/colorPrimaryDark"
+                        android:background="?attr/editTextBackground"
+                        android:spinnerMode="dropdown" />
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
@@ -302,5 +341,6 @@
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
+
 </android.support.design.widget.CoordinatorLayout>

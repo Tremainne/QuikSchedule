@@ -251,14 +251,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             event.name = jsonObject.getString("summary");
                             event.id = jsonObject.getString("id");
                             event.location = jsonObject.getString("location");
-                            event.description = jsonObject.getString("description");
 
-                            Log.d("JSON","PLS");
                             JSONObject time = jsonObject.getJSONObject("start");
-                            Log.d("JSON", time.toString());
                             event.startTime = time.getString("dateTime");
                             time = jsonObject.getJSONObject("end");
                             event.endTime = time.getString("dateTime");
+
+                            String[] lines = jsonObject.getString("description").split("\n");
+                            event.materials = lines[0].substring(0, lines[0].length());
+                            event.comments = lines[1].substring(0, lines[1].length());
+                            event.transportation =
+                                    Integer.parseInt(lines[2].substring(0, lines[2].length()));
                         }
                         catch (JSONException e) {
                             e.printStackTrace();

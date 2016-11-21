@@ -19,7 +19,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +51,7 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
             {" = 'SUNDAY'", " = 'MONDAY'", " = 'TUESDAY'", " = 'WEDNESDAY'", " = 'THURSDAY'",
                     " = 'FRIDAY'", " = 'SATURDAY'"};
     private int mPage;
+    private View view;
 
     GoogleAccountCredential mCredential;
 
@@ -89,11 +89,13 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_full_agenda, container, false);
+        view = inflater.inflate(R.layout.fragment_full_agenda, container, false);
 
+        final RelativeLayout schedule = (RelativeLayout) view.findViewById(R.id.fullAgendaSchedule);
         TextView date = (TextView) view.findViewById(R.id.date);
         date.setText(dates[mPage-1]);
 
+        Log.d("SyncWTF", "Day Fragment Adding Events");
         populateAgenda(getContext(), view);
 
         Calendar currentTime = Calendar.getInstance();
@@ -109,6 +111,8 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
             public void onRefresh() {
                 getResultsFromApi();
                 swipeRefreshLayout.setRefreshing(false);
+                schedule.removeAllViews();
+                populateAgenda(getContext(), view);
             }
         });
 
@@ -117,12 +121,11 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
 
     public void onResume() {
         super.onResume();
-
+        populateAgenda(getContext(), view);
     }
 
     public void populateAgenda(Context mContext, View view)
     {
-        Log.d("Entered", "populateAgenda");
 
         DateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
 
@@ -142,15 +145,16 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
 
         PriorityQueue<EventView> events = DatabaseHelper.getEvents(getContext(), sql);
 
+        Log.d("SyncWTF", " "+events.size()+" "+dates[mPage - 1]);
+        int j = 0;
         for(EventView i : events ) {
-            Log.d("event", i.name);
+            Log.d("SyncWTF", i.name + " "+(++j));
             addEvent(i, view);
         }
     }
 
     public void addEvent(final EventView event, View v) {
 
-        Log.d("Event Name", event.name+" "+event.startTime);
         event.setGravity(Gravity.NO_GRAVITY);
         event.setText(" "+event.name+"\n"+
                 " " +event.getTimeAsString(EventView.STARTTIME)+
@@ -185,18 +189,15 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
                 i.putExtra("Start Time", event.getTimeAsString(EventView.STARTTIME));
                 i.putExtra("End Time", event.getTimeAsString(EventView.ENDTIME));
                 i.putExtra("ID", event.id);
+                i.putExtra("Transportation", event.transportation);
+                i.putExtra("Comments", event.comments);
+                i.putExtra("Materials", event.materials);
 
                 startActivity(i);
             }
         });
 
     }
-
-
-
-
-
-
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are

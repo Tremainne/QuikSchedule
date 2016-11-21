@@ -1,23 +1,27 @@
 package group22.quikschedule.Settings;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.view.View;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.AccessControlContext;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import group22.quikschedule.Calendar.ExpandedEventActivity;
-import group22.quikschedule.MainActivity;
+import group22.quikschedule.InitialActivity;
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static java.security.AccessController.getContext;
 
 /**
@@ -33,6 +37,7 @@ import static java.security.AccessController.getContext;
  * @author Ishjot Suri
  * @author Rudr Tandon
  */
+
 public class AlertActivity extends BroadcastReceiver {
 
     private int mPage;
@@ -42,6 +47,9 @@ public class AlertActivity extends BroadcastReceiver {
     private String startTime;
     private String endTime;
     private String id;
+
+    public static int id2;
+
     private int calculateminutes;
     private int timeToDisplay;
     /**
@@ -102,8 +110,44 @@ public class AlertActivity extends BroadcastReceiver {
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mNotificationManager.notify(NavigationDrawerActivity.id, builder.build());
+        mNotificationManager.notify(id2, builder.build());
         System.err.println("Notified");
+    }
+
+    public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
+
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt("")); //GET SHIT FROM TY
+        cal.set(Calendar.MINUTE, Integer.parseInt("")); //GET SHIT FROM TY
+
+        return Integer.parseInt(""); //GET SHIT FROM TY
+    }
+
+    public static void setAlarm(View view) throws JSONException {
+        System.err.println("Setting Alarm");
+
+        Calendar c = Calendar.getInstance();
+        //Set the alarm time for event i based on the start time and get the time back
+        //id = setAlarmtime(null, c); //GET SHIT FROM TY
+
+        id2 = 0;
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
+        c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+        c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
+
+        //Set a new alertIntent for the notification
+        Intent alertIntent = new Intent(getApplicationContext(), AlertActivity.class);
+
+        //set a pending intent where the unique id is the time of the event
+        //If you have two events with the same time then it wont notify you for second
+        PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), id2, alertIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //Create an AlarmManager for each event
+        AlarmManager alarmManager  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+        //Set the alarm
+        alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);
+
     }
 
 }

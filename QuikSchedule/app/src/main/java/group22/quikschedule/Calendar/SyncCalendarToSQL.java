@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -148,6 +149,8 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
                 System.out.println("No new items to sync");
             } else {
                 for (Event event : items) {
+
+                    Log.d("Deleting Events", event.getSummary());
                     syncEvent(event);
                     System.err.println(event.toPrettyString());
                 }
@@ -213,7 +216,13 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_WEEK, weekNum + numOfWeeks);
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_DAY, day);
                 values.put(DatabaseContract.DatabaseEntry.COLUMN_DATA, event.toPrettyString());
-                db.insert(DatabaseContract.DatabaseEntry.TABLE_NAME, null, values);
+
+                if (weekIdComboInDb(db, event.getId(), weekNum + numOfWeeks)) {
+                    System.err.println("already in table");
+                    db.update(DatabaseContract.DatabaseEntry.TABLE_NAME, values, DatabaseContract.DatabaseEntry.COLUMN_ID + " = " + "'" + event.getId() + "'", null);
+                } else {
+                    db.insert(DatabaseContract.DatabaseEntry.TABLE_NAME, null, values);
+                }
 
                 numOfWeeks--;
             } while (numOfWeeks >= 0);
@@ -253,6 +262,17 @@ public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
         Cursor cursor = db.rawQuery(sql, null);
 
         boolean inTable = cursor.getCount() <= 0;
+        cursor.close();
+        return inTable;
+    }
+
+    private boolean weekIdComboInDb (SQLiteDatabase db, String id, int week) {
+        String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
+                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_ID + "=" +
+                "'" + id + "'" + " AND " + DatabaseContract.DatabaseEntry.COLUMN_WEEK + " = " + "'" + week + "'";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        boolean inTable = cursor.getCount() > 0;
         cursor.close();
         return inTable;
     }

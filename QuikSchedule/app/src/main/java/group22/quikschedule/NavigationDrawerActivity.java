@@ -44,12 +44,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import group22.quikschedule.Calendar.CalendarSyncActivity;
 import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
 import group22.quikschedule.Calendar.SyncCalendarToSQL;
+import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
 import group22.quikschedule.Friends.FriendsFragment;
+import group22.quikschedule.Maps.Directions;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Maps.PollingService;
 import group22.quikschedule.Settings.AlertActivity;
@@ -58,15 +59,28 @@ import group22.quikschedule.Settings.WebregActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static group22.quikschedule.InitialActivity.APP_PREFERENCES;
+
+/**
+ * Class: NavigationDrawerActivity
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/5/16
+ *
+ * Description: Sets the pendingIntents for the alarms that are created.
+ *
+ * @author Rudr Tandon
+ * @author Ishjot Suri
+ * @author Rohan Chhabra
+ * @author WHOEVER ELSE WORKED ON THIS JUST UPDATE IT
+ */
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                     EasyPermissions.PermissionCallbacks{
 
     public static boolean inMaps = false;
-
-    public static HashMap<Integer, PendingIntent> alarmIntentMap;
-    public static HashMap<Integer, AlarmManager> alarmManagerMap;
-
+    public static boolean loggedIn;
 
     GoogleAccountCredential mCredential;
 
@@ -78,81 +92,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private static final String BUTTON_TEXT = "Sync Calendar to Phone";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
-    public static int id;
-
-
-
-    public static int setAlarmtime(JSONObject jsonObj, Calendar cal) throws JSONException {
-
-        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt("")); //GET SHIT FROM TY
-        cal.set(Calendar.MINUTE, Integer.parseInt("")); //GET SHIT FROM TY
-
-        return Integer.parseInt(""); //GET SHIT FROM TY
-    }
 
     public void setAlarm(View view) throws JSONException {
-        System.err.println("Setting Alarm");
-
-            Calendar c = Calendar.getInstance();
-            //Set the alarm time for event i based on the start time and get the time back
-            //id = setAlarmtime(null, c); //GET SHIT FROM TY
-
-                id = 0;
-                c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
-                c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
-                c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
-
-            //Set a new alertIntent for the notification
-            Intent alertIntent = new Intent(this, AlertActivity.class);
-
-            //set a pending intent where the unique id is the time of the event
-            //If you have two events with the same time then it wont notify you for second
-            PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), id, alertIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            //Add this to my static map so it can be accessed later to cancel
-            //alarmIntentMap.put(id, contentIntent);
-
-            //Create an AlarmManager for each event
-            AlarmManager alarmManager  = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-            ////Add this to my static map so it can be accessed later to cancel the pendingIntent
-            //alarmManagerMap.put(id, alarmManager);
-
-            //Set the alarm
-            alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);
-
-    }
-
-    public ArrayList<JSONObject> cursorToJson(Cursor cursor)
-    {
-
-        ArrayList<JSONObject> events = new ArrayList<>();
-        Log.d("FUCK", "ME");
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                System.err.println("AYYY2");
-                do {
-                    System.err.println("AYYY3");
-                    String json = cursor.getString(
-                            cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_DATA));
-                    Log.d("Pls", "help");
-                    System.err.println(json);
-                    JSONObject j;
-                    try {
-                        j = new JSONObject(json);
-                        Log.d("New JSON", json);
-                        events.add(j);
-                    } catch (JSONException e) {
-                        Log.i("FUCK", "OFF");
-                    }
-                } while (cursor.moveToNext());
-            }
-        }
-
-        return events;
-
+       AlertActivity.setAlarm(view);
     }
 
     public static String getDayString()
@@ -185,35 +127,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return "null";
     }
 
-    public ArrayList<JSONObject> getData(Context mContext)
-    {
-
-        Log.d("Entered", "JSON getData");
-        DatabaseHelper mDbHelper = new DatabaseHelper(mContext);
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
-                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_DAY + " = '" +getDayString()+ "'";
-
-        // COLUMN_WEEK is number
-        //+ DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
-        //DatabaseContract.DatabaseEntry.TABLE_NAME + " WHERE "
-        //+ DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS 'MONDAY'"; // + " WHERE " +
-        //DatabaseContract.DatabaseEntry.COLUMN_DAY; // + " IS MONDAY";
-        Cursor cursor = db.rawQuery(sql, null); //+ "MONDAY", null);
-        ArrayList<JSONObject> events = cursorToJson(cursor);
-        Log.d("JSON Objects", events.toString());
-        Log.d("JSON Objects size", ""+events.size());
-        cursor.close();
-        return events;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FacebookSdk.sdkInitialize(getApplicationContext()); //Allows for Facebook SDK access
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
+
+        SharedPreferences settings = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+        settings.getBoolean("LoggedIn", loggedIn);
+        if(loggedIn) {
+            startActivity(new Intent(this, NavigationDrawerActivity.class));
+        }
 
         startService( new Intent(this, PollingService.class) );
 
@@ -222,6 +146,18 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         Intent i = getIntent();
+
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
+
+        getResultsFromApi();
+
+        if (i.hasExtra("webreg")) {
+            if (i.getStringExtra("webreg").equals("webreg")) {
+                new SyncFirebaseToCalendar(mCredential, this).execute();
+            }
+        }
 
         int selectFrag = i.getIntExtra("Fragment", 0);
 
@@ -260,7 +196,18 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         if(i.hasExtra("Location")) {
             Bundle mapsBundle = new Bundle();
-            mapsBundle.putString("Location", i.getStringExtra("Location"));
+            String end = i.getStringExtra("Location");
+            String[] arr = end.split("\\w");
+            StringBuilder result = new StringBuilder();
+            for (String str : arr) {
+                boolean isNum = str.matches("\\d+");
+                // If its a number or  its a Zip code (length 5), put it back in the address.
+                if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                    result.append(str + " ");
+                }
+            }
+            mapsBundle.putString("Location", result.toString());
+            mapsBundle.putInt("Transportation", i.getIntExtra("Transportation", 0));
             fragment.setArguments(mapsBundle);
         }
 
@@ -274,12 +221,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
-
-        getResultsFromApi();
     }
 
     @Override
@@ -328,7 +269,22 @@ public class NavigationDrawerActivity extends AppCompatActivity
             fragment = (Fragment) fragmentClass.newInstance();
             if (id == R.id.nav_maps) {
                 Bundle mapsBundle = new Bundle();
-                mapsBundle.putString("Location", "CENTR");
+                // Replace with location of days first event.
+                String end = "CENTR 240"; // TODO
+                String[] arr = end.split("[\\s,]+");
+                StringBuilder result = new StringBuilder();
+                for (String str : arr) {
+                    boolean isNum = str.matches("\\d+");
+                    // If its a number or  its a Zip code (length 5), put it back in the address.
+                    if (!isNum || str.length() == Directions.ZIP_LENGTH) {
+                        if (result.length() > 0) {
+                            result.append(" ");
+                        }
+                        result.append(str);
+
+                    }
+                }
+                mapsBundle.putString("Location", result.toString());
                 fragment.setArguments(mapsBundle);
             }
         } catch (Exception e) {
@@ -345,8 +301,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void toWebreg(View view){
         startActivity(new Intent(this, WebregActivity.class));
     }
-
-    public void syncCalendarToSQL (View view) { startActivity(new Intent(this, CalendarSyncActivity.class)); }
 
     public void toMap(View view) {
         startActivity(new Intent(this, MapsFragment.class));
@@ -561,5 +515,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 connectionStatusCode,
                 REQUEST_GOOGLE_PLAY_SERVICES);
         dialog.show();
+    }
+
+    public void toInitial(View view){
+        startActivity(new Intent(this, InitialActivity.class));
     }
 }
