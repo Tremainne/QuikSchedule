@@ -117,14 +117,14 @@ public class Polling extends BroadcastReceiver {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60, pi);
+        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60 * 60, pi);
     }
 
     public void setEventAlarm(Context context, int time) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.set(AlarmManager.RTC, System.currentTimeMillis() + 1000 * 5, pi);
+        am.set(AlarmManager.RTC, System.currentTimeMillis() + time * 60 * 1000, pi);
     }
 
     public void cancelAlarm(Context context) {
