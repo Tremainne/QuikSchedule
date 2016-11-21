@@ -1,7 +1,6 @@
 package group22.quikschedule.Maps;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -23,6 +22,7 @@ public class Directions {
 
     /**
      * Getter for the staticDirections
+     *
      * @return the directions information for display
      */
     public static List<List<HashMap<String, String>>> getStaticDirections() {
@@ -30,6 +30,7 @@ public class Directions {
     }
 
     private static final String[] transitTypes = {"transit", "driving", "cycling", "walking"};
+
     /**
      * Getter for travel time
      *
@@ -88,6 +89,7 @@ public class Directions {
 
     /**
      * Parses a LatLng value into a string that can be used with Directions
+     *
      * @param parse The LatLng value to parse into a string
      * @return The resulting string
      */
@@ -100,9 +102,10 @@ public class Directions {
 
     /**
      * Makes a request to the directions API to find the amount of travel time for a specific route
+     *
      * @param start The starting location of the route
-     * @param dest The ending location of the route
-     * @param maps The listener to the result, handles using the time value.
+     * @param dest  The ending location of the route
+     * @param maps  The listener to the result, handles using the time value.
      */
     public static void makeTimeRequest(final LatLng start, LatLng dest, int transitMode,
                                        final GeoCodeListener maps) {
@@ -114,8 +117,7 @@ public class Directions {
                 try {
                     Directions.staticTime = getTimeJson(result);
                     maps.onGeocodeListenerComplete();
-                }
-                catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                     maps.onGeocodeListenerFail();
                 }
@@ -128,9 +130,10 @@ public class Directions {
     /**
      * Makes a directions API request to find out the actual routing directions, used to draw the
      * polyline
+     *
      * @param start The starting location for the route
-     * @param dest The ending location for the route
-     * @param maps The listener that will use the route info.
+     * @param dest  The ending location for the route
+     * @param maps  The listener that will use the route info.
      */
     public static void makeDirectionsRequest(final LatLng start, LatLng dest, int transitMode,
                                              final GeoCodeListener maps) {
@@ -142,8 +145,7 @@ public class Directions {
                 try {
                     Directions.staticDirections = getDirectionsJson(result);
                     maps.onGeocodeListenerComplete();
-                }
-                catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                     maps.onGeocodeListenerFail();
                 }
@@ -155,6 +157,7 @@ public class Directions {
 
     /**
      * Parses the JSON to get the time amount
+     *
      * @param jsonStr The string to parse
      * @return The time value that was parsed out
      * @throws JSONException If there was an issue with the JSON
@@ -181,6 +184,7 @@ public class Directions {
 
     /**
      * Parses the JSON to get the directions to the destination
+     *
      * @param jsonStr The string to parse
      * @return The directions that were parsed out
      * @throws JSONException If there was an issue with the JSON

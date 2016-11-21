@@ -5,8 +5,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -18,15 +16,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 import group22.quikschedule.Calendar.DatabaseContract;
@@ -51,11 +41,10 @@ public class Polling extends BroadcastReceiver {
     EventView curr = null;
 
     @Override
-    public void onReceive( Context context, Intent intent )
-    {
+    public void onReceive(Context context, Intent intent) {
         this.context = context;
-        PowerManager pm = (PowerManager) context.getSystemService( Context.POWER_SERVICE );
-        PowerManager.WakeLock wl = pm.newWakeLock( PowerManager.PARTIAL_WAKE_LOCK, "" );
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
 
         String sql = "SELECT " + DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
@@ -81,20 +70,20 @@ public class Polling extends BroadcastReceiver {
                 }
             });
             // Go through EventView PQ and add to new PQ based on start time
-            for ( EventView ev : pq ) {
-                events.add( ev );
+            for (EventView ev : pq) {
+                events.add(ev);
             }
-            getDir( context, events );
+            getDir(context, events);
         }
 
         wl.release();
     }
 
-    public void setTwoHourAlarms( Context context, PriorityQueue<EventView> pq ) {
-        for ( EventView ev : pq ) {
-            Toast.makeText( context, "Set two hour alarm", Toast.LENGTH_LONG ).show();
+    public void setTwoHourAlarms(Context context, PriorityQueue<EventView> pq) {
+        for (EventView ev : pq) {
+            Toast.makeText(context, "Set two hour alarm", Toast.LENGTH_LONG).show();
             int start = ev.getTimeAsInt(0);
-            setEventAlarm( context, start - 120 );
+            setEventAlarm(context, start - 120);
         }
         first = false;
     }
@@ -112,10 +101,10 @@ public class Polling extends BroadcastReceiver {
         ++counter;
 
         LocationListener listener = new LocationListener();
-        client = new GoogleApiClient.Builder( context )
-                .addApi( LocationServices.API )
-                .addConnectionCallbacks( listener )
-                .addOnConnectionFailedListener( listener )
+        client = new GoogleApiClient.Builder(context)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(listener)
+                .addOnConnectionFailedListener(listener)
                 .build();
         client.connect();
 
@@ -141,18 +130,18 @@ public class Polling extends BroadcastReceiver {
         Geocode.nameToLatLng(result.toString(), listener, false);
     }
 
-    public void setAlarm( Context context ) {
-        AlarmManager am = (AlarmManager) context.getSystemService( Context.ALARM_SERVICE );
-        Intent i = new Intent( context, Polling.class );
-        PendingIntent pi = PendingIntent.getBroadcast( context, 0, i, 0 );
-        am.setRepeating( AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60, pi );
+    public void setAlarm(Context context) {
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(context, Polling.class);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60, pi);
     }
 
-    public void setEventAlarm( Context context, int time ) {
-        AlarmManager am = (AlarmManager) context.getSystemService( Context.ALARM_SERVICE );
-        Intent i = new Intent( context, Polling.class );
-        PendingIntent pi = PendingIntent.getBroadcast( context, 0, i, 0 );
-        am.set( AlarmManager.RTC, System.currentTimeMillis() + 1000 * 5, pi );
+    public void setEventAlarm(Context context, int time) {
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(context, Polling.class);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+        am.set(AlarmManager.RTC, System.currentTimeMillis() + 1000 * 5, pi);
     }
 
     public void cancelAlarm(Context context) {
@@ -267,9 +256,7 @@ public class Polling extends BroadcastReceiver {
         @Override
         public void onGeocodeListenerFail() {
             // Set time to be two hours if there was an error.
-            duration = 60*60*2*100;
-            //Toast.makeText(context, "Location could not be found", Toast.LENGTH_LONG).show();
-
+            duration = 60 * 60 * 2 * 100;
         }
     }
 }

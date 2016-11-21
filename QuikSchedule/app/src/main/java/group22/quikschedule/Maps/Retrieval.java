@@ -13,11 +13,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Class: Retrieval
- *
+ * <p>
  * Bugs: None known
  * Version: 1.0
  * Date: 10/24/16
- *
+ * <p>
  * Description: Class that extends the AsyncTask interface in order to call Google Directions API
  * URL to grab the JSON object returned by the call for directions information.
  *
@@ -31,20 +31,20 @@ class Retrieval extends AsyncTask<String, Void, String> {
      * Name: doInBackground
      * Description: Performs the bulk of the work by connecting to URL and going line by line
      * to create a singular string of the JSON object information.
+     *
      * @param urls - URLs to be requested to create string of JSON object
      */
     public String doInBackground(String... urls) {
         String request = urls[0];
         HttpsURLConnection con = null;
-        Log.d("Retrieval", request );
+        Log.d("Retrieval", request);
 
         // Try HTTP GET request
         try {
             URL url = new URL(request);
             con = (HttpsURLConnection) url.openConnection();
-            con.setRequestMethod( "GET" );
-        }
-        catch (MalformedURLException e) {
+            con.setRequestMethod("GET");
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,7 +70,7 @@ class Retrieval extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
         result.append(line);
-        while( line != null ) {
+        while (line != null) {
             try {
                 line = rd.readLine();
             } catch (IOException e) {
@@ -89,18 +89,18 @@ class Retrieval extends AsyncTask<String, Void, String> {
 
     /**
      * Interface: AsyncResponse
-     *
+     * <p>
      * Bugs: None known
      * Version: 1.0
      * Date: 10/24/16
-     *
+     * <p>
      * Description: Simple interface that is utilized to return String object back to the UI thread
      * activity.
      *
      * @author Tynan Dewes
      */
     public interface AsyncResponse {
-        void processFinish( String result );
+        void processFinish(String result);
     }
 
     public AsyncResponse delegate = null;
@@ -108,10 +108,11 @@ class Retrieval extends AsyncTask<String, Void, String> {
     /**
      * Name: Retrieval
      * Description: Simple assignment for AsyncResponse delegate object
+     *
      * @param delegate - AsyncResponse object utilized to instantiated delegate for onPostExecute
      *                 method
      */
-    public Retrieval( AsyncResponse delegate ) {
+    public Retrieval(AsyncResponse delegate) {
         this.delegate = delegate;
     }
 
@@ -119,10 +120,11 @@ class Retrieval extends AsyncTask<String, Void, String> {
      * Name: onPostExecute
      * Description: Simple method run on post execution of the doInBackground task that utilizes
      * the AsyncResponse interface above to return the string to the UI thread
+     *
      * @param result - Resulting string of JSON object used to return to UI thread
      */
     @Override
-    protected void onPostExecute( String result ) {
-        delegate.processFinish( result );
+    protected void onPostExecute(String result) {
+        delegate.processFinish(result);
     }
 }
