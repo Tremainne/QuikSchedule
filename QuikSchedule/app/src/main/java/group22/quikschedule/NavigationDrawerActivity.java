@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -43,7 +44,6 @@ import group22.quikschedule.Calendar.EventView;
 import group22.quikschedule.Calendar.SyncCalendarToSQL;
 import group22.quikschedule.Calendar.SyncFirebaseToCalendar;
 import group22.quikschedule.Calendar.WeekFragment;
-import group22.quikschedule.Friends.FriendsFragment;
 import group22.quikschedule.Maps.Directions;
 import group22.quikschedule.Maps.MapsFragment;
 import group22.quikschedule.Maps.PollingService;
@@ -165,11 +165,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
             case 1:
                 fragmentClass = MapsFragment.class;
                 break;
-            case 2:
-                fragmentClass = FriendsFragment.class;
-                break;
             case 3:
                 fragmentClass = SettingsFragment.class;
+                break;
+            default:
+                fragmentClass = WeekFragment.class;
                 break;
         }
 
@@ -241,8 +241,16 @@ public class NavigationDrawerActivity extends AppCompatActivity
             Log.i("Fragment Selected", "Maps");
             inMaps = true;
         } else if (id == R.id.nav_friends) {
-            fragmentClass = FriendsFragment.class;
             Log.i("Fragment Selected", "Friends");
+            Intent i;
+            try {
+                this.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+                i = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://"));
+            } catch (Exception e) {
+                i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"));
+            }
+            startActivity(i);
+            return true;
         } else if (id == R.id.nav_settings) {
             fragmentClass = SettingsFragment.class;
             Log.i("Fragment Selected", "Settings");
@@ -506,4 +514,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void toInitial(View view) {
         startActivity(new Intent(this, InitialActivity.class));
     }
+
+
 }
