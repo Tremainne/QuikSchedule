@@ -1,6 +1,8 @@
 package group22.quikschedule.Maps;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -13,30 +15,38 @@ import org.json.JSONObject;
 
 public class Geocode {
     /**
-     * Perfroms a Google Geocode API request to find the latitude and longitude of the address
+     * Performs a Google Geocode API request to find the latitude and longitude of the address
+     *
      * @param address Address to look up
-     * @param map The listener to tell the result of the address lookup.
+     * @param map     The listener to tell the result of the address lookup.
      * @param isStart Which value to set in the listener
      */
     public static void nameToLatLng(String address, final GeoCodeListener map,
                                     final boolean isStart) {
         address = address.replaceAll("\\s", "%20");
-        String request = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+        final String request = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
                 address + "&key=AIzaSyBmLBTq2_NcacunMNnPlEPL5fIQj38bIRs";
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
             public void processFinish(String result) {
                 Log.d("geocode", "request completed");
                 try {
+                    LatLng requestResult = getJson(result);
+                    if (requestResult == null) {
+                        map.onGeocodeListenerFail();
+                        return;
+                    }
                     // Used to decide whether the start or end should get set in the map.
                     if (isStart) {
-                        map.setStart(getJson(result));
+                        map.setStart(requestResult);
 
                     } else {
-                        map.setEnd(getJson(result));
+                        map.setEnd(requestResult);
                     }
                 } catch (JSONException e) {
                     map.onGeocodeListenerFail();
+                    e.printStackTrace();
+                    return;
                 }
                 map.onLatLngComplete();
             }
@@ -46,6 +56,7 @@ public class Geocode {
 
     /**
      * Parses the JSON to find the latitude and longitude.
+     *
      * @param json The string to parse address info from
      * @return The parsed latitude and longitude values.
      * @throws JSONException if the address isn't found or something goes wrong with the request

@@ -14,16 +14,13 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,11 +29,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 /**
  * Class: InitialActivity
- *
+ * <p>
  * Bugs: None known
  * Version: 1.0
  * Date: 11/7/16
- *
+ * <p>
  * Description:
  *
  * @author David Thomson
@@ -58,6 +55,7 @@ public class InitialActivity extends AppCompatActivity implements
 
     /**
      * Description: Default starting method called when starting a new MainActivity
+     *
      * @param savedInstanceState - indicates the context from which the method was called
      */
     @Override
@@ -168,8 +166,7 @@ public class InitialActivity extends AppCompatActivity implements
             findViewById(R.id.google_login).setVisibility(View.GONE);
             //Intent next = new Intent(getApplicationContext(), AppMenu.class);
             //startActivity(next);
-        }
-        else {
+        } else {
             mStatusTextView.setText(R.string.google_signed_out);
             findViewById(R.id.google_login).setVisibility(View.VISIBLE);
         }
