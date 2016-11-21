@@ -42,6 +42,7 @@ public class Polling extends BroadcastReceiver {
     private GoogleApiClient client;
     private static boolean first = true;
     int time;
+    private int transitMode;
 
     @Override
     public void onReceive( Context context, Intent intent )
@@ -226,7 +227,7 @@ public class Polling extends BroadcastReceiver {
         @Override
         public void onLatLngComplete() {
             if (this.end != null && start != null) {
-                Directions.makeTimeRequest(start, end, this);
+                Directions.makeTimeRequest(start, end, transitMode, this);
             }
         }
 

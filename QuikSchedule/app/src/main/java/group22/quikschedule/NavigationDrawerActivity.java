@@ -164,7 +164,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         int selectFrag = i.getIntExtra("Fragment", 0);
 
         Fragment fragment = null;
-        Class fragmentClass = null;
+        Class fragmentClass;
         fragmentClass = WeekFragment.class;
 
         switch(selectFrag) {
@@ -277,6 +277,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 String[] arr = end.split("[\\s,]+");
                 StringBuilder result = new StringBuilder();
                 for (String str : arr) {
+                    Log.d("navBar", str);
                     boolean isNum = str.matches("\\d+");
                     // If its a number or  its a Zip code (length 5), put it back in the address.
                     if (!isNum || str.length() == Directions.ZIP_LENGTH) {
