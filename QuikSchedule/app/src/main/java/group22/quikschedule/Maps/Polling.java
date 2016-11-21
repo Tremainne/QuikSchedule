@@ -80,8 +80,8 @@ public class Polling extends BroadcastReceiver {
     }
 
     public void setTwoHourAlarms(Context context, PriorityQueue<EventView> pq) {
+        Toast.makeText(context, "Setting alarms", Toast.LENGTH_SHORT).show();
         for (EventView ev : pq) {
-            Toast.makeText(context, "Set two hour alarm", Toast.LENGTH_LONG).show();
             int start = ev.getTimeAsInt(0);
             setEventAlarm(context, start - 120);
         }
@@ -110,7 +110,6 @@ public class Polling extends BroadcastReceiver {
         String result = Directions.convertAddress(end);
         // try to get rid of room numbers, but keep potential zip codes
 
-        Toast.makeText(context, result + " hi", Toast.LENGTH_LONG);
         Geocode.nameToLatLng(result, listener, false);
     }
 
@@ -149,6 +148,9 @@ public class Polling extends BroadcastReceiver {
         @Override
         public void onConnected(Bundle connectionHint) {
             Location myLoc = LocationServices.FusedLocationApi.getLastLocation( client );
+            if (myLoc == null) {
+                myLoc = LocationServices.FusedLocationApi.getLastLocation(client);
+            }
             String lat;
             String lng;
             if (myLoc != null) {
@@ -157,11 +159,12 @@ public class Polling extends BroadcastReceiver {
                 double latDbl = Double.parseDouble(lat);
                 double lngDbl = Double.parseDouble(lng);
                 setStart( new LatLng(latDbl, lngDbl) );
-                onLatLngComplete();
             }
             else {
                 setStart( new LatLng( 32.880254, -117.237643 ) );
             }
+            onLatLngComplete();
+
         }
 
         @Override
@@ -186,7 +189,7 @@ public class Polling extends BroadcastReceiver {
          */
         @Override
         public void setStart(LatLng start) {
-            Toast.makeText( context, "Start: " + start.toString(), Toast.LENGTH_LONG ).show();
+            //Toast.makeText( context, "Start: " + start.toString(), Toast.LENGTH_LONG ).show();
             Polling.this.start = start;
         }
 
@@ -197,7 +200,7 @@ public class Polling extends BroadcastReceiver {
          */
         @Override
         public void setEnd(LatLng end) {
-            Toast.makeText( context, "End: " + end.toString(), Toast.LENGTH_LONG ).show();
+            //Toast.makeText( context, "End: " + end.toString(), Toast.LENGTH_LONG ).show();
             this.end = end;
         }
 

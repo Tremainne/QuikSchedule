@@ -162,6 +162,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onConnected(Bundle connectionHint) {
         Location myLoc = LocationServices.FusedLocationApi.getLastLocation(client);
+        if (myLoc == null) {
+            myLoc = LocationServices.FusedLocationApi.getLastLocation(client);
+        }
         String lat;
         String lng;
         // Parse info about current location.
