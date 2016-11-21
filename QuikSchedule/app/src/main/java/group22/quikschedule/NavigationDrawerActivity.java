@@ -189,16 +189,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         if (i.hasExtra("Location")) {
             Bundle mapsBundle = new Bundle();
-            String end = i.getStringExtra("Location");
-            String[] arr = end.split("\\w");
-            StringBuilder result = new StringBuilder();
-            for (String str : arr) {
-                boolean isNum = str.matches("\\d+");
-                // If its a number or  its a Zip code (length 5), put it back in the address.
-                if (!isNum || str.length() == Directions.ZIP_LENGTH) {
-                    result.append(str + " ");
-                }
-            }
+            String result = Directions.convertAddress(i.getStringExtra("Location"));
             mapsBundle.putString("Location", result.toString());
             mapsBundle.putInt("Transportation", i.getIntExtra("Transportation", 0));
             fragment.setArguments(mapsBundle);
@@ -282,21 +273,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
                 EventView curr = map.get(start);
                 String end = curr.location;
-                String[] arr = end.split("[\\s,]+");
-                StringBuilder result = new StringBuilder();
-                for (String str : arr) {
-                    Log.d("navBar", str);
-                    boolean isNum = str.matches("\\d+");
-                    // If its a number or  its a Zip code (length 5), put it back in the address.
-                    if (!isNum || str.length() == Directions.ZIP_LENGTH) {
-                        if (result.length() > 0) {
-                            result.append(" ");
-                        }
-                        result.append(str);
-
-                    }
-                }
-                mapsBundle.putString("Location", result.toString());
+                String result = Directions.convertAddress(end);
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG);
+                mapsBundle.putString("Location", result);
                 fragment.setArguments(mapsBundle);
             }
         } catch (Exception e) {

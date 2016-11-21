@@ -111,23 +111,11 @@ public class Polling extends BroadcastReceiver {
         String end = curr.location;
         Toast.makeText(context, "hi", Toast.LENGTH_LONG);
 
+        String result = Directions.convertAddress(end);
         // try to get rid of room numbers, but keep potential zip codes
-        String[] arr = end.split("\\w");
-        StringBuilder result = new StringBuilder();
-        for (String str : arr) {
-            boolean isNum = str.matches("\\d+");
-            // If its a number or  its a Zip code (length 5), put it back in the address.
-            if (!isNum || str.length() == Directions.ZIP_LENGTH) {
-                if (Directions.converter.containsKey(str)) {
-                    result.append(Directions.converter.get(str));
-                }
-                else {
-                    result.append(str);
-                }
-            }
-        }
-        Toast.makeText(context, result.toString() + " hi", Toast.LENGTH_LONG);
-        Geocode.nameToLatLng(result.toString(), listener, false);
+
+        Toast.makeText(context, result + " hi", Toast.LENGTH_LONG);
+        Geocode.nameToLatLng(result, listener, false);
     }
 
     public void setAlarm(Context context) {
