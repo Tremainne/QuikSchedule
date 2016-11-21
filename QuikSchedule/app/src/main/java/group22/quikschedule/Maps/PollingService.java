@@ -11,19 +11,18 @@ import android.os.IBinder;
 public class PollingService extends Service {
     Polling polling = new Polling();
 
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
     }
 
     @Override
-    public int onStartCommand( Intent intent, int flags, int startId ) {
-        polling.setAlarm( this );
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        polling.setAlarm(this);
         return START_STICKY;
     }
 
     @Override
-    public IBinder onBind( Intent intent ) {
+    public IBinder onBind(Intent intent) {
         return null;
     }
 }

@@ -9,12 +9,14 @@ import com.google.android.gms.maps.model.LatLng;
 public interface GeoCodeListener {
     /**
      * set a start value for a route
+     *
      * @param start the value to set the start to
      */
     void setStart(LatLng start);
 
     /**
      * set the end value for a route
+     *
      * @param end the end value to set to
      */
     void setEnd(LatLng end);

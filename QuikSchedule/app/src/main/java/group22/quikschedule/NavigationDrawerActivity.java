@@ -1,15 +1,10 @@
 package group22.quikschedule;
 
-import android.*;
 import android.accounts.AccountManager;
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -36,9 +29,7 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -66,11 +57,11 @@ import static group22.quikschedule.InitialActivity.APP_PREFERENCES;
 
 /**
  * Class: NavigationDrawerActivity
- *
+ * <p>
  * Bugs: None known
  * Version: 1.0
  * Date: 11/5/16
- *
+ * <p>
  * Description: Sets the pendingIntents for the alarms that are created.
  *
  * @author Rudr Tandon
@@ -80,7 +71,7 @@ import static group22.quikschedule.InitialActivity.APP_PREFERENCES;
  */
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-                    EasyPermissions.PermissionCallbacks{
+        EasyPermissions.PermissionCallbacks {
 
     public static boolean inMaps = false;
     public static boolean loggedIn;
@@ -97,11 +88,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
 
     public void setAlarm(View view) throws JSONException {
-       AlertActivity.setAlarm(getApplicationContext());
+        AlertActivity.setAlarm(getApplicationContext());
     }
 
-    public static String getDayString()
-    {
+    public static String getDayString() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
 
@@ -138,11 +128,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         SharedPreferences settings = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         settings.getBoolean("LoggedIn", loggedIn);
-        if(loggedIn) {
+        if (loggedIn) {
             startActivity(new Intent(this, NavigationDrawerActivity.class));
         }
 
-        startService( new Intent(this, PollingService.class) );
+        startService(new Intent(this, PollingService.class));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("QuikSchedule");
@@ -168,7 +158,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         Class fragmentClass;
         fragmentClass = WeekFragment.class;
 
-        switch(selectFrag) {
+        switch (selectFrag) {
             case 0:
                 fragmentClass = WeekFragment.class;
                 break;
@@ -197,7 +187,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             fragment.setArguments(weekBundle);
         }
 
-        if(i.hasExtra("Location")) {
+        if (i.hasExtra("Location")) {
             Bundle mapsBundle = new Bundle();
             String end = i.getStringExtra("Location");
             String[] arr = end.split("\\w");
@@ -233,12 +223,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else if( inMaps == true ) {
+        } else if (inMaps == true) {
             startActivity(new Intent(NavigationDrawerActivity.this, NavigationDrawerActivity.class));
             inMaps = false;
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -284,15 +272,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 Map<Integer, EventView> map = new HashMap<Integer, EventView>();
                 PriorityQueue<Integer> timePQ = new PriorityQueue<Integer>(10);
                 // Go through EventView PQ and add to map/PQ
-                for ( EventView ev : pq ) {
-                    int start = ev.getTimeAsInt( EventView.STARTTIME );
-                    timePQ.add( start );
-                    map.put( start, ev );
+                for (EventView ev : pq) {
+                    int start = ev.getTimeAsInt(EventView.STARTTIME);
+                    timePQ.add(start);
+                    map.put(start, ev);
                 }
                 Integer start = timePQ.peek();
                 timePQ.remove();
 
-                EventView curr = map.get( start );
+                EventView curr = map.get(start);
                 String end = curr.location;
                 String[] arr = end.split("[\\s,]+");
                 StringBuilder result = new StringBuilder();
@@ -322,18 +310,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return true;
     }
 
-    public void toWebreg(View view){
+    public void toWebreg(View view) {
         startActivity(new Intent(this, WebregActivity.class));
     }
 
     public void toMap(View view) {
         startActivity(new Intent(this, MapsFragment.class));
     }
-
-
-
-
-
 
 
     /**
@@ -541,7 +524,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         dialog.show();
     }
 
-    public void toInitial(View view){
+    public void toInitial(View view) {
         startActivity(new Intent(this, InitialActivity.class));
     }
 }

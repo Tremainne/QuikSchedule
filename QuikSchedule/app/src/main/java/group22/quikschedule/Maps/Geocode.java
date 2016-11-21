@@ -14,8 +14,9 @@ import org.json.JSONObject;
 public class Geocode {
     /**
      * Performs a Google Geocode API request to find the latitude and longitude of the address
+     *
      * @param address Address to look up
-     * @param map The listener to tell the result of the address lookup.
+     * @param map     The listener to tell the result of the address lookup.
      * @param isStart Which value to set in the listener
      */
     public static void nameToLatLng(String address, final GeoCodeListener map,
@@ -46,6 +47,7 @@ public class Geocode {
 
     /**
      * Parses the JSON to find the latitude and longitude.
+     *
      * @param json The string to parse address info from
      * @return The parsed latitude and longitude values.
      * @throws JSONException if the address isn't found or something goes wrong with the request

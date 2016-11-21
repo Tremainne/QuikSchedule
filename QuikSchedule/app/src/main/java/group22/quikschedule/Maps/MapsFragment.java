@@ -39,22 +39,22 @@ import java.util.List;
 import group22.quikschedule.R;
 
 
-
 /**
  * Very basic fragment that should set the map up.
  */
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        GeoCodeListener
-{
+        GeoCodeListener {
 
     private int transitMode = 0;
+
     /**
      * called when the maps fragment is started, creates the view, calls create to make the map,
      * and begins the directions showing process if needed.
-     * @param inflater Inflates the view
-     * @param container what the view is inflated into
+     *
+     * @param inflater           Inflates the view
+     * @param container          what the view is inflated into
      * @param savedInstanceState unused
      * @return The view that was created.
      */
@@ -62,10 +62,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_maps, container, false);
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
         Bundle extras = getActivity().getIntent().getExtras();
         // If we have a destination, get it
-        if( extras != null ) {
+        if (extras != null) {
             destination = extras.getString("Location");
             transitMode = extras.getInt("Transportation", 0);
         }
@@ -86,6 +86,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * sets the start, part of geocode listener
+     *
      * @param start the value to set start to.
      */
     @Override
@@ -97,6 +98,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * sets the end, part of geocode listener
+     *
      * @param end the value to set end to.
      */
     @Override
@@ -112,7 +114,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     /**
      * sets up the map when the fragment is created. Also begins directions look up and display
      * step.
-    */
+     */
     private void create() {
         Log.d("Maps", "activity began");
         // Set to null so that a new directions item can be displayed.
@@ -123,10 +125,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 (getActivity().getSupportFragmentManager().findFragmentById(R.id.map));
 
         // Used to find current/last tracked location
-        client = new GoogleApiClient.Builder( getActivity() )
-                .addApi( LocationServices.API )
-                .addConnectionCallbacks( this )
-                .addOnConnectionFailedListener( this )
+        client = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
                 .build();
 
         //Get the google map
@@ -135,8 +137,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         // Show the directions, possibly use class code lookup.
         if (Directions.converter.containsKey(destination)) {
             showDirections(Directions.converter.get(destination));
-        }
-        else {
+        } else {
             showDirections(destination);
         }
         Log.d("Maps", "Made geocode request");
@@ -153,17 +154,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * API client callback, looks up last known location and sets the start to it.
+     *
      * @param connectionHint
      */
     @Override
-    public void onConnected( Bundle connectionHint ) {
-        Location myLoc = LocationServices.FusedLocationApi.getLastLocation( client );
+    public void onConnected(Bundle connectionHint) {
+        Location myLoc = LocationServices.FusedLocationApi.getLastLocation(client);
         String lat;
         String lng;
         // Parse info about current location.
-        if( myLoc != null ) {
-            lat = String.valueOf( myLoc.getLatitude() );
-            lng = String.valueOf( myLoc.getLongitude() );
+        if (myLoc != null) {
+            lat = String.valueOf(myLoc.getLatitude());
+            lng = String.valueOf(myLoc.getLongitude());
             double latDbl = Double.parseDouble(lat);
             double lngDbl = Double.parseDouble(lng);
             start = new LatLng(latDbl, lngDbl);
@@ -173,21 +175,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Called when the connection is suspended for some reason, hopefully won't happen
+     *
      * @param cause Why the connection was suspended.
      */
     @Override
-    public void onConnectionSuspended (int cause) {
-        Log.d( "Maps", "Connection suspended"  );
+    public void onConnectionSuspended(int cause) {
+        Log.d("Maps", "Connection suspended");
     }
 
     /**
      * Called if the connection to the API client fails, display error message
+     *
      * @param result the result of the connection
      */
     @Override
-    public void onConnectionFailed ( ConnectionResult result ) {
+    public void onConnectionFailed(ConnectionResult result) {
         Toast.makeText(getContext(), "Error is connecting to Google API", Toast.LENGTH_LONG).show();
-        Log.d( "Maps", "Connection failed"  );
+        Log.d("Maps", "Connection failed");
     }
 
     /**
@@ -198,12 +202,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap map) {
         try {
-            while (map == null)
-            {
+            while (map == null) {
                 Thread.sleep(10);
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         map.clear();
@@ -219,7 +221,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
      * @return false so that the event continues and zoom happens.
      */
     @Override
-    public boolean onMyLocationButtonClick(){
+    public boolean onMyLocationButtonClick() {
         Log.d("maps", "clicked the myLocation button.");
         return false;
     }
@@ -236,7 +238,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             // Permission to access the location is missing.
             Log.d("maps", "fine permission needs request.");
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    LOCATION_PERMISSION_REQUEST_CODE);
+                    LOCATION_PERMISSION_REQUEST_CODE);
             Log.d("maps", "fine permission requested.");
             if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -251,7 +253,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             // Access to the location has been granted to the app.
             Log.d("maps", "permission given");
             myMap.setMyLocationEnabled(true);
-            Log.d("maps","enabled my location");
+            Log.d("maps", "enabled my location");
             myMap.getUiSettings().setMyLocationButtonEnabled(false);
             myMap.getUiSettings().setMyLocationButtonEnabled(true);
         }
@@ -260,8 +262,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     /**
      * When we get the result for the permission to use myLocation is granted or not.
      *
-     * @param requestCode - what permission was requested -- should be location permission
-     * @param permissions - What permissions we have
+     * @param requestCode  - what permission was requested -- should be location permission
+     * @param permissions  - What permissions we have
      * @param grantResults - result of permission request
      */
     @Override
@@ -283,9 +285,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Checks if the permission has been granted.
-     * @param grantPermissions  permissions
-     * @param grantResults if they were granted or not
-     * @param permission the permission we want to check on.
+     *
+     * @param grantPermissions permissions
+     * @param grantResults     if they were granted or not
+     * @param permission       the permission we want to check on.
      * @return was it granted.
      */
     public static boolean isPermissionGranted(String[] grantPermissions, int[] grantResults,
@@ -326,14 +329,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 LatLng position = new LatLng(lat, lng);
 
                 points.add(position);
-                builder.include( position );
+                builder.include(position);
             }
 
             // Adding all the points in the route to LineOptions
             lineOptions.addAll(points);
             lineOptions.width(10);
             lineOptions.color(Color.MAGENTA);
-            Log.d("MapsFragment","onPostExecute lineoptions decoded");
+            Log.d("MapsFragment", "onPostExecute lineoptions decoded");
 
         }
 
@@ -341,12 +344,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int padding = (int) (0.15 * dpWidth); // offset from edges of map in pixels
-                                              // based on width of screen
+        // based on width of screen
         // Zoom the camera to show the whole line.
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 
         // Drawing polyline in the Google Map for the i-th route
-        if(lineOptions != null) {
+        if (lineOptions != null) {
             Log.d("MapsFragment", "drawing Polyline");
             myMap.clear();
             myMap.addPolyline(lineOptions);
@@ -354,10 +357,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             myMap.addMarker(new MarkerOptions()
                     .position(end)
                     .title("Destination"));
-            myMap.moveCamera( cu );
-        }
-        else {
-            Log.d("MapsFragment","without Polylines drawn");
+            myMap.moveCamera(cu);
+        } else {
+            Log.d("MapsFragment", "without Polylines drawn");
         }
 
         Log.d("plotLine", "Should finish line.");
@@ -376,11 +378,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Would be used to show directions from a specified to start to a specified end.
-     *
+     * <p>
      * Currently unused.
      *
      * @param start the starting location for the route
-     * @param end The ending location for the route.
+     * @param end   The ending location for the route.
      */
     public void showDirections(String start, String end) {
         Geocode.nameToLatLng(start, this, true);
@@ -389,6 +391,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Shows directions, assuming a start based on the current location, and to the end location.
+     *
      * @param end The end location for the route.
      */
     public void showDirections(String end) {
