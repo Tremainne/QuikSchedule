@@ -15,9 +15,19 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * Created by kris on 10/22/16.
+ * Class: DatabaseHelper
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/5/16
+ *
+ * Description: This class has a bunch of methods that intract with the devices database and allows
+ *              us to push and pull data from the database
+ *
+ * @author Kris Rau
+ * @author Ishjot Suri
+ * @author Rohan Chhabra
  */
-
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "events.db";
@@ -41,11 +51,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+
     /**
      *
      * @param cursor
      * @return
      */
+    /*
     public JSONArray cursorToJson(Cursor cursor)
     {
         JSONArray resultSet     = new JSONArray();
@@ -83,13 +95,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return resultSet;
+    } */
+
+    public ArrayList<JSONObject> cursorToJson(Cursor cursor)
+    {
+
+        ArrayList<JSONObject> events = new ArrayList<>();
+        Log.d("FUCK", "ME");
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                System.err.println("AYYY2");
+                do {
+                    System.err.println("AYYY3");
+                    String json = cursor.getString(
+                            cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_DATA));
+                    Log.d("Pls", "help");
+                    System.err.println(json);
+                    JSONObject j;
+                    try {
+                        j = new JSONObject(json);
+                        Log.d("New JSON", json);
+                        events.add(j);
+                    } catch (JSONException e) {
+                        Log.i("FUCK", "OFF");
+                    }
+                } while (cursor.moveToNext());
+            }
+        }
+
+        return events;
+
     }
+
+    public ArrayList<JSONObject> getData(Context mContext)
+    {
+
+        Log.d("Entered", "JSON getData");
+        DatabaseHelper mDbHelper = new DatabaseHelper(mContext);
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        String sql = "SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME +
+                " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_DAY + " = 'Monday'";
+
+
+        Cursor cursor = db.rawQuery(sql, null); //+ "MONDAY", null);
+        ArrayList<JSONObject> events = cursorToJson(cursor);
+        Log.d("JSON Objects", events.toString());
+        Log.d("JSON Objects size", ""+events.size());
+        cursor.close();
+        return events;
+    }
+
+
+
 
     /**
      *
      * @param mContext
      * @return
      */
+    /*
     public ArrayList<JSONArray> getData(Context mContext)
     {
         DatabaseHelper mDbHelper = new DatabaseHelper(mContext);
@@ -118,10 +184,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor = db.rawQuery(sql + "FRIDAY", null);
         object_day.add(cursorToJson(cursor));*/
 
-        System.err.println(object_day.get(0));
-        return object_day;
+     //   System.err.println(object_day.get(0));
+      //  return object_day;
 
-    }
+   // }
 
 
     /**

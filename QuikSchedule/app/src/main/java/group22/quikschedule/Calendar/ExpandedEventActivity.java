@@ -57,6 +57,19 @@ import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_PERMISS
 
 //import group22.quikschedule.Maps.MapsActivity;
 
+/**
+ * Class: ExpandedEventActivity
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/5/16
+ *
+ * Description: Activity that
+ *
+ * @author Ishjot Suri
+ * @author Rohan Chhabra
+ */
+
 public class ExpandedEventActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks {
 
