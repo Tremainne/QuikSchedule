@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 import group22.quikschedule.Calendar.DatabaseContract;
@@ -272,8 +273,27 @@ public class NavigationDrawerActivity extends AppCompatActivity
             fragment = (Fragment) fragmentClass.newInstance();
             if (id == R.id.nav_maps) {
                 Bundle mapsBundle = new Bundle();
-                // Replace with location of days first event.
-                String end = "CENTR 240"; // TODO
+                // This should probably be a getEvents method.
+                String sql = "SELECT " + DatabaseContract.DatabaseEntry.COLUMN_DATA + " FROM " +
+                        DatabaseContract.DatabaseEntry.TABLE_NAME + " WHERE " +
+                        DatabaseContract.DatabaseEntry.COLUMN_DAY + " IS '" +
+                        NavigationDrawerActivity.getDayString() + "'";
+                // get location of days first event.
+                PriorityQueue<EventView> pq = DatabaseHelper.getEvents(getApplicationContext(),
+                        sql);
+                Map<Integer, EventView> map = new HashMap<Integer, EventView>();
+                PriorityQueue<Integer> timePQ = new PriorityQueue<Integer>(10);
+                // Go through EventView PQ and add to map/PQ
+                for ( EventView ev : pq ) {
+                    int start = ev.getTimeAsInt( EventView.STARTTIME );
+                    timePQ.add( start );
+                    map.put( start, ev );
+                }
+                Integer start = timePQ.peek();
+                timePQ.remove();
+
+                EventView curr = map.get( start );
+                String end = curr.location;
                 String[] arr = end.split("[\\s,]+");
                 StringBuilder result = new StringBuilder();
                 for (String str : arr) {
