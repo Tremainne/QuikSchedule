@@ -57,7 +57,7 @@ public class AlertActivity extends BroadcastReceiver {
     public static int id2;
 
     private int calculateminutes;
-    private static int timeToDisplay = 771;
+    private static int timeToDisplay;
     /**
      * Description: OnCreate function called on create of the Activity utilized to navigate the user
      * through a series of Webviews
@@ -78,16 +78,25 @@ public class AlertActivity extends BroadcastReceiver {
         endTime = i.getExtras().getString("End");
         id = i.getExtras().getString("Id");
         calculateminutes = i.getExtras().getInt("Calculate Minutes");
-        //timeToDisplay = i.getExtras().getInt("Time To Display");
+        timeToDisplay = i.getExtras().getInt("Time To Display");
         materials = i.getExtras().getString("Materials");
         comments = i.getExtras().getString("Comments");
 
-       // createNotification(context, name, location + " at " + startTime + " - " + endTime , "");
-        createNotification(context, name, location + " at " + startTime + " - " + endTime + "\nLeave in " +
-                            calculateminutes + "mins" , "");
+        int calculateminutes_mins = 0, calculateminutes_hr = 0;
+        calculateminutes_hr = calculateminutes/60;
+        calculateminutes_mins = calculateminutes%60;
+
+        String ampm = "AM";
+
+        if(calculateminutes_hr > 12)
+            ampm ="PM";
+
+        // createNotification(context, name, location + " at " + startTime + " - " + endTime , "");
+        createNotification(context, name, location + " at " + startTime + " - " + endTime, "Leave at " +
+                calculateminutes_hr + ":" + calculateminutes_mins + " " + ampm + ".", "");
     }
 
-    private void createNotification(Context context, String msg, String msgText, String msgAlert) {
+    private void createNotification(Context context, String msg, String msgText, String msgText2, String msgAlert) {
         System.err.println("Creating Notification");
 
         Intent i = new Intent(context, ExpandedEventActivity.class);
@@ -115,6 +124,18 @@ public class AlertActivity extends BroadcastReceiver {
                 .setContentText(msgText)
                 .setTicker(msgAlert)
                 .setSmallIcon(R.drawable.qs_icon);
+
+        NotificationCompat.InboxStyle inboxStyle =
+                new NotificationCompat.InboxStyle();
+        // Sets a title for the Inbox in expanded layout
+        inboxStyle.setBigContentTitle(msg);
+
+        // Moves events into the expanded layout
+        inboxStyle.addLine(msgText);
+        inboxStyle.addLine(msgText2);
+
+        // Moves the expanded layout object into the notification object.
+        builder.setStyle(inboxStyle);
 
         builder.setContentIntent(notificIntent);
 
@@ -153,6 +174,7 @@ public class AlertActivity extends BroadcastReceiver {
         //c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
         //c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
         //c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
+        //id2 = 0;
 
         //Set a new alertIntent for the notification
         Intent alertIntent = new Intent(context, AlertActivity.class);

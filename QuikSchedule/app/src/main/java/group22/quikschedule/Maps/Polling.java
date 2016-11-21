@@ -117,14 +117,14 @@ public class Polling extends BroadcastReceiver {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60 * 60, pi);
+        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60, pi);
     }
 
     public void setEventAlarm(Context context, int time) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.set(AlarmManager.RTC, System.currentTimeMillis() + time * 60 * 1000, pi);
+        am.set(AlarmManager.RTC, System.currentTimeMillis() + 1000 * 5, pi);
     }
 
     public void cancelAlarm(Context context) {
@@ -223,7 +223,7 @@ public class Polling extends BroadcastReceiver {
 
             Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
 
-            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10;
+            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
 
             Intent intent = new Intent(context, AlertActivity.class);
 
@@ -235,8 +235,8 @@ public class Polling extends BroadcastReceiver {
             intent.putExtra( "Name", curr.name );
             intent.putExtra( "Materials", curr.materials );
             intent.putExtra( "Comments", curr.comments );
-            intent.putExtra( "Calculate Minutes", curr.getTimeAsInt( EventView.STARTTIME ) - duration );
-            intent.putExtra( "Time To Display", toDisplay );
+            intent.putExtra( "Calculate Minutes", toDisplay );
+            intent.putExtra( "Time To Display", toDisplay - 10 );
             context.sendBroadcast( intent );
         }
 
@@ -251,7 +251,7 @@ public class Polling extends BroadcastReceiver {
 
             Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
 
-            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10;
+            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
 
             Intent intent = new Intent(context, AlertActivity.class);
 
@@ -263,8 +263,8 @@ public class Polling extends BroadcastReceiver {
             intent.putExtra( "Name", curr.name );
             intent.putExtra( "Materials", curr.materials );
             intent.putExtra( "Comments", curr.comments );
-            intent.putExtra( "Calculate Minutes", curr.getTimeAsInt( EventView.STARTTIME ) - duration );
-            intent.putExtra( "Time To Display", toDisplay );
+            intent.putExtra( "Calculate Minutes", toDisplay );
+            intent.putExtra( "Time To Display", toDisplay - 10 );
             context.sendBroadcast( intent );
         }
     }
