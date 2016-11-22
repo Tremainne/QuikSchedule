@@ -24,7 +24,7 @@ import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
 import group22.quikschedule.Calendar.EventView;
 import group22.quikschedule.NavigationDrawerActivity;
-import group22.quikschedule.Settings.SetAlarmReceiver;
+import group22.quikschedule.Settings.AlertActivity;
 
 /**
  * Class: Polling
@@ -101,6 +101,9 @@ public class Polling extends BroadcastReceiver {
         if( pq.isEmpty() ) {
             first = true;
             return;
+        }
+        else if( pq.size() == 1 ) {
+            first = true;
         }
         for( int i = 0; i < counter; i++ ) {
             curr = pq.peek();
@@ -235,50 +238,23 @@ public class Polling extends BroadcastReceiver {
             }
         }
 
-        public int setAlarmtime(Calendar cal) {
-
-            System.err.println("Setting Time");
+        public int setAlarmTime( Calendar cal ) {
             int mins = 0, hours = 0;
 
-            mins = (curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ))%60;
-            hours = (curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ))/60;
-            System.err.println("Hours: " + mins + "Mins");
+            mins = ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10 ) % 60;
+            hours = ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10 ) / 60;
+            Toast.makeText( context, "Hours: " + hours + " Minutes: " + mins, Toast.LENGTH_LONG ).show();
 
             cal.set(Calendar.HOUR_OF_DAY, hours);
             cal.set(Calendar.MINUTE, mins);
 
-            return (curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ));
+            return ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10 );
         }
 
-        /**
-         * Get the travel time for the first event from the directions lookup.
-         */
-        @Override
-        public void onGeocodeListenerComplete() {
-            duration = Directions.getStaticTime();
-
-            Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
-
-            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
-
-            Intent intent = new Intent(context, SetAlarmReceiver.class);
-
-            intent.putExtra( "Name", curr.name );
-            intent.putExtra( "Location", curr.location );
-            intent.putExtra( "Start", curr.getTimeAsString( EventView.STARTTIME ) );
-            intent.putExtra( "End", curr.getTimeAsString( EventView.ENDTIME ) );
-            intent.putExtra( "Id", curr.id );
-            intent.putExtra( "Name", curr.name );
-            intent.putExtra( "Materials", curr.materials );
-            intent.putExtra( "Comments", curr.comments );
-            intent.putExtra( "Calculate Minutes", toDisplay );
-            intent.putExtra( "Time To Display", toDisplay - 10 );
-            //context.sendBroadcast( intent );
-
-
+        public void setNotification( Intent intent ) {
             Calendar c = Calendar.getInstance();
             //Set the alarm time for event i based on the start time and get the time back
-            id2 = setAlarmtime(c); //GET SHIT FROM TY
+            id2 = setAlarmTime( c );
             Toast.makeText( context, "ID: " + id2/60 + ":" + id2%60 + ".", Toast.LENGTH_LONG ).show();
 
             //set a pending intent where the unique id is the time of the event
@@ -294,6 +270,34 @@ public class Polling extends BroadcastReceiver {
         }
 
         /**
+         * Get the travel time for the first event from the directions lookup.
+         */
+        @Override
+        public void onGeocodeListenerComplete() {
+            duration = Directions.getStaticTime();
+
+            Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
+
+            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
+
+            Intent intent = new Intent(context, AlertActivity.class);
+
+            intent.putExtra( "Name", curr.name );
+            intent.putExtra( "Location", curr.location );
+            intent.putExtra( "Start", curr.getTimeAsString( EventView.STARTTIME ) );
+            intent.putExtra( "End", curr.getTimeAsString( EventView.ENDTIME ) );
+            intent.putExtra( "Id", curr.id );
+            intent.putExtra( "Name", curr.name );
+            intent.putExtra( "Materials", curr.materials );
+            intent.putExtra( "Comments", curr.comments );
+            intent.putExtra( "Calculate Minutes", toDisplay );
+            intent.putExtra( "Time To Display", toDisplay - 10 );
+            //context.sendBroadcast( intent );
+
+            setNotification( intent );
+        }
+
+        /**
          * If the address lookup or the directions lookup fails, set the time to two hours by
          * default. May also want to indicate an error here, or verify location at event creation.
          */
@@ -306,7 +310,7 @@ public class Polling extends BroadcastReceiver {
 
             int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
 
-            Intent intent = new Intent(context, SetAlarmReceiver.class);
+            Intent intent = new Intent(context, AlertActivity.class);
 
             intent.putExtra( "Name", curr.name );
             intent.putExtra( "Location", curr.location );
@@ -318,7 +322,9 @@ public class Polling extends BroadcastReceiver {
             intent.putExtra( "Comments", curr.comments );
             intent.putExtra( "Calculate Minutes", toDisplay );
             intent.putExtra( "Time To Display", toDisplay - 10 );
-            context.sendBroadcast( intent );
+            //context.sendBroadcast( intent );
+
+            setNotification( intent );
         }
     }
 }

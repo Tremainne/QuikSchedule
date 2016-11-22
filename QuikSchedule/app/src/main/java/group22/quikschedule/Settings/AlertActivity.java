@@ -183,5 +183,4 @@ public class AlertActivity extends BroadcastReceiver {
         //Set the alarm
         alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);
     }
-
 }
