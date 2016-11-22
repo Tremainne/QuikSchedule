@@ -36,6 +36,17 @@ import java.util.List;
  * Created by kris on 10/30/16.
  */
 
+/**
+ * Class: SyncFirebaseToCalendar
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 10/30/16
+ *
+ * Description:
+ *
+ * @author Kris Rau
+ */
 public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Event>> {
 
     public ArrayList<Event> events = new ArrayList<Event>();

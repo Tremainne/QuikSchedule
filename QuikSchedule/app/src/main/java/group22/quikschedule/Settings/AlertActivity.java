@@ -36,7 +36,6 @@ import static java.security.AccessController.getContext;
  *
  * Description: Activity that deals with the efficiently showing notification for the users events
  *
- *
  * @author Ishjot Suri
  * @author Rudr Tandon
  */

@@ -3,9 +3,16 @@ package group22.quikschedule.Maps;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Created by Ty Dewes on 11/16/16.
+ * Class: GeoCodeListener
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/16/16
+ *
+ * Description:
+ *
+ * @author Tynan Dewes
  */
-
 public interface GeoCodeListener {
     /**
      * set a start value for a route

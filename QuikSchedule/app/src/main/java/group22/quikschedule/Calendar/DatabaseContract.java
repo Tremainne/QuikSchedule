@@ -3,9 +3,16 @@ package group22.quikschedule.Calendar;
 import android.provider.BaseColumns;
 
 /**
- * Created by kris on 10/22/16.
+ * Class: DatabaseContract
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 10/22/16
+ *
+ * Description:
+ *
+ * @author Kris Rau
  */
-
 public final class DatabaseContract {
 
     public static final int DATABASE_VERSION = 1;

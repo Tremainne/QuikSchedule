@@ -66,12 +66,11 @@ import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_PERMISS
  * Version: 1.0
  * Date: 11/5/16
  *
- * Description: Activity that
+ * Description: Activity that ...?
  *
  * @author Ishjot Suri
  * @author Rohan Chhabra
  */
-
 public class ExpandedEventActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks {
 

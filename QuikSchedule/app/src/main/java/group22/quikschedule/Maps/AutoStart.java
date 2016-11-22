@@ -5,9 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Created by Ty Dewes and David Thomson on 11/14/16.
+ * Class: AutoStart
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/14/16
+ *
+ * Description:
+ *
+ * @author Tynan Dewes
+ * @author David Thomson
  */
-
 public class AutoStart extends BroadcastReceiver {
     Polling polling = new Polling();
 

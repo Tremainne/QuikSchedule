@@ -17,7 +17,17 @@ import java.util.Calendar;
 
 import group22.quikschedule.R;
 
-
+/**
+ * Class: WeekFragment
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: ????
+ *
+ * Description:
+ *
+ * @author Rohan Chhabra
+ */
 public class WeekFragment extends Fragment implements View.OnClickListener{
 
     private boolean fullAgenda = true;

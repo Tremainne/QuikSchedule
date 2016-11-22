@@ -4,10 +4,19 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-/**
- * Created by Tynan Dewes and David Thomson on 11/14/16.
- */
 
+/**
+ * Class: PollingService
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/14/16
+ *
+ * Description:
+ *
+ * @author David Thomson
+ * @author Tynan Dewes
+ */
 public class PollingService extends Service {
     Polling polling = new Polling();
 
