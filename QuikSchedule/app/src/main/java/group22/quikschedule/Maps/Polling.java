@@ -67,6 +67,7 @@ public class Polling extends BroadcastReceiver {
         if (first) {
             setTwoHourAlarms(context, pq);
             first = false;
+            counter = 1;
         }
         // Set alarms based on distances
         else {
