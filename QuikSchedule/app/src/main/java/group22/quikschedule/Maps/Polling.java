@@ -47,8 +47,7 @@ public class Polling extends BroadcastReceiver {
     private Context context;
     int duration;
     EventView curr = null;
-
-    public static int id2;
+    public static int id;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -92,8 +91,8 @@ public class Polling extends BroadcastReceiver {
     public void setTwoHourAlarms(Context context, PriorityQueue<EventView> pq) {
         Toast.makeText(context, "Setting alarms", Toast.LENGTH_SHORT).show();
         for (EventView ev : pq) {
-            int start = ev.getTimeAsInt(0);
-            setEventAlarm(context, start - 120);
+            int start = ev.getTimeAsInt(EventView.STARTTIME);
+            setEventAlarm(context, start);
         }
     }
 
@@ -102,10 +101,10 @@ public class Polling extends BroadcastReceiver {
             first = true;
             return;
         }
-        else if( pq.size() == 1 ) {
-            first = true;
-        }
         for( int i = 0; i < counter; i++ ) {
+            if( pq.size() == 1 ) {
+                first = true;
+            }
             curr = pq.peek();
             pq.remove();
         }
@@ -134,7 +133,7 @@ public class Polling extends BroadcastReceiver {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set( Calendar.HOUR_OF_DAY, 0 ); // MIDNIGHT 12 AM
+        calendar.set( Calendar.HOUR_OF_DAY, 0 );
         calendar.set( Calendar.MINUTE, 00 );
         calendar.set( Calendar.SECOND, 00 );
 
@@ -146,9 +145,8 @@ public class Polling extends BroadcastReceiver {
     public void setEventAlarm(Context context, int time) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        Toast.makeText(context, "" + System.currentTimeMillis() + time, Toast.LENGTH_SHORT).show();
-        am.set(AlarmManager.RTC, System.currentTimeMillis() + time, pi);
+        PendingIntent pi = PendingIntent.getBroadcast(context, time, i, 0);
+        am.set(AlarmManager.RTC, System.currentTimeMillis() + time * 60 * 1000 - (120 * 60 * 1000), pi);
     }
 
     public void cancelAlarm(Context context) {
@@ -188,7 +186,6 @@ public class Polling extends BroadcastReceiver {
                 setStart( new LatLng( 32.880254, -117.237643 ) );
             }
             onLatLngComplete();
-
         }
 
         @Override
@@ -243,23 +240,22 @@ public class Polling extends BroadcastReceiver {
 
             mins = ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10 ) % 60;
             hours = ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10 ) / 60;
-            Toast.makeText( context, "Hours: " + hours + " Minutes: " + mins, Toast.LENGTH_LONG ).show();
 
             cal.set(Calendar.HOUR_OF_DAY, hours);
             cal.set(Calendar.MINUTE, mins);
 
-            return ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10 );
+            return curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10;
         }
 
         public void setNotification( Intent intent ) {
             Calendar c = Calendar.getInstance();
             //Set the alarm time for event i based on the start time and get the time back
-            id2 = setAlarmTime( c );
-            Toast.makeText( context, "ID: " + id2/60 + ":" + id2%60 + ".", Toast.LENGTH_LONG ).show();
+            id = setAlarmTime( c );
+            Toast.makeText( context, "Next Event: " + id/60 + ":" + id%60 + ".", Toast.LENGTH_LONG ).show();
 
             //set a pending intent where the unique id is the time of the event
             //If you have two events with the same time then it wont notify you for second
-            PendingIntent contentIntent = PendingIntent.getBroadcast(context, id2, intent,
+            PendingIntent contentIntent = PendingIntent.getBroadcast(context, id, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             //Create an AlarmManager for each event
@@ -292,8 +288,6 @@ public class Polling extends BroadcastReceiver {
             intent.putExtra( "Comments", curr.comments );
             intent.putExtra( "Calculate Minutes", toDisplay );
             intent.putExtra( "Time To Display", toDisplay - 10 );
-            //context.sendBroadcast( intent );
-
             setNotification( intent );
         }
 
@@ -322,8 +316,6 @@ public class Polling extends BroadcastReceiver {
             intent.putExtra( "Comments", curr.comments );
             intent.putExtra( "Calculate Minutes", toDisplay );
             intent.putExtra( "Time To Display", toDisplay - 10 );
-            //context.sendBroadcast( intent );
-
             setNotification( intent );
         }
     }
