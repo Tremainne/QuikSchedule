@@ -36,9 +36,16 @@ import java.util.List;
 import java.util.TimeZone;
 
 /**
- * Created by kris on 10/22/16.
+ * Class: SyncCalendarToSQL
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 10/22/16
+ *
+ * Description:
+ *
+ * @author Kris Rau
  */
-
 public class SyncCalendarToSQL extends AsyncTask<Void, Void, Void> {
     private com.google.api.services.calendar.Calendar mService = null;
     private Context mContext;

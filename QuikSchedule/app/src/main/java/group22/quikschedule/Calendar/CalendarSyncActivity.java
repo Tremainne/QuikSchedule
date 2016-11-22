@@ -30,9 +30,16 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
- * Created by kris on 10/22/16.
+ * Class: CalendarSyncActivity
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 10/22/16
+ *
+ * Description:
+ *
+ * @author Kris Rau
  */
-
 public class CalendarSyncActivity extends Activity
         implements EasyPermissions.PermissionCallbacks {
 

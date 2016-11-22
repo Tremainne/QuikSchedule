@@ -10,9 +10,16 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by RohanChhabra on 10/30/16.
+ * Class: EventView
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 10/30/16
+ *
+ * Description:
+ *
+ * @author Rohan Chhabra
  */
-
 public class EventView extends TextView {
 
     public static final int STARTTIME = 0;

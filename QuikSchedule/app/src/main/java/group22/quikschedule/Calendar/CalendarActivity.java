@@ -8,7 +8,17 @@ import android.widget.CalendarView;
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.R;
 
-
+/**
+ * Class: CalendarActivity
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: ????
+ *
+ * Description:
+ *
+ * @author Rohan Chhabra
+ */
 public class CalendarActivity extends AppCompatActivity {
 
     CalendarView calendarView;

@@ -5,27 +5,24 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.PowerManager;
-import android.widget.Toast;
 
 import org.json.JSONException;
 
 import java.util.Calendar;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
-import group22.quikschedule.Calendar.DatabaseContract;
-import group22.quikschedule.Calendar.DatabaseHelper;
-import group22.quikschedule.Calendar.EventView;
-import group22.quikschedule.NavigationDrawerActivity;
-
-import static group22.quikschedule.Settings.AlertActivity.setAlarmtime;
 
 /**
- * Created by TyDewes on 11/21/16.
+ * Class: SetAlarmReceiver
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/21/16
+ *
+ * Description:
+ *
+ * @author Tynan Dewes
  */
-
-public class setAlarmReceiver extends BroadcastReceiver {
+public class SetAlarmReceiver extends BroadcastReceiver {
 
     public static int id2;
     private static int timeToDisplay;

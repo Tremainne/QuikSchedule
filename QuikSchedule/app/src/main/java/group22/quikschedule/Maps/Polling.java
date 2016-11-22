@@ -24,13 +24,20 @@ import group22.quikschedule.Calendar.DatabaseContract;
 import group22.quikschedule.Calendar.DatabaseHelper;
 import group22.quikschedule.Calendar.EventView;
 import group22.quikschedule.NavigationDrawerActivity;
-import group22.quikschedule.Settings.AlertActivity;
-import group22.quikschedule.Settings.setAlarmReceiver;
+import group22.quikschedule.Settings.SetAlarmReceiver;
 
 /**
- * Created by Ty Dewes and David Thomson on 11/14/16.
+ * Class: Polling
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 11/14/16
+ *
+ * Description:
+ *
+ * @author Tynan Dewes
+ * @author David Thomson
  */
-
 public class Polling extends BroadcastReceiver {
 
     private LatLng start;
@@ -237,7 +244,7 @@ public class Polling extends BroadcastReceiver {
 
             int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
 
-            Intent intent = new Intent(context, setAlarmReceiver.class);
+            Intent intent = new Intent(context, SetAlarmReceiver.class);
 
             intent.putExtra( "Name", curr.name );
             intent.putExtra( "Location", curr.location );
@@ -265,7 +272,7 @@ public class Polling extends BroadcastReceiver {
 
             int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
 
-            Intent intent = new Intent(context, setAlarmReceiver.class);
+            Intent intent = new Intent(context, SetAlarmReceiver.class);
 
             intent.putExtra( "Name", curr.name );
             intent.putExtra( "Location", curr.location );

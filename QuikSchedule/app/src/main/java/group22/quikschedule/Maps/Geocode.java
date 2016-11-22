@@ -10,9 +10,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by christoph on 10/31/16.
+ * Class: Geocode
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 10/31/16
+ *
+ * Description:
+ *
+ * @author Christoph Steefel
  */
-
 public class Geocode {
     /**
      * Performs a Google Geocode API request to find the latitude and longitude of the address

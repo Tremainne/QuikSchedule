@@ -44,6 +44,17 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * Class: DayFragment
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: ????
+ *
+ * Description:
+ *
+ * @author Rohan Chhabra
+ */
 public class DayFragment extends Fragment implements EasyPermissions.PermissionCallbacks {
 
     private String[] dates;

@@ -34,7 +34,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
  * Version: 1.0
  * Date: 11/7/16
  * <p>
- * Description:
+ * Description: Runs initial sign in activities, including linking Google account and Firebase
+ *              to the application.
  *
  * @author David Thomson
  */

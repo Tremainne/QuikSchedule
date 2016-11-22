@@ -5,6 +5,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+/**
+ * Class: FragmentPageAdapter
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: ????
+ *
+ * Description:
+ *
+ * @author ????
+ */
 public class FragmentPageAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 7;
     private String tabTitles[] = new String[7];

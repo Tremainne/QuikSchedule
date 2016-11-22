@@ -16,8 +16,8 @@ import group22.quikschedule.R;
  * Date: 11/7/16
  *
  * Description: Activity that implements various settings buttons such as the connection to WebReg
- *              and SQLite database. Still requires UI overhaul but functions with back end
- *              correctly in current state.
+ *              and SQLite database. Used primarily for testing and for connecting WebReg to the
+ *              agenda.
  *
  * @author David Thomson
  */

@@ -13,9 +13,16 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by christoph on 10/20/16.
+ * Class: Directions
+ *
+ * Bugs: None known
+ * Version: 1.0
+ * Date: 10/20/16
+ *
+ * Description:
+ *
+ * @author Christoph Steefel
  */
-
 public class Directions {
 
     public static final int ZIP_LENGTH = 5;
