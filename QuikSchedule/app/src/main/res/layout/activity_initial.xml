@@ -30,12 +30,13 @@
         android:text="Welcome to QuikSchedule!"
         android:textColor="@color/colorPrimary"/>
 
+    <!--
     <ImageView
-        android:layout_width="341dp"
+        android:layout_width="361dp"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/qs_icon"
+        app:srcCompat="@drawable/qsicon_gplay"
         android:id="@+id/imageView7"
-        android:layout_weight="1.75" />
+        android:layout_weight="1.75" /> -->
 
     <LinearLayout
         android:orientation="vertical"

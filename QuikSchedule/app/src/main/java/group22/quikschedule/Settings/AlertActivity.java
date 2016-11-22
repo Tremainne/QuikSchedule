@@ -58,7 +58,8 @@ public class AlertActivity extends BroadcastReceiver {
     /**
      * Description: OnCreate function called on create of the Activity utilized to navigate the user
      * through a series of Webviews
-     * @param savedInstanceState - current SavedInstanceState
+     * @param context -
+     * @param i -
      */
     @Override
     public void onReceive(Context context, Intent i) {
@@ -117,7 +118,7 @@ public class AlertActivity extends BroadcastReceiver {
                 .setContentTitle(msg)
                 .setContentText(msgText)
                 .setTicker(msgAlert)
-                .setSmallIcon(R.drawable.qs_icon);
+                .setSmallIcon(R.drawable.qsicon_gplay);
 
         NotificationCompat.InboxStyle inboxStyle =
                 new NotificationCompat.InboxStyle();
