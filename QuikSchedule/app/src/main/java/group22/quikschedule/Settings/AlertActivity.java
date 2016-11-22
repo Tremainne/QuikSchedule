@@ -149,7 +149,7 @@ public class AlertActivity extends BroadcastReceiver {
         System.err.println("Notified");
     }
 
-    public static int setAlarmtime(Calendar cal) throws JSONException {
+    public static int setAlarmtime(Calendar cal) {
 
         System.err.println("Setting Time");
         int mins = 0, hours = 0;
@@ -169,7 +169,9 @@ public class AlertActivity extends BroadcastReceiver {
 
         Calendar c = Calendar.getInstance();
         //Set the alarm time for event i based on the start time and get the time back
+        System.err.println("Calling setAlarmtime");
         id2 = setAlarmtime(c); //GET SHIT FROM TY
+        System.err.println("ID: " + id2/60 + ":" + id2%60 + ".");
 
         //c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
         //c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));

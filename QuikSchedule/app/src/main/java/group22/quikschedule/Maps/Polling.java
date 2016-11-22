@@ -16,6 +16,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -38,6 +39,8 @@ public class Polling extends BroadcastReceiver {
     private Context context;
     int duration;
     EventView curr = null;
+
+    public static int id2;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -214,6 +217,21 @@ public class Polling extends BroadcastReceiver {
             }
         }
 
+        public int setAlarmtime(Calendar cal) {
+
+            System.err.println("Setting Time");
+            int mins = 0, hours = 0;
+
+            mins = (curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ))%60;
+            hours = (curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ))/60;
+            System.err.println("Hours: " + mins + "Mins");
+
+            cal.set(Calendar.HOUR_OF_DAY, hours);
+            cal.set(Calendar.MINUTE, mins);
+
+            return (curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ));
+        }
+
         /**
          * Get the travel time for the first event from the directions lookup.
          */
@@ -237,7 +255,24 @@ public class Polling extends BroadcastReceiver {
             intent.putExtra( "Comments", curr.comments );
             intent.putExtra( "Calculate Minutes", toDisplay );
             intent.putExtra( "Time To Display", toDisplay - 10 );
-            context.sendBroadcast( intent );
+            //context.sendBroadcast( intent );
+
+
+            Calendar c = Calendar.getInstance();
+            //Set the alarm time for event i based on the start time and get the time back
+            id2 = setAlarmtime(c); //GET SHIT FROM TY
+            Toast.makeText( context, "ID: " + id2/60 + ":" + id2%60 + ".", Toast.LENGTH_LONG ).show();
+
+            //set a pending intent where the unique id is the time of the event
+            //If you have two events with the same time then it wont notify you for second
+            PendingIntent contentIntent = PendingIntent.getBroadcast(context, id2, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            //Create an AlarmManager for each event
+            AlarmManager alarmManager  = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+            //Set the alarm
+            alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), contentIntent);
         }
 
         /**
