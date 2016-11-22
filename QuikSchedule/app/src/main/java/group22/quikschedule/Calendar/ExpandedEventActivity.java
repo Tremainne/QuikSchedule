@@ -592,11 +592,11 @@ public class ExpandedEventActivity extends AppCompatActivity
 
             if(deleteEvent) {
                 Log.d("Delete", "Delete");
-                /*try {
+                try {
                     Log.d("Delete", "SUCCESS: " + mService.events().delete(getCalendarIdFromSummary("QuickSchedule"), eventID).execute());
                 } catch (IOException e) {
                     System.err.println("Failed to delete event in calendar");
-                }*/
+                }
             }
             else if(editingEvent) {
 

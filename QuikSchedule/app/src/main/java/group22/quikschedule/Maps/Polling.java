@@ -25,6 +25,7 @@ import group22.quikschedule.Calendar.DatabaseHelper;
 import group22.quikschedule.Calendar.EventView;
 import group22.quikschedule.NavigationDrawerActivity;
 import group22.quikschedule.Settings.AlertActivity;
+import group22.quikschedule.Settings.setAlarmReceiver;
 
 /**
  * Created by Ty Dewes and David Thomson on 11/14/16.
@@ -120,14 +121,24 @@ public class Polling extends BroadcastReceiver {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000 * 60, pi);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set( Calendar.HOUR_OF_DAY, 0 ); // MIDNIGHT 12 AM
+        calendar.set( Calendar.MINUTE, 00 );
+        calendar.set( Calendar.SECOND, 00 );
+
+        calendar.add( Calendar.HOUR_OF_DAY, 24 );
+
+        am.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
     }
 
     public void setEventAlarm(Context context, int time) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.set(AlarmManager.RTC, System.currentTimeMillis() + 1000 * 5, pi);
+        Toast.makeText(context, "" + System.currentTimeMillis() + time, Toast.LENGTH_SHORT).show();
+        am.set(AlarmManager.RTC, System.currentTimeMillis() + time, pi);
     }
 
     public void cancelAlarm(Context context) {
@@ -243,7 +254,7 @@ public class Polling extends BroadcastReceiver {
 
             int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
 
-            Intent intent = new Intent(context, AlertActivity.class);
+            Intent intent = new Intent(context, setAlarmReceiver.class);
 
             intent.putExtra( "Name", curr.name );
             intent.putExtra( "Location", curr.location );
@@ -288,7 +299,7 @@ public class Polling extends BroadcastReceiver {
 
             int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
 
-            Intent intent = new Intent(context, AlertActivity.class);
+            Intent intent = new Intent(context, setAlarmReceiver.class);
 
             intent.putExtra( "Name", curr.name );
             intent.putExtra( "Location", curr.location );
