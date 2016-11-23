@@ -1,9 +1,11 @@
 package group22.quikschedule;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -142,8 +144,28 @@ public class InitialActivity extends AppCompatActivity implements
             editor.commit();
 
             signInButton.setVisibility(View.GONE);
-            startActivity(new Intent(this, NavigationDrawerActivity.class));
-            finish();
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Google Sign In Successful!");
+            alertDialog.setMessage("Would you like to add your classes from WebReg?");
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            startActivity(new Intent(getApplicationContext(), WebregActivity.class));
+                            finish();
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            startActivity(new Intent(getApplicationContext(), NavigationDrawerActivity.class));
+                            finish();
+                        }
+                    });
+            alertDialog.show();
+            //startActivity(new Intent(this, NavigationDrawerActivity.class));
+           // finish();
         } else {
             // Signed out, show unauthenticated UI.
             signInButton.setVisibility(View.VISIBLE);
