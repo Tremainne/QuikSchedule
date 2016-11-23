@@ -145,29 +145,8 @@ public class InitialActivity extends AppCompatActivity implements
             editor.commit();
 
             signInButton.setVisibility(View.GONE);
-            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-            alertDialog.setTitle("Google Sign In Successful!");
-            alertDialog.setMessage("Would you like to add your classes from WebReg?");
-            alertDialog.setCancelable(false);
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            startActivity(new Intent(getApplicationContext(), WebregActivity.class));
-                            finish();
-                        }
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            startActivity(new Intent(getApplicationContext(), NavigationDrawerActivity.class));
-                            finish();
-                        }
-                    });
-            alertDialog.show();
-            //startActivity(new Intent(this, NavigationDrawerActivity.class));
-           // finish();
+            startActivity(new Intent(this, NavigationDrawerActivity.class).putExtra("Initial", "true"));
+            finish();
         } else {
             // Signed out, show unauthenticated UI.
             signInButton.setVisibility(View.VISIBLE);

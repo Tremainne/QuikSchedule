@@ -3,6 +3,7 @@ package group22.quikschedule;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -16,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -152,6 +154,27 @@ public class NavigationDrawerActivity extends AppCompatActivity
             if (i.getStringExtra("webreg").equals("webreg")) {
                 new SyncFirebaseToCalendar(mCredential, this).execute();
             }
+        }
+
+        if(i.hasExtra("Initial")) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Google Sign In Successful!");
+            alertDialog.setMessage("Would you like to add your classes from WebReg?");
+            alertDialog.setCancelable(false);
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            startActivity(new Intent(getApplicationContext(), WebregActivity.class));
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
         }
 
         int selectFrag = i.getIntExtra("Fragment", 0);

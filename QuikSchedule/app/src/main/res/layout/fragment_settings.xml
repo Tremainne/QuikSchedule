@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:background="@color/background"
-    tools:context="group22.quikschedule.Settings">
+    tools:context="group22.quikschedule.Settings.SettingsFragment">
 
     <android.support.v7.widget.AppCompatButton
         android:text=" Add Classes from WebReg"

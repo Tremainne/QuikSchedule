@@ -317,7 +317,7 @@ public class WebregActivity extends AppCompatActivity{
                 else if( webUrl.contains( "https://ucsdbkst.ucsd.edu/wrtx/FullBookList?term=FA16" ) ) {
                     AlertDialog alertDialog = new AlertDialog.Builder(WebregActivity.this).create();
                     alertDialog.setTitle("Books added successfully!");
-                    alertDialog.setMessage("Please hit the back button to return to the settings page.");
+                    alertDialog.setMessage("Please hit the back button to return to your agenda.");
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
