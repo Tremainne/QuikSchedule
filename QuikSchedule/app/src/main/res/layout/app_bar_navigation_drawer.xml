@@ -30,6 +30,4 @@
         android:layout_marginTop="?attr/actionBarSize">
     </FrameLayout>
 
-    <!--<include layout="@layout/content_navigation_drawer" />-->
-
 </android.support.design.widget.CoordinatorLayout>

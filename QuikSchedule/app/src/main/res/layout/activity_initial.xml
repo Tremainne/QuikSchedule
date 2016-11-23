@@ -10,14 +10,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:background="@drawable/initial_background"
+    android:background="@drawable/signin_background"
     tools:context="group22.quikschedule.InitialActivity"
     android:weightSum="1">
-
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="match_parent"
@@ -30,13 +25,14 @@
         android:text="Welcome to QuikSchedule!"
         android:textColor="@color/colorPrimary"/>
 
-    <!--
+
     <ImageView
-        android:layout_width="361dp"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/qsicon_gplay"
-        android:id="@+id/imageView7"
-        android:layout_weight="1.75" /> -->
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/qsicon_hdpi"
+        android:layout_gravity="center"
+        android:id="@+id/signIn_logo"
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:orientation="vertical"

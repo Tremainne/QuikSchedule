@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="38dp"
     android:textSize="15sp"
-    android:textColor="@color/md_pink_A700"
+    android:textColor="@color/colorAccent"
     android:paddingTop="6dp"
     android:paddingLeft="5dp"
     android:gravity="left">

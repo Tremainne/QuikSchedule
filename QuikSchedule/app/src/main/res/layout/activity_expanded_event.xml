@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_grey_900">
+    android:background="@color/background">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -113,7 +113,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textColorHint="@color/md_pink_A700"
+                        android:textColorHint="@color/colorAccent"
                         android:layout_marginBottom="4dp">
 
                         <EditText
@@ -136,7 +136,7 @@
                     <ImageView
                         android:layout_width="44dp"
                         android:layout_height="match_parent"
-                        android:src="@android:drawable/ic_lock_idle_alarm"
+                        android:src="@android:drawable/ic_menu_today"
                         android:id="@+id/imageButton2" />
 
                     <android.support.design.widget.TextInputLayout
@@ -144,7 +144,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="4dp"
-                        android:textColorHint="@color/md_pink_A700">
+                        android:textColorHint="@color/colorAccent">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -167,7 +167,7 @@
                     <ImageView
                         android:layout_width="45dp"
                         android:layout_height="match_parent"
-                        android:src="@android:drawable/ic_lock_idle_alarm"
+                        android:src="@android:drawable/ic_menu_recent_history"
                         android:id="@+id/TimeImage" />
 
                     <android.support.design.widget.TextInputLayout
@@ -175,7 +175,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
-                        android:textColorHint="@color/md_pink_A700">
+                        android:textColorHint="@color/colorAccent">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -198,7 +198,7 @@
                     <ImageView
                         android:layout_width="45dp"
                         android:layout_height="match_parent"
-                        android:src="@android:drawable/ic_lock_idle_alarm"
+                        android:src="@android:drawable/ic_menu_recent_history"
                         android:id="@+id/TimeImage2" />
 
                     <android.support.design.widget.TextInputLayout
@@ -206,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
-                        android:textColorHint="@color/md_pink_A700">
+                        android:textColorHint="@color/colorAccent">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -237,7 +237,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
-                        android:textColorHint="@color/md_pink_A700">
+                        android:textColorHint="@color/colorAccent">
 
                         <EditText
                             android:layout_width="match_parent"
@@ -258,7 +258,7 @@
                     <ImageView
                         android:layout_width="45dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_menu_gallery"
+                        android:src="@drawable/ic_menu_manage"
                         android:id="@+id/imageView3" />
 
                     <android.support.design.widget.TextInputLayout
@@ -266,7 +266,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="4dp"
-                        android:textColorHint="@color/md_pink_A700">
+                        android:textColorHint="@color/colorAccent">
 
                         <EditText
                             android:layout_width="303dp"
@@ -287,14 +287,14 @@
                     <ImageView
                         android:layout_width="46dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/quantum_ic_closed_caption_grey600_36"
+                        android:src="@drawable/cast_ic_mini_controller_closed_caption"
                         android:id="@+id/imageView5" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:textColorHint="@color/md_pink_A700">
+                        android:textColorHint="@color/colorAccent">
 
                         <EditText
                             android:layout_width="match_parent"
@@ -332,7 +332,7 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/md_black_1000"
+                        android:background="@color/colorPrimaryDark"
                         android:textColor="@color/colorAccent"
                         android:text="Route"
                         android:ems="10"

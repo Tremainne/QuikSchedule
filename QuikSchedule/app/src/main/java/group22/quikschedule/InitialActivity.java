@@ -27,6 +27,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import group22.quikschedule.Settings.WebregActivity;
+
 /**
  * Class: InitialActivity
  * <p>
@@ -50,9 +52,9 @@ public class InitialActivity extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private TextView mStatusTextView;
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
+    private SignInButton signInButton;
 
     /**
      * Description: Default starting method called when starting a new MainActivity
@@ -68,8 +70,6 @@ public class InitialActivity extends AppCompatActivity implements
 
         settings = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         editor = settings.edit();
-
-        mStatusTextView = (TextView) findViewById(R.id.status);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -101,7 +101,7 @@ public class InitialActivity extends AppCompatActivity implements
                 .build();
 
         // Set the dimensions of the sign-in button.
-        SignInButton signInButton = (SignInButton) findViewById(R.id.google_login);
+        signInButton = (SignInButton) findViewById(R.id.google_login);
         signInButton.setSize(SignInButton.SIZE_WIDE);
 
     }
@@ -118,17 +118,6 @@ public class InitialActivity extends AppCompatActivity implements
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void signOut() {
-        FirebaseAuth.getInstance().signOut();
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        Log.d(TAG, "Logged out successfully! David Thomson");
-                    }
-                });
     }
 
     @Override
@@ -148,28 +137,16 @@ public class InitialActivity extends AppCompatActivity implements
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             firebaseAuthWithGoogle(acct);
-            mStatusTextView.setText(getString(R.string.google_signed_in, acct.getDisplayName()));
 
             editor.putBoolean("LoggedIn", true);
             editor.commit();
 
-            updateUI(true);
+            signInButton.setVisibility(View.GONE);
             startActivity(new Intent(this, NavigationDrawerActivity.class));
+            finish();
         } else {
             // Signed out, show unauthenticated UI.
-            updateUI(false);
-        }
-    }
-
-    private void updateUI(boolean signedIn) {
-        if (signedIn) {
-            mStatusTextView.setText(R.string.google_signed_in);
-            findViewById(R.id.google_login).setVisibility(View.GONE);
-            //Intent next = new Intent(getApplicationContext(), AppMenu.class);
-            //startActivity(next);
-        } else {
-            mStatusTextView.setText(R.string.google_signed_out);
-            findViewById(R.id.google_login).setVisibility(View.VISIBLE);
+            signInButton.setVisibility(View.VISIBLE);
         }
     }
 

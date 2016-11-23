@@ -7,13 +7,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NavigationDrawerActivity"
-    android:background="@color/md_grey_900">
+    android:background="@color/background">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/md_black_1000"
+        android:background="@color/colorPrimaryDark"
         android:layout_marginTop="55dp"
         android:elevation="6dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -40,7 +40,7 @@
             android:id="@+id/sundayTextView"
             android:gravity="center"
             android:layout_weight="1"
-            android:textColor="@color/md_pink_A700" />
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:text="M"
@@ -49,7 +49,7 @@
             android:id="@+id/mondayTextView"
             android:gravity="center"
             android:layout_weight="1"
-            android:textColor="@color/md_pink_A700" />
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:text="T"
@@ -58,7 +58,7 @@
             android:id="@+id/tuesdayTextView"
             android:gravity="center"
             android:layout_weight="1"
-            android:textColor="@color/md_pink_A700" />
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:text="W"
@@ -67,7 +67,7 @@
             android:id="@+id/wednesdayTextView"
             android:gravity="center"
             android:layout_weight="1"
-            android:textColor="@color/md_pink_A700" />
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:text="T"
@@ -76,7 +76,7 @@
             android:id="@+id/thursdayTextView"
             android:gravity="center"
             android:layout_weight="1"
-            android:textColor="@color/md_pink_A700" />
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:text="F"
@@ -94,7 +94,7 @@
             android:id="@+id/saturdayTextView"
             android:gravity="center"
             android:layout_weight="1"
-            android:textColor="@color/md_pink_A700" />
+            android:textColor="@color/colorAccent" />
     </LinearLayout>
 
     <ImageButton
@@ -117,7 +117,7 @@
         style="@android:style/Theme.Translucent"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:fontFamily=""
-        android:textColor="@color/md_pink_A700"
+        android:textColor="@color/colorAccent"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

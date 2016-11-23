@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/background"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -16,7 +16,7 @@
         android:layout_width="266dp"
         android:layout_height="87dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/qsicon_hdpi"
         android:layout_gravity="center"
         android:layout_weight="1.42" />
 
