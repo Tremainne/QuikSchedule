@@ -42,6 +42,7 @@ import group22.quikschedule.Settings.WebregActivity;
  *              to the application.
  *
  * @author David Thomson
+ * @author Rohan Chhabra
  */
 public class InitialActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -147,6 +148,7 @@ public class InitialActivity extends AppCompatActivity implements
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("Google Sign In Successful!");
             alertDialog.setMessage("Would you like to add your classes from WebReg?");
+            alertDialog.setCancelable(false);
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

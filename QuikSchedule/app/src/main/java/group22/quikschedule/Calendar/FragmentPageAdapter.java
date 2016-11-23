@@ -14,7 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  *
  * Description:
  *
- * @author ????
+ * @author RohanChhabra
  */
 public class FragmentPageAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 7;

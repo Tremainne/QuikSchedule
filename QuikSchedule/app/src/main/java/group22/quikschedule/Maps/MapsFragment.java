@@ -49,7 +49,10 @@ import group22.quikschedule.R;
  *
  * Description: A very basic fragment that should set the map up.
  *
- * @author WHO WROTE THIS?
+ * @author Tynan Dewes
+ * @author David Thomson
+ * @author Christoph Steefel
+ * @author Rohan Chhabra
  */
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback,

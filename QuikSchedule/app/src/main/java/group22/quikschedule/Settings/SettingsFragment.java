@@ -1,11 +1,17 @@
 package group22.quikschedule.Settings;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import group22.quikschedule.Calendar.EventView;
+import group22.quikschedule.Calendar.ExpandedEventActivity;
 import group22.quikschedule.R;
 
 /**
@@ -20,6 +26,7 @@ import group22.quikschedule.R;
  *              agenda.
  *
  * @author David Thomson
+ * @author RohanChhabra
  */
 public class SettingsFragment extends Fragment {
 
@@ -40,6 +47,19 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View v = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        AppCompatButton notifications = (AppCompatButton) v.findViewById(R.id.notifications);
+        notifications.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setAction(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                startActivity(i);
+            }
+        });
+
+        return v;
     }
 }

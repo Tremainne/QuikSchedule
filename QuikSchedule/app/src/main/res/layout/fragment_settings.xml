@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,12 +12,35 @@
     android:background="@color/background"
     tools:context="group22.quikschedule.Settings">
 
-    <Button
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.AppCompatButton
+        android:text=" Add Classes from WebReg"
+        android:textSize="20dp"
         android:layout_height="wrap_content"
         android:id="@+id/toWebreg"
-        android:text="Go to Webreg Activity"
-        android:onClick="toWebreg"/>
+        android:background="@color/background"
+        style="@android:style/Theme.Translucent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:onClick="toWebreg"
+        android:textAlignment="textStart"
+        android:layout_gravity="start" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:text=" Set Notifications"
+        android:textSize="20dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/notifications"
+        android:background="@color/background"
+        style="@android:style/Theme.Translucent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:textAlignment="textStart"
+        android:layout_gravity="start" />
+
 
     <Button
         android:text="Set Alert Button"
@@ -26,12 +48,5 @@
         android:layout_height="wrap_content"
         android:id="@+id/showNotificationButton"
         android:onClick="setAlarm"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/syncCalendarToSQL"
-        android:text="Go to Initial Activity"
-        android:onClick="toInitial"/>
 
 </LinearLayout>
