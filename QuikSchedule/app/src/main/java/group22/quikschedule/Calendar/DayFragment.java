@@ -49,9 +49,15 @@ import static android.app.Activity.RESULT_OK;
  *
  * Bugs: None known
  * Version: 1.0
- * Date: ????
+ * Date: 10/12/2016
  *
- * Description:
+ * Description: Fragment that contains the schedule for each individual day when on the Schedule
+ *              tab. It handles populating the agenda by sending a query to the SQL database,
+ *              pulling out all the events, formatting them according to their time and duration,
+ *              and displaying them on the UI. It also allows each event to be clicked on, which
+ *              will then send that events information to the ExpandedEventActivity. This class
+ *              also contains the ability to refresh the days events and sync them with the phone's
+ *              database and Google Calendar.
  *
  * @author Rohan Chhabra
  */
@@ -106,7 +112,6 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
         TextView date = (TextView) view.findViewById(R.id.date);
         date.setText(dates[mPage-1]);
 
-        Log.d("SyncWTF", "Day Fragment Adding Events");
         populateAgenda(getContext(), view);
 
         Calendar currentTime = Calendar.getInstance();
@@ -156,10 +161,7 @@ public class DayFragment extends Fragment implements EasyPermissions.PermissionC
 
         PriorityQueue<EventView> events = DatabaseHelper.getEvents(getContext(), sql);
 
-        Log.d("SyncWTF", " "+events.size()+" "+dates[mPage - 1]);
-        int j = 0;
         for(EventView i : events ) {
-            Log.d("SyncWTF", i.name + " "+(++j));
             addEvent(i, view);
         }
     }

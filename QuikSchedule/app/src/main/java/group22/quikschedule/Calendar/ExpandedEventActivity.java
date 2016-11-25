@@ -66,10 +66,16 @@ import static group22.quikschedule.Calendar.CalendarSyncActivity.REQUEST_PERMISS
  * Version: 1.0
  * Date: 11/5/16
  *
- * Description: Activity that ...?
+ * Description: Activity that displays event details in an expanded view so that the user can
+ *              view, edit, delete, or create events. It allows the user to fill in event
+ *              information such as event name, date, start time, end time, location, and more and
+ *              then save that event, which will then be sent to Google Calendar and the phone's
+ *              database. Additionally, once the user inputs a location, he or she can select a
+ *              transit method and press route, which will then take them to the maps fragment and
+ *              route a path from their current location to the event location.
  *
- * @author Ishjot Suri
  * @author Rohan Chhabra
+ * @author Ishjot Suri
  */
 public class ExpandedEventActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks {
@@ -147,7 +153,7 @@ public class ExpandedEventActivity extends AppCompatActivity
             }
 
             if(i.hasExtra("Materials")) {
-                Log.d("Trans", "Tf");
+
                 materials.setText(i.getStringExtra("Materials"));
             }
 
@@ -167,7 +173,7 @@ public class ExpandedEventActivity extends AppCompatActivity
                 .setBackOff(new ExponentialBackOff());
 
         if(v.getId() == R.id.delete) {
-            Log.d("Delete", "toCalendar");
+
             deleteEvent = true;
             deleteEvent();
         }
@@ -365,7 +371,6 @@ public class ExpandedEventActivity extends AppCompatActivity
         if(editingEvent) {
 
             deleteEvent = true;
-            Log.d("Delete", "Function Delete 1");
 
             if (!isGooglePlayServicesAvailable()) {
                 acquireGooglePlayServices();
@@ -381,7 +386,7 @@ public class ExpandedEventActivity extends AppCompatActivity
 
             }
 
-            Log.d("Delete", "Function Delete 2");
+
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
@@ -590,7 +595,6 @@ public class ExpandedEventActivity extends AppCompatActivity
         protected Void doInBackground(Void... params) {
 
             if(deleteEvent) {
-                Log.d("Delete", "Delete");
                 try {
                     Log.d("Delete", "SUCCESS: " + mService.events().delete(getCalendarIdFromSummary("QuickSchedule"), eventID).execute());
                 } catch (IOException e) {
@@ -599,7 +603,6 @@ public class ExpandedEventActivity extends AppCompatActivity
             }
             else if(editingEvent) {
 
-                Log.d("Delete", "Editing");
                 try {
                     System.err.println("SUCCESS: " + mService.events().update(getCalendarIdFromSummary("QuickSchedule"), eventID, event).execute());
                 } catch (IOException e) {
@@ -607,7 +610,6 @@ public class ExpandedEventActivity extends AppCompatActivity
                 }
             }
             else {
-                Log.d("Delete", "New");
                 try {
                     System.err.println("SUCCESS: " + mService.events().insert(getCalendarIdFromSummary("QuickSchedule"), event).execute());
                 } catch (IOException e) {

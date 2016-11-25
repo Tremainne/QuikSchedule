@@ -16,7 +16,12 @@ import java.util.Date;
  * Version: 1.0
  * Date: 10/30/16
  *
- * Description:
+ * Description: This class is a custom TextView that holds all the information of each event and
+ *              is shown on the UI in the form of a TextView. It contains data fields holding
+ *              event information such as event name, start time, end time, etc. so that it can be
+ *              accessed by other classes. It also contains two methods getTimeAsInt and
+ *              getTimeAsString that format the times as ints and Strings to be used when
+ *              displaying the event on the UI.
  *
  * @author Rohan Chhabra
  */

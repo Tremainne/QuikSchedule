@@ -22,9 +22,11 @@ import group22.quikschedule.R;
  *
  * Bugs: None known
  * Version: 1.0
- * Date: ????
+ * Date: 10/12/2016
  *
- * Description:
+ * Description: Fragment that contains the agenda tabs, the add button for adding events, and a
+ *              button that allows the user to pick a date to go to. It sets up these three
+ *              components and invokes other classes that implement them.
  *
  * @author Rohan Chhabra
  */
@@ -35,7 +37,6 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
     private String[] dates;
 
     public WeekFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -52,7 +53,6 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
 
         createTabs();
 
-        // Inflate the layout for this fragment
         return weekView;
     }
 

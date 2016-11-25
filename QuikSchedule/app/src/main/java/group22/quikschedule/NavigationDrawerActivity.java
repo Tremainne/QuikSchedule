@@ -60,12 +60,20 @@ import static group22.quikschedule.InitialActivity.APP_PREFERENCES;
 
 /**
  * Class: NavigationDrawerActivity
- * <p>
+ *
  * Bugs: None known
  * Version: 1.0
- * Date: 11/5/16
- * <p>
- * Description: Sets the pendingIntents for the alarms that are created.
+ * Date: 10/12/16
+ *
+ * Description: Activity that primarily handles the switching between different tabs and their
+ *              respective fragments. This includes sending the appropriate data to each fragment,
+ *              getting permissions from the user, and general setup of the app. It will do the
+ *              following things in this order:
+ *                  1. ask user to log into Google if he/she isn't already
+ *                  2. sync Google Calendar with the phone's database
+ *                  3. ask the user to add classes from WebReg
+ *                  4. gets input data from the Intent and sends it to other fragments/activities
+ *                  5. sets the viewing tab according to the input data from the intent
  *
  * @author Rudr Tandon
  * @author Ishjot Suri
@@ -87,7 +95,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String BUTTON_TEXT = "Sync Calendar to Phone";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
 
@@ -546,10 +553,5 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 REQUEST_GOOGLE_PLAY_SERVICES);
         dialog.show();
     }
-
-    public void toInitial(View view) {
-        startActivity(new Intent(this, InitialActivity.class));
-    }
-
 
 }

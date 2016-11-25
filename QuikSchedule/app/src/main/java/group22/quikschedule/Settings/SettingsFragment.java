@@ -23,10 +23,11 @@ import group22.quikschedule.R;
  *
  * Description: Activity that implements various settings buttons such as the connection to WebReg
  *              and SQLite database. Used primarily for testing and for connecting WebReg to the
- *              agenda.
+ *              agenda. It also has a button that allows the user to go to Android's settings
+ *              and edit the notifications for the app.
  *
  * @author David Thomson
- * @author RohanChhabra
+ * @author Rohan Chhabra
  */
 public class SettingsFragment extends Fragment {
 

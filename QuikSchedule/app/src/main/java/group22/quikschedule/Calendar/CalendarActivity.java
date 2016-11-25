@@ -13,9 +13,11 @@ import group22.quikschedule.R;
  *
  * Bugs: None known
  * Version: 1.0
- * Date: ????
+ * Date: 10/12/2016
  *
- * Description:
+ * Description: Simple class that contains a CalendarView and its listener that allows the user to
+ *              select a date. The date information is then sent to the NavigationDrawerActivity,
+ *              which will handle it from there.
  *
  * @author Rohan Chhabra
  */

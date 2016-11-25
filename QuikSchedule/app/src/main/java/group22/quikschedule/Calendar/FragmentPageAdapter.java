@@ -10,9 +10,11 @@ import android.support.v4.app.FragmentPagerAdapter;
  *
  * Bugs: None known
  * Version: 1.0
- * Date: ????
+ * Date: 10/12/2016
  *
- * Description:
+ * Description: Handles switching between tabs and instantiating each fragment with the
+ *              appropriate DayFragment content. Gets an array of dates that will be used as titles
+ *              for each tab.
  *
  * @author RohanChhabra
  */
