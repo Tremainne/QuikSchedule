@@ -11,7 +11,7 @@ import android.content.Intent;
  * Version: 1.0
  * Date: 11/14/16
  *
- * Description:
+ * Description: Class in charge of setting up alarm system on reboot of phone.
  *
  * @author Tynan Dewes
  * @author David Thomson

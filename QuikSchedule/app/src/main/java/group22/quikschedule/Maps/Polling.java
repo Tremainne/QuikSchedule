@@ -33,7 +33,8 @@ import group22.quikschedule.Settings.AlertActivity;
  * Version: 1.0
  * Date: 11/14/16
  *
- * Description:
+ * Description: Class that handles actively polling for user location to send notifications for
+ * the user's events in a timely manner.
  *
  * @author Tynan Dewes
  * @author David Thomson
@@ -48,7 +49,17 @@ public class Polling extends BroadcastReceiver {
     int duration;
     EventView curr = null;
     public static int id;
+    public static final int BUFFER = 10;
+    public static final int MINUTE = 60;
+    public static final int MILLI = 1000;
 
+    /**
+     * Description: OnReceive function called when a broadcast is sent to this receiver.  Handles
+     * which type of receiving job should be carried out based on boolean value
+     * @param context current context
+     * @param intent  intent passed to the broadcast
+     * @return        void
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
@@ -89,6 +100,13 @@ public class Polling extends BroadcastReceiver {
         wl.release();
     }
 
+    /**
+     * Description: Helper function used to set alarms two hours before each event starts.  This
+     * is called once a day at midnight to set relevant alarms for the following day
+     * @param context current context
+     * @param pq      PriorityQueue of events used to see events for the day
+     * @return        void
+     */
     public void setTwoHourAlarms(Context context, PriorityQueue<EventView> pq) {
         Toast.makeText(context, "Setting alarms", Toast.LENGTH_SHORT).show();
         for (EventView ev : pq) {
@@ -97,11 +115,22 @@ public class Polling extends BroadcastReceiver {
         }
     }
 
+    /**
+     * Description: Helper function used to get duration time from current location to the
+     * destination for the next upcoming event.  This function is called once two hours before
+     * each event to determine when the notification should be sent for the event based on
+     * duration time.
+     * @param context current context
+     * @param pq      PriorityQueue of events used to see events for the day
+     * @return        void
+     */
     public void getDir( Context context, PriorityQueue<EventView> pq ) {
+        // Empty check
         if( pq.isEmpty() ) {
             first = true;
             return;
         }
+        // Get next event based on global variables
         for( int i = 0; i < counter; i++ ) {
             if( pq.size() == 1 ) {
                 first = true;
@@ -121,42 +150,60 @@ public class Polling extends BroadcastReceiver {
 
         String end = curr.location;
 
+        // Get duration of travel using nameToLatLng function
         String result = Directions.convertAddress(end);
-        // try to get rid of room numbers, but keep potential zip codes
-
         Geocode.nameToLatLng(result, listener, false);
     }
 
+    /**
+     * Description: Helper function used to set alarm once a day at midnight as described above.
+     * @param context current context
+     * @return        void
+     */
     public void setAlarm(Context context) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
 
+        // Set calendar to midnight
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set( Calendar.HOUR_OF_DAY, 0 );
         calendar.set( Calendar.MINUTE, 00 );
         calendar.set( Calendar.SECOND, 00 );
-
-        calendar.add( Calendar.HOUR_OF_DAY, 24 );
+        calendar.add( Calendar.HOUR_OF_DAY, 24 ); // Repeating
 
         am.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
     }
 
+    /**
+     * Description: Helper function used to set alarm based on inputted time.  Used to set alarm
+     * two hours before each event starting time.  Subtracts 2 hours from each starting time when
+     * called.
+     * @param context current context
+     * @param time    starting time of the event
+     * @return        void
+     */
     public void setEventAlarm(Context context, int time) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Polling.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, time, i, 0);
-        am.set(AlarmManager.RTC, System.currentTimeMillis() + time * 60 * 1000 - (120 * 60 * 1000), pi);
+        am.set(AlarmManager.RTC, System.currentTimeMillis() + time * MINUTE * MILLI -
+                (2 * MINUTE * MINUTE * MILLI), pi);
     }
 
-    public void cancelAlarm(Context context) {
-        Intent intent = new Intent(context, Polling.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pi);
-    }
-
+    /**
+     * Class: LocationListener
+     *
+     * Bugs: None known
+     * Version: 1.0
+     * Date: 11/14/16
+     *
+     * Description: Class that handles Location listening for use with the active polling system.
+     *
+     * @author Tynan Dewes
+     * @author Cristoph Steefel
+     */
     private class LocationListener implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener, GeoCodeListener {
 
@@ -172,23 +219,30 @@ public class Polling extends BroadcastReceiver {
         public void onConnected(Bundle connectionHint) {
             Location myLoc = LocationServices.FusedLocationApi.getLastLocation( client );
             if (myLoc == null) {
-                myLoc = LocationServices.FusedLocationApi.getLastLocation(client);
+                myLoc = LocationServices.FusedLocationApi.getLastLocation( client );
             }
             String lat;
             String lng;
+            // Get starting location
             if (myLoc != null) {
-                lat = String.valueOf(myLoc.getLatitude());
-                lng = String.valueOf(myLoc.getLongitude());
-                double latDbl = Double.parseDouble(lat);
-                double lngDbl = Double.parseDouble(lng);
-                setStart( new LatLng(latDbl, lngDbl) );
+                lat = String.valueOf( myLoc.getLatitude() );
+                lng = String.valueOf( myLoc.getLongitude() );
+                double latDbl = Double.parseDouble( lat );
+                double lngDbl = Double.parseDouble( lng );
+                setStart( new LatLng( latDbl, lngDbl ) );
             }
             else {
-                setStart( new LatLng( 32.880254, -117.237643 ) );
+                setStart( new LatLng( 32.880254, -117.237643 ) );  // This should never happen
             }
+            // Call final function using current start location
             onLatLngComplete();
         }
 
+        /**
+         * When the Google API client connection is suspended, log it.
+         *
+         * @param cause unused
+         */
         @Override
         public void onConnectionSuspended(int cause) {
             Log.d("Maps", "Connection suspended");
@@ -236,23 +290,40 @@ public class Polling extends BroadcastReceiver {
             }
         }
 
+        /**
+         * Description: Helper function used to get time for starting alarm.  Should be sent 10
+         * minutes before the user has to leave for the event.
+         *
+         * @param cal Calendar object to be modified for starting time
+         * @return unused int
+         */
         public int setAlarmTime( Calendar cal ) {
             int mins = 0, hours = 0;
 
-            mins = ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10 ) % 60;
-            hours = ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10 ) / 60;
+            mins = ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / MINUTE ) -
+                    BUFFER ) % MINUTE;
+            hours = ( curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / MINUTE ) -
+                    BUFFER ) / MINUTE;
 
             cal.set(Calendar.HOUR_OF_DAY, hours);
             cal.set(Calendar.MINUTE, mins);
 
-            return curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 ) - 10;
+            return curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / MINUTE ) - BUFFER;
         }
 
+        /**
+         * Description: Helper function used to set notification for correct time.  Should be sent
+         * 10 minutes before the user has to leave for the event.
+         *
+         * @param intent Intent broadcasted to setNotification
+         * @return void
+         */
         public void setNotification( Intent intent ) {
             Calendar c = Calendar.getInstance();
             //Set the alarm time for event i based on the start time and get the time back
             id = setAlarmTime( c );
-            Toast.makeText( context, "Next Event: " + id/60 + ":" + id%60 + ".", Toast.LENGTH_LONG ).show();
+            //Toast.makeText( context, "Next Event: " + id/MINUTE + ":" + id%MINUTE + ".",
+            // Toast.LENGTH_LONG ).show();
 
             //set a pending intent where the unique id is the time of the event
             //If you have two events with the same time then it wont notify you for second
@@ -275,7 +346,7 @@ public class Polling extends BroadcastReceiver {
 
             Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
 
-            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
+            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / MINUTE );
 
             Intent intent = new Intent(context, AlertActivity.class);
 
@@ -288,7 +359,7 @@ public class Polling extends BroadcastReceiver {
             intent.putExtra( "Materials", curr.materials );
             intent.putExtra( "Comments", curr.comments );
             intent.putExtra( "Calculate Minutes", toDisplay );
-            intent.putExtra( "Time To Display", toDisplay - 10 );
+            intent.putExtra( "Time To Display", toDisplay - BUFFER );
             setNotification( intent );
         }
 
@@ -299,11 +370,11 @@ public class Polling extends BroadcastReceiver {
         @Override
         public void onGeocodeListenerFail() {
             // Set time to be two hours if there was an error.
-            duration = 60 * 60 * 2 * 100;
+            duration = MINUTE * MINUTE * 2 * 100;
 
             Toast.makeText( context, "Duration: " + duration, Toast.LENGTH_LONG ).show();
 
-            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / 60 );
+            int toDisplay = curr.getTimeAsInt( EventView.STARTTIME ) - ( duration / MINUTE );
 
             Intent intent = new Intent(context, AlertActivity.class);
 

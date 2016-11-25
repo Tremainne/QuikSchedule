@@ -12,7 +12,7 @@ import android.os.IBinder;
  * Version: 1.0
  * Date: 11/14/16
  *
- * Description:
+ * Description: PollingService that can be used to set up notifications to be run at midnight.
  *
  * @author David Thomson
  * @author Tynan Dewes
@@ -20,16 +20,31 @@ import android.os.IBinder;
 public class PollingService extends Service {
     Polling polling = new Polling();
 
+    /**
+     * Description: OnCreate function called when this service is started.  No modifications made.
+     */
     public void onCreate() {
         super.onCreate();
     }
 
+    /**
+     * Description: OnStartCommand called when the Service is started.  Simply calls setAlarm
+     * on the Polling object to set the alarms
+     * @param intent  unused
+     * @param flags   unused
+     * @param startId unused
+     * @return integer value based on start
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         polling.setAlarm(this);
         return START_STICKY;
     }
 
+    /**
+     * Description: onBind command overridden for necessity
+     * @param intent  unused
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return null;
