@@ -239,6 +239,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * Description:
+     * @param
+     * @return
+     */
     @Override
     public void onBackPressed() {
 
@@ -254,6 +259,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Description: Facilitates the selections between the different tabs on the NavigationDrawer.
+     *
+     * @param item selected item
+     * @return boolean, true if successfully changed item
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -262,18 +273,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
         Fragment fragment = null;
         Class fragmentClass = null;
 
-        Log.i("Fragment Selected", "Entering");
         if (id == R.id.nav_schedule) {
-            fragmentClass = WeekFragment.class;
-            Log.i("Fragment Selected", "Schedule");
-            // Handle the camera action
-        } else if (id == R.id.nav_maps) {
-            fragmentClass = MapsFragment.class;
 
-            Log.i("Fragment Selected", "Maps");
+            fragmentClass = WeekFragment.class;
+        } else if (id == R.id.nav_maps) {
+
+            fragmentClass = MapsFragment.class;
             inMaps = true;
         } else if (id == R.id.nav_friends) {
-            Log.i("Fragment Selected", "Friends");
+
             Intent i;
             try {
                 this.getPackageManager().getPackageInfo("com.facebook.katana", 0);
@@ -284,8 +292,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
             startActivity(i);
             return true;
         } else if (id == R.id.nav_settings) {
+
             fragmentClass = SettingsFragment.class;
-            Log.i("Fragment Selected", "Settings");
         }
 
         try {
@@ -333,6 +341,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
+        // switches fragments for the tabs
         getSupportFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -350,11 +359,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
 
     /**
-     * Attempt to call the API, after verifying that all the preconditions are
+     * Description: Attempt to call the API, after verifying that all the preconditions are
      * satisfied. The preconditions are: Google Play Services installed, an
      * account was selected and the device currently has online access. If any
      * of the preconditions are not satisfied, the app will prompt the user as
      * appropriate.
+     *
+     * @return void
      */
     private void getResultsFromApi() {
         if (!isGooglePlayServicesAvailable()) {
@@ -369,14 +380,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Attempts to set the account used with the API credentials. If an account
-     * name was previously saved it will use that one; otherwise an account
-     * picker dialog will be shown to the user. Note that the setting the
-     * account to use with the credentials object requires the app to have the
-     * GET_ACCOUNTS permission, which is requested here if it is not already
-     * present. The AfterPermissionGranted annotation indicates that this
-     * function will be rerun automatically whenever the GET_ACCOUNTS permission
-     * is granted.
+     * Description: Opens a dialog that lets the user to choose a Google account. It will choose
+     * the previously saved account if it exists, otherwise it will prompt the user to choose. It
+     * will also make sure that the app has the GET_ACCOUNTS permissions first.
+     *
+     * @return void
      */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
@@ -404,7 +412,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Called when an activity launched here (specifically, AccountPicker
+     * Description: Called when an activity launched here (specifically, AccountPicker
      * and authorization) exits, giving you the requestCode you started it with,
      * the resultCode it returned, and any additional data from it.
      *
@@ -413,6 +421,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
      *                    activity result.
      * @param data        Intent (containing result data) returned by incoming
      *                    activity result.
+     * @return void
      */
     @Override
     protected void onActivityResult(
@@ -453,13 +462,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Respond to requests for permissions at runtime for API 23 and above.
+     * Description: Respond to requests for permissions at runtime for API 23 and above.
      *
      * @param requestCode  The request code passed in
      *                     requestPermissions(android.app.Activity, String, int, String[])
      * @param permissions  The requested permissions. Never null.
      * @param grantResults The grant results for the corresponding permissions
      *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     * @return void
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -471,12 +481,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Callback for when a permission is granted using the EasyPermissions
+     * Description: Callback for when a permission is granted using the EasyPermissions
      * library.
      *
      * @param requestCode The request code associated with the requested
      *                    permission
      * @param list        The requested permission list. Never null.
+     * @return void
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
@@ -484,12 +495,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Callback for when a permission is denied using the EasyPermissions
+     * Description: Callback for when a permission is denied using the EasyPermissions
      * library.
      *
      * @param requestCode The request code associated with the requested
      *                    permission
      * @param list        The requested permission list. Never null.
+     * @return void
      */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
@@ -497,7 +509,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Checks whether the device currently has a network connection.
+     * Description: Checks whether the device currently has a network connection.
      *
      * @return true if the device has a network connection, false otherwise.
      */
@@ -509,7 +521,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Check that Google Play services APK is installed and up to date.
+     * Description: Check that Google Play services APK is installed and up to date.
      *
      * @return true if Google Play Services is available and up to
      * date on this device; false otherwise.
@@ -523,8 +535,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Attempt to resolve a missing, out-of-date, invalid or disabled Google
+     * Description: Attempt to resolve a missing, out-of-date, invalid or disabled Google
      * Play Services installation via a user dialog, if possible.
+     *
+     * @return void
      */
     private void acquireGooglePlayServices() {
         GoogleApiAvailability apiAvailability =
@@ -538,11 +552,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
 
     /**
-     * Display an error dialog showing that Google Play Services is missing
+     * Description: Display an error dialog showing that Google Play Services is missing
      * or out of date.
      *
      * @param connectionStatusCode code describing the presence (or lack of)
      *                             Google Play Services on this device.
+     * @return void
      */
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {

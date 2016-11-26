@@ -32,13 +32,24 @@ import group22.quikschedule.R;
  */
 public class WeekFragment extends Fragment implements View.OnClickListener{
 
-    private boolean fullAgenda = true;
-    private View weekView;
-    private String[] dates;
+    private boolean fullAgenda = true; // used to determine if coming from agenda
+    private View weekView; // View that contains the stuff in the WeekFragment
+    private String[] dates; // dates for the week
 
+    /**
+     * Description: Default constructor.
+     */
     public WeekFragment() {
     }
 
+    /**
+     * Description: Default starting method called when starting a new WeekFragment
+     *
+     * @param inflater - indicates which layer is to be brought to the front
+     * @param container - indicates the current context of the layer
+     * @param savedInstanceState - indicates the context from which the method was called
+     * @return View, where the WeekFragment is created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,6 +67,13 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
         return weekView;
     }
 
+    /**
+     * Description: OnClick method that handles when the user clicks on the add button or the
+     * "Go to Calendar" button.
+     *
+     * @param v where the buttons are
+     * @return void
+     */
     @Override
     public void onClick(View v) {
 
@@ -72,6 +90,11 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * Description: Creates and initializes the tabs that hold the agenda for the week.
+     *
+     * @return void
+     */
     public void createTabs() {
 
         Calendar cal = Calendar.getInstance();
@@ -84,12 +107,13 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
 
         int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 
+        //gets the dates for every day of the week
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         DateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
         dates = new String[7];
         for(int i = 0; i < 7; i++) {
             dates[i] = formatter.format(cal.getTime());
-            cal.roll(Calendar.DAY_OF_WEEK, 1);
+            cal.roll(Calendar.DAY_OF_WEEK, 1); // increments the days to get each date
         }
 
         Bundle bundle = new Bundle();
@@ -104,6 +128,7 @@ public class WeekFragment extends Fragment implements View.OnClickListener{
         TabLayout tabLayout = (TabLayout) weekView.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
+        // converts the dates to a string format in order to initialize the tab titles
         for(int i = 0; i < 7; i++) {
             TabLayout.Tab t = tabLayout.getTabAt(i);
             t.setText(dates[i].substring(dates[i].length()-8, dates[i].length()-6));

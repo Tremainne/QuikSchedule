@@ -22,6 +22,18 @@ public final class DatabaseContract {
 
     private DatabaseContract() {}
 
+    /**
+     * Class: DatabaseEntry
+     *
+     * Bugs: None known
+     * Version: 1.0
+     * Date: 10/22/16
+     *
+     * Description: Defines the columns of the SQL database as constants for easy access during
+     * SQL queries.
+     *
+     * @author Kris Rau
+     */
     public static class DatabaseEntry implements BaseColumns {
         public static final String TABLE_NAME = "Events";
         public static final String COLUMN_KEY = "Key";

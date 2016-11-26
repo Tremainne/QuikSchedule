@@ -23,8 +23,14 @@ import group22.quikschedule.R;
  */
 public class CalendarActivity extends AppCompatActivity {
 
-    CalendarView calendarView;
+    CalendarView calendarView; // User uses this to pick a date
 
+    /**
+     * Description: Gets the date from the CalendarView and sends it to the Navigation Drawer
+     * Activity.
+     * @param savedInstanceState saved bundle if activity is recreated
+     * @return void
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

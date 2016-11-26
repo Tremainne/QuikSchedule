@@ -102,11 +102,19 @@ public class ExpandedEventActivity extends AppCompatActivity
 
     private Event event;
 
+    /**
+     * Description: Creates the ExpandedEventView with either filled fields for all the event
+     * details if the user clicked on an event, otherwise initializes them as empty.
+     *
+     * @param savedInstanceState bundle that saves the data when recreating the activity
+     * @return void
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expanded_event);
 
+        // all the containers of the event details
         EditText eventName = (EditText) findViewById(R.id.eventName);
         dateContainer = (TextView) findViewById(R.id.datePicker);
         startTimeContainer = (TextView) findViewById(R.id.startTimePicker);
@@ -115,6 +123,7 @@ public class ExpandedEventActivity extends AppCompatActivity
         EditText comments = (EditText) findViewById(R.id.comments);
         EditText materials = (EditText) findViewById(R.id.materials);
 
+        //initializes spinner for selecting transit mode
         dropdown = (Spinner)findViewById(R.id.transportationMode);
         String[] items = new String[]
                 {"Transit", "Driving", "Cycling", "Walking"};
@@ -123,6 +132,8 @@ public class ExpandedEventActivity extends AppCompatActivity
 
         Intent i = getIntent();
 
+        // if coming from an existing event user tapped on, then initializes the containers with
+        // the existing event's details
         if(i.hasExtra("Name")) {
             editingEvent = true;
 
@@ -165,8 +176,13 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Description: Method that adds or deletes events from calendar.
+     *
+     * @param v view from where the buttons were clicked to add or delete events
+     * @return void
+     */
     public void toCalendar(View v) {
-        //Send Data to Google Calendar
 
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
@@ -182,7 +198,13 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
-    private boolean addToCalendar () {
+    /**
+     * Description: Adds a new event to Google Calendar or updates the event with the new info
+     * the user added.
+     *
+     * @return boolean, true if added, else false
+     */
+    private boolean addToCalendar() {
 
         String eventName = ((EditText) findViewById(R.id.eventName)).getText().toString();
         String date = ((TextView) findViewById(R.id.datePicker)).getText().toString();
@@ -190,6 +212,7 @@ public class ExpandedEventActivity extends AppCompatActivity
         String endTime = ((TextView) findViewById(R.id.endTimePicker)).getText().toString();
         String locationName = ((EditText) findViewById(R.id.location)).getText().toString();
 
+        // checks if the required fields of event name, location, date and times are full
         if (!eventName.matches(".*[a-zA-Z].*")) {
             Toast.makeText(this, "Enter an event name", Toast.LENGTH_LONG).show();
             return false;
@@ -233,6 +256,8 @@ public class ExpandedEventActivity extends AppCompatActivity
             return false;
         }
 
+        // if GooglePlayServices is available, credentials are set up, and device is connected,
+        // then adds the event to Google Calendar
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
             return false;
@@ -247,6 +272,7 @@ public class ExpandedEventActivity extends AppCompatActivity
 
         } else {
 
+            // Setup for adding event details to the Google Calendar
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
@@ -254,6 +280,7 @@ public class ExpandedEventActivity extends AppCompatActivity
                     .setApplicationName("Quick Calendar")
                     .build();
 
+            // sets new Event with the event details for the calendar
             event = new Event()
                     .setSummary(((EditText) findViewById(R.id.eventName)).getText().toString())
                     .setLocation(location.getText().toString())
@@ -261,6 +288,7 @@ public class ExpandedEventActivity extends AppCompatActivity
                     "\n"+ ((EditText) findViewById(R.id.comments)).getText().toString() + "\n" +
                     dropdown.getSelectedItemPosition());
 
+            // sets the times and the date of the event
             Calendar cal = Calendar.getInstance();
 
             Calendar time = Calendar.getInstance();
@@ -294,8 +322,10 @@ public class ExpandedEventActivity extends AppCompatActivity
             event.setStart(eventStart);
             event.setEnd(eventEnd);
 
+            // adds event to Google Calendar
             new addToCalendarInBackground().execute();
 
+            // goes to the day of the newly created or edited event
             Intent i = new Intent(this, NavigationDrawerActivity.class);
             i.putExtra("Day", c.get(Calendar.DAY_OF_MONTH));
             i.putExtra("Year", c.get(Calendar.YEAR));
@@ -306,6 +336,12 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Description: gets the date from the date picker and sets it in the Calendar.
+     *
+     * @param v view where the datePicker is
+     * @return void
+     */
     public void pickDate(View v) {
 
         int year = c.get(Calendar.YEAR);
@@ -324,6 +360,12 @@ public class ExpandedEventActivity extends AppCompatActivity
         datePicker.show();
     }
 
+    /**
+     * Description: gets the time from the time picker and sets it in the Calendar.
+     *
+     * @param v view where the timePicker is
+     * @return void
+     */
     public void pickTime(final View v) {
 
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -346,6 +388,13 @@ public class ExpandedEventActivity extends AppCompatActivity
         mTimePicker.show();
     }
 
+    /**
+     * Description: When the user clicks on the route button, it sends the location to the Maps
+     * and routes from the users current location to the event location.
+     *
+     * @param v where the route button is
+     * @return void
+     */
     public void routeToEvent(View v) {
 
         if(location.getText().toString().equals("")) {
@@ -362,16 +411,29 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Description: Cancels editing or creating an event.
+     *
+     * @param v where the cancel button is
+     * @return void
+     */
     public void cancel(View v) {
         onBackPressed();
     }
 
+    /**
+     * Description: Deletes the event from the calendar.
+     *
+     * @return boolean, if event was deleted
+     */
     public boolean deleteEvent() {
 
+        // if event already exists, then we can delete
         if(editingEvent) {
 
             deleteEvent = true;
 
+            //checks if setup is right to delete event
             if (!isGooglePlayServicesAvailable()) {
                 acquireGooglePlayServices();
                 return false;
@@ -387,6 +449,8 @@ public class ExpandedEventActivity extends AppCompatActivity
             }
 
 
+            //gets calendar and calls addToCalendarInBackground, which will call the delete method
+            // for the Google Calendar
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
@@ -396,6 +460,7 @@ public class ExpandedEventActivity extends AppCompatActivity
 
             new addToCalendarInBackground().execute();
 
+            // returns to NavigationDrawerActivity after deleting
             Calendar c = Calendar.getInstance();
 
             Intent i = new Intent(this, NavigationDrawerActivity.class);
@@ -413,6 +478,13 @@ public class ExpandedEventActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Description: Opens a dialog that lets the user to choose a Google account. It will choose
+     * the previously saved account if it exists, otherwise it will prompt the user to choose. It
+     * will also make sure that the app has the GET_ACCOUNTS permissions first.
+     *
+     * @return void
+     */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
@@ -438,10 +510,16 @@ public class ExpandedEventActivity extends AppCompatActivity
     }
 
     /**
+     * Description: Called when an activity launched here (specifically, AccountPicker
+     * and authorization) exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it.
      *
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode code indicating which activity result is incoming.
+     * @param resultCode  code indicating the result of the incoming
+     *                    activity result.
+     * @param data        Intent (containing result data) returned by incoming
+     *                    activity result.
+     * @return void
      */
     @Override
     protected void onActivityResult(
@@ -494,9 +572,13 @@ public class ExpandedEventActivity extends AppCompatActivity
     }
 
     /**
+     * Description: Callback for when a permission is granted using the EasyPermissions
+     * library.
      *
-     * @param requestCode
-     * @param perms
+     * @param requestCode The request code associated with the requested
+     *                    permission
+     * @param perms        The requested permission list. Never null.
+     * @return void
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
@@ -504,9 +586,13 @@ public class ExpandedEventActivity extends AppCompatActivity
     }
 
     /**
+     * Description: Callback for when a permission is denied using the EasyPermissions
+     * library.
      *
-     * @param requestCode
-     * @param perms
+     * @param requestCode The request code associated with the requested
+     *                    permission
+     * @param perms        The requested permission list. Never null.
+     * @return void
      */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
@@ -514,8 +600,9 @@ public class ExpandedEventActivity extends AppCompatActivity
     }
 
     /**
+     * Description: Description: Checks whether the device currently has a network connection.
      *
-     * @return
+     * @return true if the device has a network connection, false otherwise.
      */
     private boolean isDeviceOnline() {
         ConnectivityManager connMgr =
@@ -525,8 +612,10 @@ public class ExpandedEventActivity extends AppCompatActivity
     }
 
     /**
+     * Description: Check that Google Play services APK is installed and up to date.
      *
-     * @return
+     * @return true if Google Play Services is available and up to
+     * date on this device; false otherwise.
      */
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability apiAvailability =
@@ -536,7 +625,12 @@ public class ExpandedEventActivity extends AppCompatActivity
         return connectionStatusCode == ConnectionResult.SUCCESS;
     }
 
-
+    /**
+     * Description: Attempt to resolve a missing, out-of-date, invalid or disabled Google
+     * Play Services installation via a user dialog, if possible.
+     *
+     * @return void
+     */
     private void acquireGooglePlayServices() {
         GoogleApiAvailability apiAvailability =
                 GoogleApiAvailability.getInstance();
@@ -548,8 +642,12 @@ public class ExpandedEventActivity extends AppCompatActivity
     }
 
     /**
+     * Description: Display an error dialog showing that Google Play Services is missing
+     * or out of date.
      *
-     * @param connectionStatusCode
+     * @param connectionStatusCode code describing the presence (or lack of)
+     *                             Google Play Services on this device.
+     * @return void
      */
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {
@@ -562,15 +660,17 @@ public class ExpandedEventActivity extends AppCompatActivity
     }
 
     /**
+     * Description: Gets the calendar ID in order to edit the events on it.
      *
-     * @param summary
-     * @return
+     * @param summary summary that is used to get the calendar ID
+     * @return String, the calendar ID
      */
     private String getCalendarIdFromSummary (String summary) {
         try {
             String pageToken = null;
             do {
-                CalendarList calendarList = mService.calendarList().list().setPageToken(pageToken).execute();
+                CalendarList calendarList =
+                        mService.calendarList().list().setPageToken(pageToken).execute();
                 List<CalendarListEntry> items = calendarList.getItems();
 
                 for (CalendarListEntry calendarListEntry : items) {
@@ -589,14 +689,35 @@ public class ExpandedEventActivity extends AppCompatActivity
         return "";
     }
 
+    /**
+     * Class: ExpandedEventActivity
+     *
+     * Bugs: None known
+     * Version: 1.0
+     * Date: 11/5/16
+     *
+     * Description: Brief class that is used to add, edit, or delete events from Google Calendar.
+     *
+     * @author Rohan Chhabra
+     * @author Kris Rau
+     */
     private class addToCalendarInBackground extends AsyncTask<Void, Void, Void> {
 
+        /**
+         * Description: Function that adds, edits, or deletes events from Google Calendar.
+         *
+         * @param params unused params
+         * @return void
+         */
         @Override
         protected Void doInBackground(Void... params) {
 
             if(deleteEvent) {
                 try {
-                    Log.d("Delete", "SUCCESS: " + mService.events().delete(getCalendarIdFromSummary("QuickSchedule"), eventID).execute());
+
+                    System.err.println("SUCCESS: " +
+                            mService.events().delete(getCalendarIdFromSummary("QuickSchedule"),
+                            eventID).execute());
                 } catch (IOException e) {
                     System.err.println("Failed to delete event in calendar");
                 }
@@ -604,14 +725,19 @@ public class ExpandedEventActivity extends AppCompatActivity
             else if(editingEvent) {
 
                 try {
-                    System.err.println("SUCCESS: " + mService.events().update(getCalendarIdFromSummary("QuickSchedule"), eventID, event).execute());
+                    System.err.println("SUCCESS: " +
+                            mService.events().update(getCalendarIdFromSummary("QuickSchedule"),
+                            eventID, event).execute());
                 } catch (IOException e) {
                     System.err.println("Failed to edit event in calendar");
                 }
             }
             else {
                 try {
-                    System.err.println("SUCCESS: " + mService.events().insert(getCalendarIdFromSummary("QuickSchedule"), event).execute());
+
+                    System.err.println("SUCCESS: " +
+                            mService.events().insert(getCalendarIdFromSummary("QuickSchedule"),
+                            event).execute());
                 } catch (IOException e) {
                     System.err.println("Failed to add event to calendar");
                 }

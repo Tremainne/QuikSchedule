@@ -56,9 +56,9 @@ public class CalendarSyncActivity extends Activity
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
 
     /**
-     * Create the main activity.
-     *
-     * @param savedInstanceState previously saved instance data.
+     * Description:
+     * @param
+     * @return
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,11 +114,13 @@ public class CalendarSyncActivity extends Activity
 
 
     /**
-     * Attempt to call the API, after verifying that all the preconditions are
+     * Description: Attempt to call the API, after verifying that all the preconditions are
      * satisfied. The preconditions are: Google Play Services installed, an
      * account was selected and the device currently has online access. If any
      * of the preconditions are not satisfied, the app will prompt the user as
      * appropriate.
+     *
+     * @return void
      */
     private void getResultsFromApi() {
         if (!isGooglePlayServicesAvailable()) {
@@ -133,14 +135,11 @@ public class CalendarSyncActivity extends Activity
     }
 
     /**
-     * Attempts to set the account used with the API credentials. If an account
-     * name was previously saved it will use that one; otherwise an account
-     * picker dialog will be shown to the user. Note that the setting the
-     * account to use with the credentials object requires the app to have the
-     * GET_ACCOUNTS permission, which is requested here if it is not already
-     * present. The AfterPermissionGranted annotation indicates that this
-     * function will be rerun automatically whenever the GET_ACCOUNTS permission
-     * is granted.
+     * Description: Opens a dialog that lets the user to choose a Google account. It will choose
+     * the previously saved account if it exists, otherwise it will prompt the user to choose. It
+     * will also make sure that the app has the GET_ACCOUNTS permissions first.
+     *
+     * @return void
      */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
@@ -152,13 +151,13 @@ public class CalendarSyncActivity extends Activity
                 mCredential.setSelectedAccountName(accountName);
                 getResultsFromApi();
             } else {
-                // Start a dialog from which the user can choose an account
+
                 startActivityForResult(
                         mCredential.newChooseAccountIntent(),
                         REQUEST_ACCOUNT_PICKER);
             }
         } else {
-            // Request the GET_ACCOUNTS permission via a user dialog
+
             EasyPermissions.requestPermissions(
                     this,
                     "This app needs to access your Google account (via Contacts).",
@@ -168,7 +167,7 @@ public class CalendarSyncActivity extends Activity
     }
 
     /**
-     * Called when an activity launched here (specifically, AccountPicker
+     * Description: Called when an activity launched here (specifically, AccountPicker
      * and authorization) exits, giving you the requestCode you started it with,
      * the resultCode it returned, and any additional data from it.
      *
@@ -177,6 +176,7 @@ public class CalendarSyncActivity extends Activity
      *                    activity result.
      * @param data        Intent (containing result data) returned by incoming
      *                    activity result.
+     * @return void
      */
     @Override
     protected void onActivityResult(
@@ -217,13 +217,14 @@ public class CalendarSyncActivity extends Activity
     }
 
     /**
-     * Respond to requests for permissions at runtime for API 23 and above.
+     * Description: Respond to requests for permissions at runtime for API 23 and above.
      *
      * @param requestCode  The request code passed in
      *                     requestPermissions(android.app.Activity, String, int, String[])
      * @param permissions  The requested permissions. Never null.
      * @param grantResults The grant results for the corresponding permissions
      *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     * @return void
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -235,12 +236,13 @@ public class CalendarSyncActivity extends Activity
     }
 
     /**
-     * Callback for when a permission is granted using the EasyPermissions
+     * Description: Callback for when a permission is granted using the EasyPermissions
      * library.
      *
      * @param requestCode The request code associated with the requested
      *                    permission
      * @param list        The requested permission list. Never null.
+     * @return void
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
@@ -248,12 +250,13 @@ public class CalendarSyncActivity extends Activity
     }
 
     /**
-     * Callback for when a permission is denied using the EasyPermissions
+     * Description: Callback for when a permission is denied using the EasyPermissions
      * library.
      *
      * @param requestCode The request code associated with the requested
      *                    permission
      * @param list        The requested permission list. Never null.
+     * @return void
      */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
@@ -261,7 +264,7 @@ public class CalendarSyncActivity extends Activity
     }
 
     /**
-     * Checks whether the device currently has a network connection.
+     * Description: Description: Checks whether the device currently has a network connection.
      *
      * @return true if the device has a network connection, false otherwise.
      */
@@ -273,7 +276,7 @@ public class CalendarSyncActivity extends Activity
     }
 
     /**
-     * Check that Google Play services APK is installed and up to date.
+     * Description: Check that Google Play services APK is installed and up to date.
      *
      * @return true if Google Play Services is available and up to
      * date on this device; false otherwise.
@@ -287,8 +290,10 @@ public class CalendarSyncActivity extends Activity
     }
 
     /**
-     * Attempt to resolve a missing, out-of-date, invalid or disabled Google
+     * Description: Attempt to resolve a missing, out-of-date, invalid or disabled Google
      * Play Services installation via a user dialog, if possible.
+     *
+     * @return void
      */
     private void acquireGooglePlayServices() {
         GoogleApiAvailability apiAvailability =
@@ -302,11 +307,12 @@ public class CalendarSyncActivity extends Activity
 
 
     /**
-     * Display an error dialog showing that Google Play Services is missing
+     * Description: Display an error dialog showing that Google Play Services is missing
      * or out of date.
      *
      * @param connectionStatusCode code describing the presence (or lack of)
      *                             Google Play Services on this device.
+     * @return void
      */
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {
