@@ -38,6 +38,7 @@ import group22.quikschedule.Settings.AlertActivity;
  *
  * @author Tynan Dewes
  * @author David Thomson
+ * @author Christoph Steefel
  */
 public class Polling extends BroadcastReceiver {
 

@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
  * Description:
  *
  * @author Tynan Dewes
+ * @author Christoph Steefel
  */
 public interface GeoCodeListener {
     /**

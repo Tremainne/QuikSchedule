@@ -50,7 +50,7 @@ public class Directions {
     private static List<List<HashMap<String, String>>> staticDirections;
     private static int staticTime;
 
-    //converter from classrom code to Location name
+    //converter from classroom code to Location name
     public static final HashMap<String, String> converter = new HashMap<String, String>();
 
     // Place locations into converter
@@ -87,10 +87,10 @@ public class Directions {
     private static String buildURLRequest(LatLng start, LatLng end, int transitMode) {
         String startStr = parseLatLong(start);
         String endStr = parseLatLong(end);
-        String request = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=" +
                 startStr + "&destination=" + endStr +
                 "&key=AIzaSyBFaJcedR1gHACBsISOnAajioMQqyVKVyg&mode=" + transitTypes[transitMode];
-        return request;
+
     }
 
 
@@ -285,6 +285,12 @@ public class Directions {
         return poly;
     }
 
+    /**
+     * Converts an address by removing numbers other than ZIP codes and converting
+     * class codes with the converter.
+     * @param addr The address to convert and return
+     * @return The converted address
+     */
     public static String convertAddress(String addr) {
         String[] arr = addr.split("[\\s,]+");
         StringBuilder result = new StringBuilder();

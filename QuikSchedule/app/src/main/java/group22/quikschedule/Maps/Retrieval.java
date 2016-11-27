@@ -24,8 +24,7 @@ import javax.net.ssl.HttpsURLConnection;
  * @author Tynan Dewes
  */
 class Retrieval extends AsyncTask<String, Void, String> {
-    // Member variables
-    private Exception exception;
+
 
     /**
      * Name: doInBackground
