@@ -1,3 +1,5 @@
+package group22.quikschedule;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -13,7 +15,7 @@ import static org.junit.Assert.assertThat;
 import group22.quikschedule.Maps.Directions;
 
 /**
- * Class: DirectionsTest
+ * Class: group22.quikschedule.DirectionsTest
  *
  * Bugs: None known
  * Version: 1.0
@@ -40,7 +42,7 @@ public class DirectionsTest extends Directions {
     final static int TRANSIT = 0;
     final static int DRIVING = 1;
 
-    final String json = "{\n" +
+    final static String json = "{\n" +
             "   \"geocoded_waypoints\" : [\n" +
             "      {\n" +
             "         \"geocoder_status\" : \"OK\",\n" +

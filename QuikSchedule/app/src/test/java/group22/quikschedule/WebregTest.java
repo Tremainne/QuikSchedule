@@ -1,3 +1,5 @@
+package group22.quikschedule;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -8,7 +10,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Class: WebregTest
+ * Class: group22.quikschedule.WebregTest
  *
  * Bugs: None known
  * Version: 1.0
