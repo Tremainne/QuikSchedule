@@ -92,6 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // performs SQL query
         Cursor cursor = db.rawQuery(sql, null);
+        db.close();
 
         // creates a PriorityQueue that gives high priority to the longer events.
         PriorityQueue<EventView> events = new PriorityQueue<>(10, new Comparator<EventView>() {
