@@ -45,6 +45,8 @@ public class testLoadingMyLocationMaps extends ActivityInstrumentationTestCase2 
 		assertTrue("SignInHubActivity is not found!", solo.waitForActivity("SignInHubActivity"));
         //Wait for activity: 'group22.quikschedule.NavigationDrawerActivity'
 		assertTrue("NavigationDrawerActivity is not found!", solo.waitForActivity("NavigationDrawerActivity"));
+		//Click on No
+		solo.clickOnView(solo.getView(android.R.id.button2));
         //Click on ImageView
 		solo.clickOnView(solo.getView(android.widget.ImageButton.class, 0));
         //Click on Maps
