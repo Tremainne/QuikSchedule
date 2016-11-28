@@ -356,8 +356,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             lo.color( Color.MAGENTA );
             Log.d("MapsFragment", "onPostExecute lineoptions decoded");
         }
-
-        LatLngBounds bounds = builder.build();
+        LatLngBounds bounds;
+        try {
+            bounds = builder.build();
+        }
+        catch (IllegalStateException e) {
+            Toast.makeText(getContext(), "Location not found", Toast.LENGTH_LONG).show();
+            return;
+        }
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int padding = (int) (0.15 * dpWidth); // offset from edges of map in pixels

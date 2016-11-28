@@ -118,6 +118,10 @@ public class Directions {
      */
     public static void makeTimeRequest(final LatLng start, LatLng dest, int transitMode,
                                        final GeoCodeListener maps) {
+        if (start == null || dest == null) {
+            maps.onGeocodeListenerFail();
+            return;
+        }
         String request = buildURLRequest(start, dest, transitMode);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
@@ -126,9 +130,11 @@ public class Directions {
                 try {
                     Directions.staticTime = getTimeJson(result);
                     maps.onGeocodeListenerComplete();
+                    return;
                 } catch (JSONException e) {
                     e.printStackTrace();
                     maps.onGeocodeListenerFail();
+                    return;
                 }
             }
         });
@@ -153,7 +159,12 @@ public class Directions {
                 Log.d("directions", "callback completed");
                 try {
                     Directions.staticDirections = getDirectionsJson(result);
-                    maps.onGeocodeListenerComplete();
+                    if (staticDirections != null) {
+                        maps.onGeocodeListenerComplete();
+                    }
+                    else {
+                        maps.onGeocodeListenerFail();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     maps.onGeocodeListenerFail();
