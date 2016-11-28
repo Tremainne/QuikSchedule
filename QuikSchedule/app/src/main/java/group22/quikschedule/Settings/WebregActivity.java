@@ -87,7 +87,7 @@ public class WebregActivity extends AppCompatActivity{
      * @author Tynan Dewes
      * @author David Thomson
      */
-    class JSInterface{
+    public class JSInterface{
         /**
          * Description: Makes use of the Javascript injection to parse the data for class schedule
          * and textbooks/materials information.
@@ -95,7 +95,7 @@ public class WebregActivity extends AppCompatActivity{
          */
         @JavascriptInterface
         @SuppressWarnings("unused")
-        public void processHTML(String html) throws IOException{
+        public boolean processHTML(String html) throws IOException {
 
             // Check to see if we are on the correct Webview page by looking for the "start of
             // classes" line else after myTritonlink, else check if we are parsing textbooks, else
@@ -105,7 +105,7 @@ public class WebregActivity extends AppCompatActivity{
             if(page.length == 1){
                 page = html.split( "//End -->" );
                 if( page.length == 1 ) {
-                    return;
+                    return false;
                 }
             }
             else {
@@ -237,6 +237,7 @@ public class WebregActivity extends AppCompatActivity{
                     }
                 }
             }
+            return true;
         }
     }
 
@@ -317,7 +318,7 @@ public class WebregActivity extends AppCompatActivity{
                 else if( webUrl.contains( "https://ucsdbkst.ucsd.edu/wrtx/FullBookList?term=FA16" ) ) {
                     AlertDialog alertDialog = new AlertDialog.Builder(WebregActivity.this).create();
                     alertDialog.setTitle("Books added successfully!");
-                    alertDialog.setMessage("Please hit the back button to return to your agenda.");
+                    alertDialog.setMessage("Please hit OK to return to your agenda.");
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
