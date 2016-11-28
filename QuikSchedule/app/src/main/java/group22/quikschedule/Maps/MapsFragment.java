@@ -76,9 +76,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         // If we have a destination, get it
-        if (savedInstanceState != null) {
-            destination = savedInstanceState.getString("Location");
-            transitMode = savedInstanceState.getInt("Transportation", 0);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            destination = bundle.getString("Location");
+            transitMode = bundle.getInt("Transportation", 0);
         }
         create();
         return view;
@@ -413,7 +414,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public void showDirections(String end) {
         Log.d("MapsFragment", "showing directions");
         Geocode.nameToLatLng(end, this, false);
-
     }
 
     /**
