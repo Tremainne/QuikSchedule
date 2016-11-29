@@ -8,7 +8,6 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import group22.quikschedule.Maps.Directions;
 import group22.quikschedule.Maps.Geocode;
 
 /**
@@ -18,7 +17,7 @@ import group22.quikschedule.Maps.Geocode;
  * Version: 1.0
  * Date: 11/25/16
  *
- * Description: Class used for testing functionality of Directions
+ * Description: Class used for testing functionality of Geocode
  *
  * @author Tynan Dewes
  */
