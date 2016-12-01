@@ -65,8 +65,6 @@ public class AlertActivity extends BroadcastReceiver {
     public void onReceive(Context context, Intent i) {
         System.err.println("Received Broadcast");
 
-        //mPage = i.getExtras().getInt("Page");
-        //date = i.getExtras().getString("Date");
         DateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
         Calendar cal = Calendar.getInstance();
         date = formatter.format( cal.getTime() );
@@ -95,6 +93,10 @@ public class AlertActivity extends BroadcastReceiver {
                 calculateminutes_hr + ":" + calculateminutes_mins + " " + ampm + ".", "");
     }
 
+    /**
+     * Description: Creates the notification and populates the expanded event view page with the
+     * respective information
+     */
     private void createNotification(Context context, String msg, String msgText, String msgText2, String msgAlert) {
         System.err.println("Creating Notification");
 
@@ -144,6 +146,10 @@ public class AlertActivity extends BroadcastReceiver {
         System.err.println("Notified");
     }
 
+    /**
+     * Description: Sets the time to call the alarm to set the notifications
+     * @Param Calender - cal
+     */
     public static int setAlarmtime(Calendar cal) {
         System.err.println("Setting Time");
         int mins = 0, hours = 0;
@@ -158,17 +164,16 @@ public class AlertActivity extends BroadcastReceiver {
         return timeToDisplay;
     }
 
+    /**
+     * Description: Sets the alarm based on time got from the previous function
+     * @Param Context - context
+     */
     public static void setAlarm(Context context) throws JSONException {
         System.err.println("Setting Alarm");
 
         Calendar c = Calendar.getInstance();
         //Set the alarm time for event i based on the start time and get the time back
-        id2 = setAlarmtime(c); //GET SHIT FROM TY
-
-        //c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
-        //c.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
-        //c.set(Calendar.SECOND, c.get(Calendar.SECOND)+5);
-        //id2 = 0;
+        id2 = setAlarmtime(c);
 
         //Set a new alertIntent for the notification
         Intent alertIntent = new Intent(context, AlertActivity.class);
