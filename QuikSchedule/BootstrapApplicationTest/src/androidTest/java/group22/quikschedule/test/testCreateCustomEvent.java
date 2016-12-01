@@ -5,7 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 
 @SuppressWarnings("rawtypes")
-public class testExpandedEventView extends ActivityInstrumentationTestCase2 {
+public class testCreateCustomEvent extends ActivityInstrumentationTestCase2 {
   	private Solo solo;
   	
   	private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "group22.quikschedule.InitialActivity";
@@ -20,7 +20,7 @@ public class testExpandedEventView extends ActivityInstrumentationTestCase2 {
     }
   	
   	@SuppressWarnings("unchecked")
-    public testExpandedEventView() throws ClassNotFoundException {
+    public testCreateCustomEvent() throws ClassNotFoundException {
         super(LAUNCHER_ACTIVITY_FULL_CLASSNAME, launcherActivityClass);
     }
 
@@ -45,27 +45,59 @@ public class testExpandedEventView extends ActivityInstrumentationTestCase2 {
 		assertTrue("SignInHubActivity is not found!", solo.waitForActivity("SignInHubActivity"));
         //Wait for activity: 'group22.quikschedule.NavigationDrawerActivity'
 		assertTrue("NavigationDrawerActivity is not found!", solo.waitForActivity("NavigationDrawerActivity"));
+        //Click on No
+		solo.clickOnView(solo.getView(android.R.id.button2));
         //Click on ImageView
 		solo.clickOnView(solo.getView("addButton"));
         //Wait for activity: 'group22.quikschedule.Calendar.ExpandedEventActivity'
 		assertTrue("ExpandedEventActivity is not found!", solo.waitForActivity("ExpandedEventActivity"));
-        //Enter the text: 'Test2'
+        //Enter the text: 'Test'
 		solo.clearEditText((android.widget.EditText) solo.getView("eventName"));
-		solo.enterText((android.widget.EditText) solo.getView("eventName"), "Test2");
+		solo.enterText((android.widget.EditText) solo.getView("eventName"), "Test");
+        //Click on Test
+		solo.clickOnView(solo.getView("eventName"));
         //Click on Empty Text View
 		solo.clickOnView(solo.getView("datePicker"));
+        //Wait for dialog
+		solo.waitForDialogToOpen(5000);
+		//Click on OK
+		solo.clickOnView(solo.getView(android.R.id.button1));
+        //Click on 11/30/2016
+		solo.clickOnView(solo.getView("datePicker"));
+        //Wait for dialog
+		solo.waitForDialogToOpen(5000);
         //Click on OK
 		solo.clickOnView(solo.getView(android.R.id.button1));
         //Click on Empty Text View
 		solo.clickOnView(solo.getView("startTimePicker"));
+        //Wait for dialog
+		solo.waitForDialogToOpen(5000);
+        //Click on RadialTimePickerView
+		solo.clickOnView(solo.getView("radial_picker"));
+        //Click on AM
+		solo.clickOnView(solo.getView("am_label"));
+        //Click on RadialTimePickerView
+		solo.clickOnView(solo.getView("radial_picker"));
+        //Click on OK
+		solo.clickOnView(solo.getView(android.R.id.button1));
+        //Click on 1:00 AM
+		solo.clickOnView(solo.getView("startTimePicker"));
+        //Wait for dialog
+		solo.waitForDialogToOpen(5000);
         //Click on OK
 		solo.clickOnView(solo.getView(android.R.id.button1));
         //Click on Empty Text View
 		solo.clickOnView(solo.getView("endTimePicker"));
-        //Click on AM
-		solo.clickOnView(solo.getView("am_label"));
-        //Click on PM
-		solo.clickOnView(solo.getView("pm_label"));
+        //Wait for dialog
+		solo.waitForDialogToOpen(5000);
+        //Click on RadialTimePickerView
+		solo.clickOnView(solo.getView("radial_picker"));
+        //Click on OK
+		solo.clickOnView(solo.getView(android.R.id.button1));
+        //Click on 4:00 AM
+		solo.clickOnView(solo.getView("endTimePicker"));
+        //Wait for dialog
+		solo.waitForDialogToOpen(5000);
         //Click on OK
 		solo.clickOnView(solo.getView(android.R.id.button1));
         //Click on Empty Text View
@@ -73,15 +105,23 @@ public class testExpandedEventView extends ActivityInstrumentationTestCase2 {
         //Enter the text: 'WLH'
 		solo.clearEditText((android.widget.EditText) solo.getView("location"));
 		solo.enterText((android.widget.EditText) solo.getView("location"), "WLH");
+        //Click on Empty Text View
+		solo.clickOnView(solo.getView("materials"));
+        //Enter the text: 'None'
+		solo.clearEditText((android.widget.EditText) solo.getView("materials"));
+		solo.enterText((android.widget.EditText) solo.getView("materials"), "None");
+        //Click on Empty Text View
+		solo.clickOnView(solo.getView("comments"));
+        //Enter the text: 'None'
+		solo.clearEditText((android.widget.EditText) solo.getView("comments"));
+		solo.enterText((android.widget.EditText) solo.getView("comments"), "None");
+        //Click on Transit
+		solo.clickOnView(solo.getView("transportationMode"));
+        //Click on Driving
+		solo.clickOnText(java.util.regex.Pattern.quote("Driving"));
         //Click on Done
 		solo.clickOnView(solo.getView("edit"));
         //Wait for activity: 'group22.quikschedule.NavigationDrawerActivity'
 		assertTrue("NavigationDrawerActivity is not found!", solo.waitForActivity("NavigationDrawerActivity"));
-        //Set default small timeout to 14161 milliseconds
-		Timeout.setSmallTimeout(14161);
-        //Click on  Test2  6:35 PM-7:00 PM  WLH
-		solo.clickOnText(java.util.regex.Pattern.quote(" Test2\n 6:35 PM-7:00 PM\n WLH"));
-        //Wait for activity: 'group22.quikschedule.Calendar.ExpandedEventActivity'
-		assertTrue("ExpandedEventActivity is not found!", solo.waitForActivity("ExpandedEventActivity"));
 	}
 }

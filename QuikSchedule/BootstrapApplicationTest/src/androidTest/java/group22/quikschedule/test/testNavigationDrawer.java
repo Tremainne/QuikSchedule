@@ -47,6 +47,8 @@ public class testNavigationDrawer extends ActivityInstrumentationTestCase2 {
 		assertTrue("SignInHubActivity is not found!", solo.waitForActivity("SignInHubActivity"));
         //Wait for activity: 'group22.quikschedule.NavigationDrawerActivity'
 		assertTrue("NavigationDrawerActivity is not found!", solo.waitForActivity("NavigationDrawerActivity"));
+		//Click on No
+		solo.clickOnView(solo.getView(android.R.id.button2));
         //Set default small timeout to 25633 milliseconds
 		Timeout.setSmallTimeout(25633);
         //Click on ImageView

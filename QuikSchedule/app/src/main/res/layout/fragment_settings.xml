@@ -41,12 +41,4 @@
         android:textAlignment="textStart"
         android:layout_gravity="start" />
 
-
-    <Button
-        android:text="Set Alert Button"
-        android:layout_width="189dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/showNotificationButton"
-        android:onClick="setAlarm"/>
-
 </LinearLayout>

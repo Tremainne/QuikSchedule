@@ -66,9 +66,9 @@ public class Geocode {
      * @return The parsed latitude and longitude values.
      * @throws JSONException if the address isn't found or something goes wrong with the request
      */
-    private static LatLng getJson(String json) throws JSONException {
+    protected static LatLng getJson(String json) throws JSONException {
 
-        if (json != null) {
+        if (json != null && json.length() != 0 ) {
             JSONObject geoJSON = new JSONObject(json);
             JSONObject result = geoJSON.getJSONArray("results").getJSONObject(0);
             JSONObject loc = result.getJSONObject("geometry").getJSONObject("location");

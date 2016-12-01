@@ -76,9 +76,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         // If we have a destination, get it
-        if (savedInstanceState != null) {
-            destination = savedInstanceState.getString("Location");
-            transitMode = savedInstanceState.getInt("Transportation", 0);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            destination = bundle.getString("Location");
+            transitMode = bundle.getInt("Transportation", 0);
         }
         create();
         return view;
@@ -319,42 +320,50 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
      * Plots the poly line on the map, using the directions from a Directions API call, and then
      * decoding the polyline that was sent with that result.
      *
+     * Code adapted from article "Google Maps Draw Route between two points using Google Directions
+     * in Google Map Android API V2" w/ Author Navneet
+     * URL: http://www.androidtutorialpoint.com/intermediate/google-maps-draw-path-two-points-
+     * using-google-directions-google-map-android-api-v2/
+     *
      * @param result The directions that hold the polyline to decode.
      */
     public void plotLine(List<List<HashMap<String, String>>> result) {
         ArrayList<LatLng> points;
-        PolylineOptions lineOptions = null;
+        PolylineOptions lo = null;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
-        // Traversing through all the routes
+        // Go through routes
         for (int i = 0; i < result.size(); i++) {
             points = new ArrayList<>();
-            lineOptions = new PolylineOptions();
-
-            // Fetching i-th route
+            lo = new PolylineOptions();
             List<HashMap<String, String>> path = result.get(i);
 
             // Fetching all the points in i-th route
             for (int j = 0; j < path.size(); j++) {
                 HashMap<String, String> point = path.get(j);
 
-                double lat = Double.parseDouble(point.get("lat"));
-                double lng = Double.parseDouble(point.get("lng"));
+                double lat = Double.parseDouble( point.get("lat") );
+                double lng = Double.parseDouble( point.get("lng") );
                 LatLng position = new LatLng(lat, lng);
 
-                points.add(position);
-                builder.include(position);
+                points.add( position );
+                builder.include( position );
             }
 
             // Adding all the points in the route to LineOptions
-            lineOptions.addAll(points);
-            lineOptions.width(10);
-            lineOptions.color(Color.MAGENTA);
+            lo.addAll( points );
+            lo.width( 10 );
+            lo.color( Color.MAGENTA );
             Log.d("MapsFragment", "onPostExecute lineoptions decoded");
-
         }
-
-        LatLngBounds bounds = builder.build();
+        LatLngBounds bounds;
+        try {
+            bounds = builder.build();
+        }
+        catch (IllegalStateException e) {
+            Toast.makeText(getContext(), "Location not found", Toast.LENGTH_LONG).show();
+            return;
+        }
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int padding = (int) (0.15 * dpWidth); // offset from edges of map in pixels
@@ -362,11 +371,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         // Zoom the camera to show the whole line.
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 
-        // Drawing polyline in the Google Map for the i-th route
-        if (lineOptions != null) {
+        // Drawing polyline
+        if (lo != null) {
             Log.d("MapsFragment", "drawing Polyline");
             myMap.clear();
-            myMap.addPolyline(lineOptions);
+            myMap.addPolyline( lo );
             // Place marker at destination.
             myMap.addMarker(new MarkerOptions()
                     .position(end)
@@ -411,7 +420,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public void showDirections(String end) {
         Log.d("MapsFragment", "showing directions");
         Geocode.nameToLatLng(end, this, false);
-
     }
 
     /**

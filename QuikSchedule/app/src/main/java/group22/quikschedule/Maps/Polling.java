@@ -42,13 +42,13 @@ import group22.quikschedule.Settings.AlertActivity;
  */
 public class Polling extends BroadcastReceiver {
 
-    private LatLng start;
+    public LatLng start;
     private GoogleApiClient client;
     private static boolean first = true;
     private static int counter = 1;
     private Context context;
-    int duration;
-    EventView curr = null;
+    public int duration;
+    public EventView curr = null;
     public static int id;
     public static final int BUFFER = 10;
     public static final int MINUTE = 60;
@@ -205,10 +205,10 @@ public class Polling extends BroadcastReceiver {
      * @author Tynan Dewes
      * @author Cristoph Steefel
      */
-    private class LocationListener implements GoogleApiClient.ConnectionCallbacks,
+    public class LocationListener implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener, GeoCodeListener {
 
-        private LatLng end;
+        public LatLng end;
 
         /**
          * When the Google API client connection succeeds, lookup our current location and parse it
@@ -266,7 +266,6 @@ public class Polling extends BroadcastReceiver {
          */
         @Override
         public void setStart(LatLng start) {
-            //Toast.makeText( context, "Start: " + start.toString(), Toast.LENGTH_LONG ).show();
             Polling.this.start = start;
         }
 
@@ -277,7 +276,6 @@ public class Polling extends BroadcastReceiver {
          */
         @Override
         public void setEnd(LatLng end) {
-            //Toast.makeText( context, "End: " + end.toString(), Toast.LENGTH_LONG ).show();
             this.end = end;
         }
 
@@ -323,8 +321,8 @@ public class Polling extends BroadcastReceiver {
             Calendar c = Calendar.getInstance();
             //Set the alarm time for event i based on the start time and get the time back
             id = setAlarmTime( c );
-            //Toast.makeText( context, "Next Event: " + id/MINUTE + ":" + id%MINUTE + ".",
-            // Toast.LENGTH_LONG ).show();
+            Toast.makeText( context, "Next Event: " + id/MINUTE + ":" + id%MINUTE + ".",
+                    Toast.LENGTH_LONG ).show();
 
             //set a pending intent where the unique id is the time of the event
             //If you have two events with the same time then it wont notify you for second

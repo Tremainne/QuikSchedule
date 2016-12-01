@@ -54,7 +54,7 @@ afterEvaluate {
     task assembleDebug(overwrite: true) {}
 
     task copyTask(type: Copy) {
-        from '/Users/RudrTandon/Documents/QuickSchedule/QuikSchedule/app/build/outputs/apk/app-debug_debug.apk'
+        from '/Users/David/Projects/QuickSchedule/QuikSchedule/app/build/outputs/apk/app-debug_debug.apk'
         into 'build/outputs/apk/'
         rename {
             'BootstrapApplicationTest-debug.apk'

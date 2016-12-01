@@ -84,7 +84,7 @@ public class Directions {
      * @param end   ending point of the trip to get directions for
      * @return The URL request string
      */
-    private static String buildURLRequest(LatLng start, LatLng end, int transitMode) {
+    protected static String buildURLRequest(LatLng start, LatLng end, int transitMode) {
         String startStr = parseLatLong(start);
         String endStr = parseLatLong(end);
         return "https://maps.googleapis.com/maps/api/directions/json?origin=" +
@@ -93,14 +93,16 @@ public class Directions {
 
     }
 
-
     /**
      * Parses a LatLng value into a string that can be used with Directions
      *
      * @param parse The LatLng value to parse into a string
      * @return The resulting string
      */
-    private static String parseLatLong(LatLng parse) {
+    protected static String parseLatLong(LatLng parse) {
+        if( parse == null ) {
+            return null;
+        }
         String latLng = parse.toString();
         String[] split = latLng.split("\\(");
         split = split[1].split("\\)");
@@ -116,6 +118,10 @@ public class Directions {
      */
     public static void makeTimeRequest(final LatLng start, LatLng dest, int transitMode,
                                        final GeoCodeListener maps) {
+        if (start == null || dest == null) {
+            maps.onGeocodeListenerFail();
+            return;
+        }
         String request = buildURLRequest(start, dest, transitMode);
         Retrieval asyncTask = new Retrieval(new Retrieval.AsyncResponse() {
             @Override
@@ -124,9 +130,11 @@ public class Directions {
                 try {
                     Directions.staticTime = getTimeJson(result);
                     maps.onGeocodeListenerComplete();
+                    return;
                 } catch (JSONException e) {
                     e.printStackTrace();
                     maps.onGeocodeListenerFail();
+                    return;
                 }
             }
         });
@@ -151,7 +159,12 @@ public class Directions {
                 Log.d("directions", "callback completed");
                 try {
                     Directions.staticDirections = getDirectionsJson(result);
-                    maps.onGeocodeListenerComplete();
+                    if (staticDirections != null) {
+                        maps.onGeocodeListenerComplete();
+                    }
+                    else {
+                        maps.onGeocodeListenerFail();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     maps.onGeocodeListenerFail();
@@ -169,7 +182,7 @@ public class Directions {
      * @return The time value that was parsed out
      * @throws JSONException If there was an issue with the JSON
      */
-    private static int getTimeJson(String jsonStr) throws JSONException {
+    protected static int getTimeJson(String jsonStr) throws JSONException {
 
         JSONObject dirJSON = new JSONObject(jsonStr);
         Log.d("Time", jsonStr);
@@ -192,52 +205,50 @@ public class Directions {
     /**
      * Parses the JSON to get the directions to the destination
      *
+     * Code adapted from article "Google Maps Draw Route between two points using Google Directions
+     * in Google Map Android API V2" w/ Author Navneet
+     * URL: http://www.androidtutorialpoint.com/intermediate/google-maps-draw-path-two-points-
+     * using-google-directions-google-map-android-api-v2/
+     *
      * @param jsonStr The string to parse
      * @return The directions that were parsed out
      * @throws JSONException If there was an issue with the JSON
      */
-    private static List<List<HashMap<String, String>>> getDirectionsJson(String jsonStr)
+    protected static List<List<HashMap<String, String>>> getDirectionsJson(String jsonStr)
             throws JSONException {
 
-        JSONObject dirJSON = new JSONObject(jsonStr);
+        JSONObject dirJSON = new JSONObject( jsonStr );
         Log.d("Directions", jsonStr);
 
-
         List<List<HashMap<String, String>>> routesList = new ArrayList<>();
-        JSONArray jRoutes;
-        JSONArray jLegs;
-        JSONArray jSteps;
+        JSONArray routes;
+        JSONArray legs;
+        JSONArray steps;
 
-
-        jRoutes = dirJSON.getJSONArray("routes");
-        // Traversing all routes
-        for (int i = 0; i < jRoutes.length(); i++) {
-            jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+        routes = dirJSON.getJSONArray( "routes" );
+        for( int i = 0; i < routes.length(); i++ ) {
+            legs = ( (JSONObject) routes.get( i ) ).getJSONArray( "legs" );
             List<HashMap<String, String>> path = new ArrayList<>();
 
-            // Traversing all legs
-            for (int j = 0; j < jLegs.length(); j++) {
-                jSteps = ((JSONObject) jLegs.get(j)).getJSONArray("steps");
+            for( int j = 0; j < legs.length(); j++ ) {
+                steps = ( (JSONObject) legs.get( j ) ).getJSONArray( "steps" );
 
-                // Traversing all steps
-                for (int k = 0; k < jSteps.length(); k++) {
+                for( int k = 0; k < steps.length(); k++ ) {
                     String polyline;
-                    polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k))
-                            .get("polyline")).get("points");
-                    List<LatLng> list = decodePoly(polyline);
+                    polyline = (String) ( (JSONObject) ( (JSONObject) steps.get( k ) )
+                            .get( "polyline" ) ).get( "points" );
+                    List<LatLng> list = decodePoly( polyline );
 
-                    // Traversing all points
                     for (int l = 0; l < list.size(); l++) {
                         HashMap<String, String> hm = new HashMap<>();
-                        hm.put("lat", Double.toString((list.get(l)).latitude));
-                        hm.put("lng", Double.toString((list.get(l)).longitude));
+                        hm.put("lat", Double.toString( (list.get( l )).latitude) );
+                        hm.put("lng", Double.toString( (list.get( l )).longitude) );
                         path.add(hm);
                     }
                 }
-                routesList.add(path);
+                routesList.add( path );
             }
         }
-
 
         return routesList;
     }
@@ -245,13 +256,14 @@ public class Directions {
 
     /**
      * Method to decode polyline points
-     * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
+     * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-
+     * direction-api-with-java
      *
      * @param encoded The encoding of the polyline that is then decoded and converted to
      *                a list of LatLng values.
      * @return the decoded list of LatLng values to plot.
      */
-    private static List<LatLng> decodePoly(String encoded) {
+    protected static List<LatLng> decodePoly(String encoded) {
 
         List<LatLng> poly = new ArrayList<>();
         int index = 0, len = encoded.length();
