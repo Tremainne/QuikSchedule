@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
  * Version: 1.0
  * Date: 11/16/16
  *
- * Description:
+ * Description: Interface for defining GeoCodeListener
  *
  * @author Tynan Dewes
  * @author Christoph Steefel
