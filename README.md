@@ -2,8 +2,11 @@
 
 ## Testing
 Unit tests located at: QuikSchedule/app/src/test/java/group22.quikschedule
+
 Scenario Tests located at: Quikschedule/BootstrapApplicationTest/src/androidTest/java/group22.quikschedule.test
+
 (NOTE: Please ensure that the emulator is unlocked when running these tests to ensure that testing can be completed properly)
+
 (NOTE: testLoadingMyLocationMaps, testNavigationDrawer, and testSignInToGoogle are for external test use.  Other scenario tests require credentials/login-specific information for internal use.)
 
 ## Proposal
