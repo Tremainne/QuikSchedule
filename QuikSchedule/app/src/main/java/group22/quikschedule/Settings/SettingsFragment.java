@@ -56,7 +56,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent();
-                i.setAction(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                i.setAction(Settings.ACTION_APPLICATION_SETTINGS);
                 startActivity(i);
             }
         });
