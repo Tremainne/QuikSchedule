@@ -14,7 +14,7 @@ import org.json.JSONObject;
  * Version: 1.0
  * Date: 10/31/16
  *
- * Description:
+ * Description: Class to handle conversion of JSON objects
  *
  * @author Christoph Steefel
  */

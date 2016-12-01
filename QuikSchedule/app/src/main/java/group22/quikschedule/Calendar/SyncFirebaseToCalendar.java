@@ -43,7 +43,7 @@ import java.util.List;
  * Version: 1.0
  * Date: 10/30/16
  *
- * Description:
+ * Description: Class to handle syncing Firebase to Calendar for Webreg info
  *
  * @author Kris Rau
  */
@@ -66,7 +66,8 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
     private DatabaseReference db;
 
     /**
-     *
+     * Name: SyncFirebaseToCalendar
+     * Description: Main method for handling syncing between Firebase and Calendar
      * @param credential
      * @param context
      */
@@ -109,7 +110,8 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
     }
 
     /**
-     *
+     * Name: doInBackground
+     * Description: Handles events to be done asynchronously
      * @param params
      * @return
      */
@@ -271,7 +273,8 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
     }
 
     /**
-     *
+     * Name: onPostExecute
+     * Description: Overridden out of necessity (unused)
      * @param result
      */
     @Override
@@ -279,9 +282,10 @@ public class SyncFirebaseToCalendar extends AsyncTask<Void, Void, ArrayList<Even
     }
 
     /**
-     *
+     * Name: getCalendarIdFromSummary
+     * Description: Gets Calendar ID from summary
      * @param summary
-     * @return
+     * @return String
      */
     private String getCalendarIdFromSummary (String summary) {
         try {

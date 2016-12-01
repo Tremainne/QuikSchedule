@@ -19,9 +19,10 @@ import java.util.List;
  * Version: 1.0
  * Date: 10/20/16
  *
- * Description:
+ * Description: Class to handle directions on the Map
  *
  * @author Christoph Steefel
+ * @author Tynan Dewes
  */
 public class Directions {
 
